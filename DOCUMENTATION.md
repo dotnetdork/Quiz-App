@@ -86,7 +86,7 @@ github_user = await get_github_user(token)  # Fetches user info
 user = User(
     github_id=github_user["id"],
     username=github_user["login"],
-    role="student"
+    role="Student"
 )
 db.add(user)
 db.commit()
@@ -404,7 +404,7 @@ CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     github_id TEXT UNIQUE NOT NULL,
     username TEXT NOT NULL,
-    role TEXT DEFAULT 'student'
+    role TEXT DEFAULT 'Student'
 );
 
 -- Scores Table
@@ -437,9 +437,9 @@ CREATE TABLE scores (
    - No raw SQL execution with user input
 
 4. **Role-Based Access Control**
-   - `require_teacher` dependency for admin routes
+   - `require_Teacher` dependency for admin routes
    - Database stores user roles
-   - Frontend hides admin UI for non-teachers
+   - Frontend hides admin UI for non-Teachers
 
 ---
 
