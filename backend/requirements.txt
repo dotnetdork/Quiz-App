@@ -1,0 +1,18 @@
+# FastAPI and server
+fastapi==0.128.0
+uvicorn==0.32.0
+
+# Database
+sqlalchemy==2.0.25
+aiosqlite==0.19.0
+
+# Authentication
+authlib==1.6.5
+httpx==0.26.0
+itsdangerous==2.1.2
+python-multipart==0.0.22
+
+# YAML parsing
+pyyaml==6.0.1
+
+# Note: FastAPI includes starlette dependency (>=0.49.1 required for security)

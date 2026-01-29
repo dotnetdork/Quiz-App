@@ -1,0 +1,71 @@
+"""
+SQLAlchemy models for the Quiz App database.
+Defines Users and Scores tables.
+"""
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+
+from database import Base
+
+
+class User(Base):
+    """
+    Users table.
+    Stores GitHub user information and their role.
+    
+    Columns:
+    - id: Primary key (auto-increment)
+    - github_id: Unique GitHub user ID
+    - username: GitHub username
+    - role: Either 'student' or 'teacher'
+    """
+    __tablename__ = "users"
+    
+    # Primary key
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # GitHub ID (unique identifier from GitHub)
+    github_id = Column(String, unique=True, index=True, nullable=False)
+    
+    # GitHub username (display name)
+    username = Column(String, nullable=False)
+    
+    # Role: 'student' (default) or 'teacher'
+    role = Column(String, default="student", nullable=False)
+    
+    # Relationship to scores
+    scores = relationship("Score", back_populates="user")
+
+
+class Score(Base):
+    """
+    Scores table.
+    Stores quiz attempt results for each user.
+    
+    Columns:
+    - id: Primary key (auto-increment)
+    - user_id: Foreign key to Users table
+    - quiz_id: ID of the quiz taken
+    - score: Points earned
+    - timestamp: When the quiz was completed
+    """
+    __tablename__ = "scores"
+    
+    # Primary key
+    id = Column(Integer, primary_key=True, index=True)
+    
+    # Foreign key to users table
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    # Quiz identifier
+    quiz_id = Column(String, nullable=False)
+    
+    # Score achieved
+    score = Column(Integer, nullable=False)
+    
+    # When the quiz was taken
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationship to user
+    user = relationship("User", back_populates="scores")
