@@ -1,0 +1,104 @@
+# -----------------------------------
+# Quiz App - Sample Questions YAML
+# -----------------------------------
+# This file contains quiz questions in two types:
+# 1. multiple_choice - Standard MCQ questions
+# 2. parsons - Drag-and-drop code ordering
+
+quizzes:
+  # -----------------------------------
+  # Quiz 1: Python Fundamentals
+  # -----------------------------------
+  - id: python_basics_01
+    title: "Python Fundamentals"
+    description: "Test your knowledge of basic Python concepts"
+    questions:
+      # Multiple Choice Question 1
+      - id: q1
+        type: "multiple_choice"
+        prompt: "Which keyword is used to create a function in Python?"
+        options:
+          - "func"
+          - "define"
+          - "def"
+          - "function"
+        answer: "def"
+
+      # Parsons Problem 1
+      - id: q2
+        type: "parsons"
+        prompt: "Reorder these blocks to create a valid 'for' loop that prints numbers 0-4."
+        blocks:
+          - "for i in range(5):"
+          - "    print(i)"
+        answer: [0, 1]  # Index-based correct order
+
+      # Multiple Choice Question 2
+      - id: q3
+        type: "multiple_choice"
+        prompt: "What is the output of: print(type([]))"
+        options:
+          - "<class 'tuple'>"
+          - "<class 'list'>"
+          - "<class 'dict'>"
+          - "<class 'set'>"
+        answer: "<class 'list'>"
+
+      # Multiple Choice Question 3
+      - id: q4
+        type: "multiple_choice"
+        prompt: "Which method adds an element to the end of a list?"
+        options:
+          - "add()"
+          - "insert()"
+          - "append()"
+          - "extend()"
+        answer: "append()"
+
+      # Parsons Problem 2
+      - id: q5
+        type: "parsons"
+        prompt: "Arrange these lines to create a function that returns the sum of two numbers."
+        blocks:
+          - "def add_numbers(a, b):"
+          - "    result = a + b"
+          - "    return result"
+        answer: [0, 1, 2]  # Correct order
+
+  # -----------------------------------
+  # Quiz 2: Python Data Structures
+  # -----------------------------------
+  - id: python_data_structures
+    title: "Python Data Structures"
+    description: "Learn about lists, dictionaries, and more"
+    questions:
+      # Multiple Choice
+      - id: ds_q1
+        type: "multiple_choice"
+        prompt: "How do you access the value for key 'name' in a dictionary called 'person'?"
+        options:
+          - "person.name"
+          - "person['name']"
+          - "person(name)"
+          - "person->name"
+        answer: "person['name']"
+
+      # Parsons Problem
+      - id: ds_q2
+        type: "parsons"
+        prompt: "Arrange these lines to create a dictionary and print a value."
+        blocks:
+          - "my_dict = {'color': 'blue', 'size': 'large'}"
+          - "print(my_dict['color'])"
+        answer: [0, 1]
+
+      # Multiple Choice
+      - id: ds_q3
+        type: "multiple_choice"
+        prompt: "Which data structure does NOT allow duplicate values?"
+        options:
+          - "list"
+          - "tuple"
+          - "set"
+          - "dictionary"
+        answer: "set"
