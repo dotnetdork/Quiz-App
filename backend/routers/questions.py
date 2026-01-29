@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 from typing import List, Dict, Any
 from utils.questions import load_questions, get_question_by_id
 
@@ -25,7 +25,10 @@ async def get_question(question_id: str) -> Dict[str, Any]:
     """Get a specific question by ID."""
     question = get_question_by_id(question_id)
     if not question:
-        return {"error": "Question not found"}
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Question not found"
+        )
     
     # Remove correct_order from response for security
     return {

@@ -9,6 +9,7 @@ function QuizPage({ user }) {
   const [question, setQuestion] = useState(null)
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (!user) {
@@ -18,16 +19,11 @@ function QuizPage({ user }) {
 
     getQuestion(questionId)
       .then(data => {
-        if (data.error) {
-          console.error('Question not found')
-          navigate('/')
-        } else {
-          setQuestion(data)
-        }
+        setQuestion(data)
       })
       .catch(err => {
         console.error('Failed to load question:', err)
-        navigate('/')
+        setError('Failed to load question. Please try again.')
       })
       .finally(() => {
         setLoading(false)
@@ -37,17 +33,18 @@ function QuizPage({ user }) {
   const handleSubmit = async (answer) => {
     const token = localStorage.getItem('token')
     if (!token) {
-      alert('Please log in first')
-      navigate('/')
+      setError('Please log in first')
+      setTimeout(() => navigate('/'), 2000)
       return
     }
 
     try {
       const data = await submitAnswer(questionId, answer, token)
       setResult(data)
+      setError(null)
     } catch (error) {
       console.error('Failed to submit answer:', error)
-      alert('Failed to submit answer. Please try again.')
+      setError('Failed to submit answer. Please try again.')
     }
   }
 
@@ -55,8 +52,26 @@ function QuizPage({ user }) {
     return <div className="container"><div className="loading">Loading question...</div></div>
   }
 
+  if (error) {
+    return (
+      <div className="container">
+        <div className="error">{error}</div>
+        <button onClick={() => navigate('/')} className="btn btn-secondary" style={{ marginTop: '1rem' }}>
+          Back to Questions
+        </button>
+      </div>
+    )
+  }
+
   if (!question) {
-    return <div className="container"><div className="error">Question not found</div></div>
+    return (
+      <div className="container">
+        <div className="error">Question not found</div>
+        <button onClick={() => navigate('/')} className="btn btn-secondary" style={{ marginTop: '1rem' }}>
+          Back to Questions
+        </button>
+      </div>
+    )
   }
 
   return (

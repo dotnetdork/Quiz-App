@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List
-from datetime import datetime
+from datetime import datetime, timezone
 
 from database import get_db
 from models import User, QuizAttempt
@@ -57,7 +57,7 @@ async def submit_answer(request: SubmitAnswerRequest, db: Session = Depends(get_
         question_id=request.question_id,
         answer=",".join(request.answer),
         is_correct=is_correct,
-        completed_at=datetime.utcnow()
+        completed_at=datetime.now(timezone.utc)
     )
     db.add(attempt)
     db.commit()

@@ -34,6 +34,11 @@ function ParsonsProblem({ codeLines, onSubmit, result }) {
   const handleDragEnd = (event) => {
     const { active, over } = event
 
+    if (!over) {
+      // Item was dropped outside of a valid drop zone
+      return
+    }
+
     if (active.id !== over.id) {
       setItems((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id)
