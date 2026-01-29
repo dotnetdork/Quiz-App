@@ -1,0 +1,39 @@
+questions:
+  - id: "parsons-1"
+    type: "parsons"
+    title: "Sort a List in Python"
+    description: "Arrange the code lines in the correct order to create a function that sorts a list of numbers in ascending order."
+    code_lines:
+      - "def sort_numbers(numbers):"
+      - "    sorted_list = sorted(numbers)"
+      - "    return sorted_list"
+    correct_order:
+      - "def sort_numbers(numbers):"
+      - "    sorted_list = sorted(numbers)"
+      - "    return sorted_list"
+  
+  - id: "parsons-2"
+    type: "parsons"
+    title: "Find Maximum Value"
+    description: "Arrange the code lines to create a function that finds the maximum value in a list."
+    code_lines:
+      - "    return max_val"
+      - "def find_max(numbers):"
+      - "    max_val = max(numbers)"
+    correct_order:
+      - "def find_max(numbers):"
+      - "    max_val = max(numbers)"
+      - "    return max_val"
+  
+  - id: "parsons-3"
+    type: "parsons"
+    title: "Calculate Sum"
+    description: "Arrange the code lines to create a function that calculates the sum of all numbers in a list."
+    code_lines:
+      - "    total = sum(numbers)"
+      - "def calculate_sum(numbers):"
+      - "    return total"
+    correct_order:
+      - "def calculate_sum(numbers):"
+      - "    total = sum(numbers)"
+      - "    return total"
