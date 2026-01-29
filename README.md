@@ -57,21 +57,56 @@ Quiz-App/
 
 ### 1. Backend Setup
 
-```bash
+#### Windows (PowerShell)
+
+```powershell
 # Navigate to backend directory
 cd backend
 
 # Create virtual environment (optional but recommended)
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+.\venv\Scripts\Activate.ps1
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Set environment variables (create .env file or export)
+# Set environment variables
+$env:GITHUB_CLIENT_ID = "your_github_client_id"
+$env:GITHUB_CLIENT_SECRET = "your_github_client_secret"
+$env:SECRET_KEY = "your_random_secret_key"
+
+# Generate a secure SECRET_KEY (optional):
+# python -c "import secrets; print(secrets.token_urlsafe(32))"
+
+# Run the server
+uvicorn main:app --reload --port 8000
+```
+
+**Note:** If you get an execution policy error when activating the virtual environment, run:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+#### Mac/Linux (Bash)
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Create virtual environment (optional but recommended)
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
 export GITHUB_CLIENT_ID="your_github_client_id"
 export GITHUB_CLIENT_SECRET="your_github_client_secret"
 export SECRET_KEY="your_random_secret_key"
+
+# Generate a secure SECRET_KEY (optional):
+# python -c "import secrets; print(secrets.token_urlsafe(32))"
 
 # Run the server
 uvicorn main:app --reload --port 8000
