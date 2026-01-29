@@ -41,7 +41,7 @@ class User(Base):
     id          # Primary key (auto-increment)
     github_id   # Unique GitHub user ID (from OAuth)
     username    # GitHub username
-    role        # "student", "teacher", or "Developer"
+    role        # "Student", "Teacher", or "Developer"
     scores      # Relationship to Score table
 ```
 
