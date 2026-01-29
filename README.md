@@ -192,6 +192,16 @@ This app is designed to be dyslexia-friendly:
 - Clear visual hierarchy
 - Keyboard navigation support
 
-## License
+## Support & Contact
 
-MIT License
+If you encounter any issues with the quiz platform or need assistance with the Teacher Dashboard, please contact the lead developer:
+
+* **Developer:** Jay Sausa
+* **Organization:** League of Amazing Programmers
+* **Issues:** Please open a "New Issue" in this GitHub repository.
+
+## Copyright & Ownership
+
+© 2026 The LEAGUE of Amazing Programmers. All Rights Reserved.
+
+This software and all associated files are the property of the League of Amazing Programmers. Unauthorized copying, modification, or distribution of this code via any medium is strictly prohibited. This project is for internal and educational use only.
