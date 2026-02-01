@@ -242,6 +242,10 @@ app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
 # ----------------------------
 # Serve the React frontend build if it exists
 # This allows the backend to serve the frontend without a separate server
+#
+# NOTE: This catch-all route is registered AFTER all API routes.
+# FastAPI matches routes in registration order, so API routes (/api/*, /auth/*, /docs, etc.)
+# will be matched first. The catch-all only handles unmatched routes.
 if STATIC_DIR.exists():
     # Mount static files (JS, CSS, images) at /static
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR / "static")), name="static")
@@ -253,6 +257,10 @@ if STATIC_DIR.exists():
         This catches all non-API routes and serves the React app.
         React Router handles client-side routing.
         """
+        # Don't serve frontend for API or auth routes (they should 404 if not found)
+        if path.startswith("api/") or path.startswith("auth/"):
+            raise HTTPException(status_code=404, detail="Not found")
+        
         # Check if the requested file exists
         file_path = STATIC_DIR / path
         if file_path.exists() and file_path.is_file():

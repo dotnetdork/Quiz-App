@@ -5,6 +5,13 @@ set -e
 
 echo "🚀 Setting up Quiz App development environment..."
 
+# Get the workspace directory (works in Codespaces and local devcontainers)
+WORKSPACE_DIR="${PWD}"
+if [ -n "${CODESPACES}" ]; then
+    # In GitHub Codespaces, use the repository name
+    WORKSPACE_DIR="/workspaces/${RepositoryName:-Quiz-App}"
+fi
+
 # Install uv (Python package manager)
 echo "📦 Installing uv..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -12,7 +19,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Create Python virtual environment and install dependencies
 echo "🐍 Setting up Python environment with uv..."
-cd /workspaces/Quiz-App
+cd "$WORKSPACE_DIR"
 uv venv
 source .venv/bin/activate
 uv pip install -r backend/requirements.txt
@@ -26,7 +33,7 @@ npm install
 echo "🔨 Building frontend..."
 npm run build
 
-cd ..
+cd "$WORKSPACE_DIR"
 
 # Create .env file from template if it doesn't exist
 if [ ! -f .env ]; then
