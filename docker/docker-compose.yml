@@ -1,0 +1,42 @@
+# Quiz App Docker Compose Configuration
+# 
+# Usage:
+#   docker-compose up --build     # Build and start
+#   docker-compose up -d          # Start in background
+#   docker-compose down           # Stop and remove containers
+#   docker-compose logs -f        # View logs
+
+services:
+  quiz-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: quiz-app
+    ports:
+      - "8000:8000"
+    environment:
+      # GitHub OAuth (required - set in .env or override here)
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - GITHUB_REDIRECT_URI=${GITHUB_REDIRECT_URI:-http://localhost:8000/auth/callback}
+      # Application settings
+      - SECRET_KEY=${SECRET_KEY:-change-this-in-production}
+      - DATABASE_PATH=/app/data/quiz_app.db
+      - QUIZFILES_PATH=/app/backend
+      - FRONTEND_URL=${FRONTEND_URL:-}
+    volumes:
+      # Persist database
+      - quiz-data:/app/data
+      # Optional: Mount custom quiz files
+      # - ./quizfiles:/app/quizfiles:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  quiz-data:
+    driver: local

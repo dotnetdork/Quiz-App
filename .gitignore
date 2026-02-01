@@ -6,6 +6,10 @@ __pycache__/
 venv/
 .venv/
 
+# uv cache and lock file
+.uv/
+uv.lock
+
 # Build outputs
 build/
 dist/

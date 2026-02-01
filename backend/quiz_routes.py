@@ -17,6 +17,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from config import QUIZFILES_PATH
 from database import get_db
 from models import User, Score
 
@@ -25,9 +26,9 @@ from models import User, Score
 # ----------------------------
 router = APIRouter()
 
-# Path to questions file
+# Path to questions file (uses QUIZFILES_PATH from config)
 QUESTIONS_FILE = os.path.join(
-    os.path.dirname(__file__),
+    QUIZFILES_PATH,
     "questions.yaml"
 )
 

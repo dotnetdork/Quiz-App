@@ -10,22 +10,31 @@ A full-stack Quiz Application for GitHub Codespaces with support for multiple-ch
 - 🏆 **Leaderboard** - Global high scores (top 10 players)
 - 👨‍🏫 **Teacher Dashboard** - Admin view for teachers to monitor students
 - ♿ **Dyslexia-Friendly** - High contrast colors, large fonts, clean spacing
+- 🐳 **Docker Support** - Easy deployment with Docker and Docker Compose
+- ☁️ **Codespaces Ready** - Development container configuration included
 
 ## Tech Stack
 
 - **Backend**: FastAPI (Python)
-- **Frontend**: React (Plain JavaScript/JSX)
+- **Frontend**: React (Plain JavaScript/JSX) - served by the backend
 - **Database**: SQLite (SQLAlchemy ORM)
 - **Authentication**: GitHub OAuth
 - **Drag & Drop**: @dnd-kit library
+- **Package Management**: uv (Python), npm (Node.js)
 
 ## Project Structure
 
 ```
 Quiz-App/
+├── .devcontainer/           # GitHub Codespaces configuration
+│   ├── devcontainer.json
+│   └── post-create.sh
+├── docker/                  # Docker deployment files
+│   ├── Dockerfile
+│   └── docker-compose.yml
 ├── backend/
 │   ├── main.py              # FastAPI application entry point
-│   ├── config.py            # Environment configuration
+│   ├── config.py            # Environment configuration (python-dotenv)
 │   ├── database.py          # SQLAlchemy setup
 │   ├── models.py            # User and Score models
 │   ├── auth.py              # GitHub OAuth logic
@@ -34,104 +43,116 @@ Quiz-App/
 │   ├── admin_routes.py      # Teacher dashboard endpoints
 │   ├── questions.yaml       # Quiz questions data
 │   └── requirements.txt     # Python dependencies
-│
-└── frontend/
-    ├── src/
-    │   ├── App.js           # Main app with routing
-    │   ├── App.css          # App-specific styles
-    │   ├── index.css        # Dyslexia-friendly theme
-    │   ├── api.js           # API helper functions
-    │   ├── pages/           # Page components
-    │   │   ├── Home.js
-    │   │   ├── Dashboard.js
-    │   │   ├── Quiz.js
-    │   │   ├── Leaderboard.js
-    │   │   └── Admin.js
-    │   └── components/      # Reusable components
-    │       ├── MultipleChoice.js
-    │       └── ParsonsProblem.js
-    └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── App.js           # Main app with routing
+│   │   ├── App.css          # App-specific styles
+│   │   ├── index.css        # Dyslexia-friendly theme
+│   │   ├── api.js           # API helper functions
+│   │   ├── pages/           # Page components
+│   │   └── components/      # Reusable components
+│   └── package.json
+├── .env-template            # Environment variables template
+└── pyproject.toml           # Python project configuration (uv)
 ```
 
-## Setup Instructions
+## Quick Start
 
-### 1. Backend Setup
+### Option 1: GitHub Codespaces (Recommended)
 
-#### Windows (PowerShell)
+1. Click **"Code"** → **"Open with Codespaces"** → **"New codespace"**
+2. Wait for the container to build (installs all dependencies automatically)
+3. Copy `.env-template` to `.env` and add your GitHub OAuth credentials
+4. Run the backend:
+   ```bash
+   cd backend && source ../.venv/bin/activate && uvicorn main:app --reload --port 8000
+   ```
+5. Open the forwarded port 8000 in your browser
 
-```powershell
-# Navigate to backend directory
-cd backend
-
-# Create virtual environment (optional but recommended)
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set environment variables
-$env:GITHUB_CLIENT_ID = "your_github_client_id"
-$env:GITHUB_CLIENT_SECRET = "your_github_client_secret"
-$env:SECRET_KEY = "your_random_secret_key"
-
-# Generate a secure SECRET_KEY (optional):
-# python -c "import secrets; print(secrets.token_urlsafe(32))"
-
-# Run the server
-uvicorn main:app --reload --port 8000
-```
-
-**Note:** If you get an execution policy error when activating the virtual environment, run:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-#### Mac/Linux (Bash)
+### Option 2: Docker (Production)
 
 ```bash
-# Navigate to backend directory
-cd backend
+# Clone the repository
+git clone https://github.com/your-org/Quiz-App.git
+cd Quiz-App
 
-# Create virtual environment (optional but recommended)
-python3 -m venv venv
-source venv/bin/activate
+# Create .env file with your credentials
+cp .env-template .env
+# Edit .env with your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET
 
-# Install dependencies
-pip install -r requirements.txt
-
-# Set environment variables
-export GITHUB_CLIENT_ID="your_github_client_id"
-export GITHUB_CLIENT_SECRET="your_github_client_secret"
-export SECRET_KEY="your_random_secret_key"
-
-# Generate a secure SECRET_KEY (optional):
-# python -c "import secrets; print(secrets.token_urlsafe(32))"
-
-# Run the server
-uvicorn main:app --reload --port 8000
+# Build and run with Docker Compose
+cd docker
+docker-compose up --build
 ```
 
-### 2. Frontend Setup
+The app will be available at `http://localhost:8000`
+
+### Option 3: Local Development with uv
 
 ```bash
-# Navigate to frontend directory
+# Install uv (if not installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone and setup
+git clone https://github.com/your-org/Quiz-App.git
+cd Quiz-App
+
+# Create .env file
+cp .env-template .env
+# Edit .env with your credentials
+
+# Setup Python environment
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -r backend/requirements.txt
+
+# Build frontend
 cd frontend
-
-# Install dependencies
 npm install
+npm run build
+cd ..
 
-# Start development server
+# Run the backend (serves both API and frontend)
+cd backend
+uvicorn main:app --reload --port 8000
+```
+
+### Option 4: Development with Separate Frontend Server
+
+For frontend development with hot reloading:
+
+```bash
+# Terminal 1: Backend
+cd backend
+source ../.venv/bin/activate
+uvicorn main:app --reload --port 8000
+
+# Terminal 2: Frontend (development server)
+cd frontend
 npm start
 ```
 
-### 3. GitHub OAuth Setup
+## Configuration
+
+All configuration is done via environment variables. Copy `.env-template` to `.env` and update the values:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `GITHUB_CLIENT_ID` | GitHub OAuth App Client ID | (required) |
+| `GITHUB_CLIENT_SECRET` | GitHub OAuth App Secret | (required) |
+| `GITHUB_REDIRECT_URI` | OAuth callback URL | `http://localhost:8000/auth/callback` |
+| `SECRET_KEY` | Session signing key | (generate a random string) |
+| `DATABASE_PATH` | SQLite database file path | `./quiz_app.db` |
+| `QUIZFILES_PATH` | Directory containing quiz YAML files | `./backend` |
+| `FRONTEND_URL` | Frontend URL (leave empty when backend serves frontend) | `` |
+
+### GitHub OAuth Setup
 
 1. Go to GitHub Settings > Developer Settings > OAuth Apps
 2. Create a new OAuth App with:
-   - **Homepage URL**: `http://localhost:3000`
+   - **Homepage URL**: `http://localhost:8000` (or your deployment URL)
    - **Authorization callback URL**: `http://localhost:8000/auth/callback`
-3. Copy the Client ID and Client Secret to your environment variables
+3. Copy the Client ID and Client Secret to your `.env` file
 
 ## User Roles
 
@@ -160,7 +181,7 @@ UPDATE users SET role='teacher' WHERE username='your_username';
 
 ## Adding New Questions
 
-Edit `backend/questions.yaml` to add new quizzes and questions:
+Edit `backend/questions.yaml` (or files in your `QUIZFILES_PATH`) to add new quizzes:
 
 ```yaml
 quizzes:
