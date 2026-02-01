@@ -7,10 +7,15 @@ It includes:
 - Quiz endpoints (YAML parsing)
 - Leaderboard endpoints
 - Admin/Teacher dashboard endpoints
+- Static file serving for the frontend (React build)
 """
+import os
+from pathlib import Path
+
 from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy.orm import Session
 
@@ -18,6 +23,14 @@ from config import SECRET_KEY, FRONTEND_URL
 from database import get_db, init_db
 from models import User, Score
 from auth import oauth, get_github_user
+
+# ----------------------------
+# Determine static files path
+# ----------------------------
+# The frontend build directory (relative to this file)
+BACKEND_DIR = Path(__file__).parent
+PROJECT_ROOT = BACKEND_DIR.parent
+STATIC_DIR = PROJECT_ROOT / "frontend" / "build"
 
 # ----------------------------
 # Create FastAPI app
@@ -37,10 +50,15 @@ app.add_middleware(
     secret_key=SECRET_KEY
 )
 
-# CORS middleware for frontend
+# CORS middleware for frontend (needed for development with separate servers)
+# Build allowed origins list based on FRONTEND_URL configuration
+cors_origins = ["http://localhost:3000"]
+if FRONTEND_URL:
+    cors_origins.append(FRONTEND_URL)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, "http://localhost:3000"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -98,11 +116,19 @@ def require_teacher(request: Request, db: Session = Depends(get_db)):
 # ----------------------------
 @app.get("/")
 def read_root():
-    """Welcome message and API info."""
+    """
+    Root endpoint.
+    If frontend build exists, serve it. Otherwise, show API info.
+    """
+    index_path = STATIC_DIR / "index.html"
+    if index_path.exists():
+        return FileResponse(str(index_path))
+    
     return {
         "message": "Welcome to Quiz App API",
         "docs": "/docs",
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "note": "Build the frontend with 'npm run build' in the frontend directory to serve the React app"
     }
 
 
@@ -159,8 +185,10 @@ async def auth_callback(request: Request, db: Session = Depends(get_db)):
         request.session["user_id"] = github_id
         request.session["username"] = username
         
-        # Redirect to frontend
-        return RedirectResponse(url=f"{FRONTEND_URL}/dashboard")
+        # Redirect to frontend dashboard
+        # If FRONTEND_URL is set, redirect there; otherwise redirect to local /dashboard
+        redirect_url = f"{FRONTEND_URL}/dashboard" if FRONTEND_URL else "/dashboard"
+        return RedirectResponse(url=redirect_url)
         
     except Exception as e:
         # Handle OAuth errors
@@ -174,7 +202,8 @@ def logout(request: Request):
     Clears the session and redirects to home.
     """
     request.session.clear()
-    return RedirectResponse(url=FRONTEND_URL)
+    redirect_url = FRONTEND_URL if FRONTEND_URL else "/"
+    return RedirectResponse(url=redirect_url)
 
 
 @app.get("/auth/me")
@@ -207,3 +236,31 @@ app.include_router(leaderboard_router, prefix="/api/leaderboard", tags=["leaderb
 # ----------------------------
 from admin_routes import router as admin_router
 app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
+
+# ----------------------------
+# Static File Serving (Frontend)
+# ----------------------------
+# Serve the React frontend build if it exists
+# This allows the backend to serve the frontend without a separate server
+if STATIC_DIR.exists():
+    # Mount static files (JS, CSS, images) at /static
+    app.mount("/static", StaticFiles(directory=str(STATIC_DIR / "static")), name="static")
+    
+    @app.get("/{path:path}")
+    async def serve_frontend(path: str):
+        """
+        Serve the React frontend.
+        This catches all non-API routes and serves the React app.
+        React Router handles client-side routing.
+        """
+        # Check if the requested file exists
+        file_path = STATIC_DIR / path
+        if file_path.exists() and file_path.is_file():
+            return FileResponse(str(file_path))
+        
+        # For all other paths, serve index.html (React Router will handle)
+        index_path = STATIC_DIR / "index.html"
+        if index_path.exists():
+            return FileResponse(str(index_path))
+        
+        raise HTTPException(status_code=404, detail="Not found")

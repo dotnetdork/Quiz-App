@@ -1,0 +1,44 @@
+[project]
+name = "quiz-app"
+version = "1.0.0"
+description = "A full-stack Quiz Application with GitHub OAuth, multiple-choice questions, and Parsons Problems"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Proprietary"}
+authors = [
+    {name = "Jay Sausa", email = "developer@league.dev"}
+]
+keywords = ["quiz", "education", "fastapi", "react"]
+
+dependencies = [
+    "fastapi>=0.128.0",
+    "uvicorn>=0.32.0",
+    "sqlalchemy>=2.0.36",
+    "aiosqlite>=0.19.0",
+    "authlib>=1.6.5",
+    "httpx>=0.26.0",
+    "itsdangerous>=2.1.2",
+    "python-multipart>=0.0.22",
+    "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "httpx>=0.26.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend"]
