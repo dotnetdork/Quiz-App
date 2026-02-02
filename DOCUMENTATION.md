@@ -3,83 +3,59 @@
 ## 🏗️ Architecture Overview
 
 The app follows a **3-tier architecture** with a **single server deployment**:
-1. **Frontend (React)** - Built and served by the backend as static files
+1. **Frontend (React)** - Built and served as static files by the backend
 2. **Backend API (FastAPI)** - Server running on port 8000 (serves both API and frontend)
 3. **Database (SQLite)** - File-based database (`quiz_app.db`)
 
-> **Note:** The frontend is built with `npm run build` and the backend serves the production build. No separate frontend server is needed for production.
+---
 
-### Quick Start Commands
+### Quick Start (Unix/macOS and Windows)
 
-The commands below include both Unix/macOS (bash) and Windows (PowerShell) examples. Where a command depends on your current working directory, the note indicates whether to run from the project root or the `docker` folder.
+Follow the commands below from the project root. Commands differ between Unix-like shells and PowerShell; both are provided in separate blocks.
 
-**Linux / macOS (bash)**
+Unix / macOS (bash):
 ```bash
-# From project root
-cd Quiz-App
-cp .env-template .env          # Create .env file
+# Create .env
+cp .env-template .env
 
-# Create and activate venv
+# Create venv, activate, install deps
 uv venv
 source .venv/bin/activate
-
-# Install Python deps and build frontend
 uv pip install -r backend/requirements.txt
+
+# Build frontend
 cd frontend && npm install && npm run build && cd ..
 
-# Run backend (serves API + built frontend)
-cd backend && uvicorn main:app --reload --host localhost --port 8000
-```
-
-**Windows (PowerShell)**
-```powershell
-# From project root
-cd "Quiz-App"
-copy .env-template .env        # Create .env file
-
-# Create and activate venv (PowerShell)
-uv venv
-.\.venv\Scripts\Activate.ps1
-
-# Install Python deps and build frontend
-uv pip install -r backend/requirements.txt
-cd frontend; npm install; npm run build; cd ..
-
-# Run backend (serves API + built frontend)
-cd backend; uvicorn main:app --reload --host localhost --port 8000
-```
-
-**Note on Docker Compose usage**
-
-Modern Docker CLI supports `docker compose` (with a space). If you run Compose from the `docker` folder you must point `--env-file` at the project `.env` (example below uses the project root `.env` located one level above `docker`).
-
-From the `docker` folder (Unix/macOS):
-```bash
-cd docker
-docker compose -f docker-compose.yml --env-file ../.env up -d --build
-# legacy syntax also works if installed: docker-compose -f docker-compose.yml --env-file ../.env up -d --build
-```
-
-From the `docker` folder (Windows PowerShell):
-```powershell
-cd docker
-docker compose -f docker-compose.yml --env-file ../.env up -d --build
-# legacy: docker-compose -f docker-compose.yml --env-file ..\.env up -d --build
-```
-
-Or run from project root and point to the compose file:
-
-Unix/macOS:
-```bash
-docker compose -f docker/docker-compose.yml --env-file .env up -d --build
+# Run backend (serves built frontend)
+cd backend
+python -m uvicorn main:app --reload --host localhost --port 8000
 ```
 
 Windows (PowerShell):
 ```powershell
-docker compose -f "docker\docker-compose.yml" --env-file ".env" up -d --build
+# Create .env
+copy .env-template .env
+
+# Create venv and install deps (use venv python directly)
+uv venv
+& ".\.venv\Scripts\python.exe" -m pip install -r backend/requirements.txt
+
+# Build frontend
+cd frontend; npm install; npm run build; cd ..
+
+# Run backend (from backend folder)
+cd backend
+& "..\.venv\Scripts\python.exe" -m uvicorn main:app --reload --host localhost --port 8000
 ```
 
----
+Docker Compose (works on Unix and Windows command line):
+```bash
+cd docker
+docker compose -f docker-compose.yml --env-file ../.env up -d --build
+```
+
+Codespaces notes:
+- If you run the backend inside a Codespace, start the server on `0.0.0.0` and port `8000` and forward the port in the Codespaces UI. Update `GITHUB_REDIRECT_URI` and `FRONTEND_URL` to the forwarded URL when testing OAuth in Codespaces.
 
 ## 📊 STEP 1: Database Layer
 
@@ -288,11 +264,8 @@ def submit_quiz(submission: QuizSubmission, user: User = Depends(require_user)):
 
 ### API Communication (`api.js`):
 ```javascript
-// API_URL defaults to '' (same origin) when served by the backend
-export const API_URL = process.env.REACT_APP_API_URL || '';
-
 export async function apiCall(endpoint, options) {
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  const response = await fetch(`http://localhost:8000${endpoint}`, {
     credentials: 'include',  // CRITICAL: Sends session cookie
     headers: { 'Content-Type': 'application/json' },
     ...options
@@ -300,8 +273,6 @@ export async function apiCall(endpoint, options) {
   return response.json();
 }
 ```
-
-> **Note:** When the frontend is served by the backend (production), `API_URL` is empty so all API calls use relative URLs to the same origin. For development with a separate frontend server, set `REACT_APP_API_URL=http://localhost:8000`.
 
 ---
 
@@ -450,7 +421,7 @@ function ParsonsProblem({ blocks, order, onOrderChange }) {
 1. **Frontend**: User navigates to `/quiz/python_basics_01`
 2. **React Router**: Matches route, renders `<Quiz>` component
 3. **useEffect**: Triggers on mount
-4. **API Call**: `fetch('/api/quiz/quiz/python_basics_01')` (relative URL, same server)
+4. **API Call**: `fetch('http://localhost:8000/api/quiz/quiz/python_basics_01')`
 5. **Browser**: Sends request with session cookie
 6. **Backend CORS**: Checks origin, allows request
 7. **Backend Session**: Reads cookie (user logged in?)
@@ -539,23 +510,13 @@ CREATE TABLE scores (
 ## 🚀 Deployment Considerations
 
 ### Environment Variables:
-
-Create a `.env` file from the template:
-- **Linux/Mac:** `cp .env-template .env`
-- **Windows:** `copy .env-template .env`
-
 ```bash
 GITHUB_CLIENT_ID=your_client_id
 GITHUB_CLIENT_SECRET=your_client_secret
-GITHUB_REDIRECT_URI=http://localhost:8000/auth/callback
 SECRET_KEY=random_secret_key
-DATABASE_PATH=./quiz_app.db
-FRONTEND_URL=  # Leave empty when backend serves frontend
+DATABASE_URL=sqlite:///./quiz_app.db
+FRONTEND_URL=http://localhost:3000
 ```
-
-Generate a secure SECRET_KEY:
-- **Linux/Mac:** `python -c "import secrets; print(secrets.token_urlsafe(32))"`
-- **Windows:** `python -c "import secrets; print(secrets.token_urlsafe(32))"`
 
 ### Production Changes Needed:
 1. Switch from SQLite to PostgreSQL
