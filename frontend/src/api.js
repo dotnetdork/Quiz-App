@@ -2,11 +2,13 @@
  * API Configuration
  * 
  * Contains the base URL for API calls.
- * Change this based on your environment.
+ * When served from the same server as the backend, use empty string (same origin).
+ * For development with separate servers, set REACT_APP_API_URL=http://localhost:8000
  */
 
-// Backend API URL
-export const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+// Backend API URL - defaults to same origin (empty string) for production
+// When frontend is served by the backend, API calls go to the same server
+export const API_URL = process.env.REACT_APP_API_URL || '';
 
 /**
  * Helper function to make API calls

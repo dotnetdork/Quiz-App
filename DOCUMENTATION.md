@@ -2,10 +2,36 @@
 
 ## 🏗️ Architecture Overview
 
-The app follows a **3-tier architecture**:
-1. **Frontend (React)** - User interface running on port 3000
-2. **Backend API (FastAPI)** - Server running on port 8000
+The app follows a **3-tier architecture** with a **single server deployment**:
+1. **Frontend (React)** - Built and served by the backend as static files
+2. **Backend API (FastAPI)** - Server running on port 8000 (serves both API and frontend)
 3. **Database (SQLite)** - File-based database (`quiz_app.db`)
+
+> **Note:** The frontend is built with `npm run build` and the backend serves the production build. No separate frontend server is needed for production.
+
+### Quick Start Commands
+
+**Linux/Mac:**
+```bash
+# Setup and run
+cd Quiz-App
+cp .env-template .env          # Create .env file
+uv venv && source .venv/bin/activate
+uv pip install -r backend/requirements.txt
+cd frontend && npm install && npm run build && cd ..
+cd backend && uvicorn main:app --reload --host localhost --port 8000
+```
+
+**Windows (PowerShell):**
+```powershell
+# Setup and run
+cd Quiz-App
+copy .env-template .env        # Create .env file
+uv venv; .venv\Scripts\activate
+uv pip install -r backend/requirements.txt
+cd frontend; npm install; npm run build; cd ..
+cd backend; uvicorn main:app --reload --host localhost --port 8000
+```
 
 ---
 
@@ -216,8 +242,11 @@ def submit_quiz(submission: QuizSubmission, user: User = Depends(require_user)):
 
 ### API Communication (`api.js`):
 ```javascript
+// API_URL defaults to '' (same origin) when served by the backend
+export const API_URL = process.env.REACT_APP_API_URL || '';
+
 export async function apiCall(endpoint, options) {
-  const response = await fetch(`http://localhost:8000${endpoint}`, {
+  const response = await fetch(`${API_URL}${endpoint}`, {
     credentials: 'include',  // CRITICAL: Sends session cookie
     headers: { 'Content-Type': 'application/json' },
     ...options
@@ -225,6 +254,8 @@ export async function apiCall(endpoint, options) {
   return response.json();
 }
 ```
+
+> **Note:** When the frontend is served by the backend (production), `API_URL` is empty so all API calls use relative URLs to the same origin. For development with a separate frontend server, set `REACT_APP_API_URL=http://localhost:8000`.
 
 ---
 
@@ -373,7 +404,7 @@ function ParsonsProblem({ blocks, order, onOrderChange }) {
 1. **Frontend**: User navigates to `/quiz/python_basics_01`
 2. **React Router**: Matches route, renders `<Quiz>` component
 3. **useEffect**: Triggers on mount
-4. **API Call**: `fetch('http://localhost:8000/api/quiz/quiz/python_basics_01')`
+4. **API Call**: `fetch('/api/quiz/quiz/python_basics_01')` (relative URL, same server)
 5. **Browser**: Sends request with session cookie
 6. **Backend CORS**: Checks origin, allows request
 7. **Backend Session**: Reads cookie (user logged in?)
@@ -462,13 +493,23 @@ CREATE TABLE scores (
 ## 🚀 Deployment Considerations
 
 ### Environment Variables:
+
+Create a `.env` file from the template:
+- **Linux/Mac:** `cp .env-template .env`
+- **Windows:** `copy .env-template .env`
+
 ```bash
 GITHUB_CLIENT_ID=your_client_id
 GITHUB_CLIENT_SECRET=your_client_secret
+GITHUB_REDIRECT_URI=http://localhost:8000/auth/callback
 SECRET_KEY=random_secret_key
-DATABASE_URL=sqlite:///./quiz_app.db
-FRONTEND_URL=http://localhost:3000
+DATABASE_PATH=./quiz_app.db
+FRONTEND_URL=  # Leave empty when backend serves frontend
 ```
+
+Generate a secure SECRET_KEY:
+- **Linux/Mac:** `python -c "import secrets; print(secrets.token_urlsafe(32))"`
+- **Windows:** `python -c "import secrets; print(secrets.token_urlsafe(32))"`
 
 ### Production Changes Needed:
 1. Switch from SQLite to PostgreSQL
