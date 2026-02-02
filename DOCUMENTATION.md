@@ -11,26 +11,72 @@ The app follows a **3-tier architecture** with a **single server deployment**:
 
 ### Quick Start Commands
 
-**Linux/Mac:**
+The commands below include both Unix/macOS (bash) and Windows (PowerShell) examples. Where a command depends on your current working directory, the note indicates whether to run from the project root or the `docker` folder.
+
+**Linux / macOS (bash)**
 ```bash
-# Setup and run
+# From project root
 cd Quiz-App
 cp .env-template .env          # Create .env file
-uv venv && source .venv/bin/activate
+
+# Create and activate venv
+uv venv
+source .venv/bin/activate
+
+# Install Python deps and build frontend
 uv pip install -r backend/requirements.txt
 cd frontend && npm install && npm run build && cd ..
+
+# Run backend (serves API + built frontend)
 cd backend && uvicorn main:app --reload --host localhost --port 8000
 ```
 
-**Windows (PowerShell):**
+**Windows (PowerShell)**
 ```powershell
-# Setup and run
-cd Quiz-App
+# From project root
+cd "Quiz-App"
 copy .env-template .env        # Create .env file
-uv venv; .venv\Scripts\activate
+
+# Create and activate venv (PowerShell)
+uv venv
+.\.venv\Scripts\Activate.ps1
+
+# Install Python deps and build frontend
 uv pip install -r backend/requirements.txt
 cd frontend; npm install; npm run build; cd ..
+
+# Run backend (serves API + built frontend)
 cd backend; uvicorn main:app --reload --host localhost --port 8000
+```
+
+**Note on Docker Compose usage**
+
+Modern Docker CLI supports `docker compose` (with a space). If you run Compose from the `docker` folder you must point `--env-file` at the project `.env` (example below uses the project root `.env` located one level above `docker`).
+
+From the `docker` folder (Unix/macOS):
+```bash
+cd docker
+docker compose -f docker-compose.yml --env-file ../.env up -d --build
+# legacy syntax also works if installed: docker-compose -f docker-compose.yml --env-file ../.env up -d --build
+```
+
+From the `docker` folder (Windows PowerShell):
+```powershell
+cd docker
+docker compose -f docker-compose.yml --env-file ../.env up -d --build
+# legacy: docker-compose -f docker-compose.yml --env-file ..\.env up -d --build
+```
+
+Or run from project root and point to the compose file:
+
+Unix/macOS:
+```bash
+docker compose -f docker/docker-compose.yml --env-file .env up -d --build
+```
+
+Windows (PowerShell):
+```powershell
+docker compose -f "docker\docker-compose.yml" --env-file ".env" up -d --build
 ```
 
 ---

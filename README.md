@@ -75,10 +75,17 @@ Quiz-App/
 5. Run the backend (serves both API and frontend):
    ```bash
    cd backend && source ../.venv/bin/activate && uvicorn main:app --reload --host localhost --port 8000
-   ```
-6. Open the forwarded port 8000 in your browser
+3. Copy `.env-template` to `.env` and add your GitHub OAuth credentials.
 
-### Option 2: Docker (Production)
+  Unix / macOS:
+  ```bash
+  cp .env-template .env
+  ```
+
+  Windows (PowerShell):
+  ```powershell
+  copy .env-template .env
+  ```
 
 ```bash
 # Clone the repository
@@ -103,7 +110,9 @@ The app will be available at `http://localhost:8000`
 # Install uv (if not installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Clone and setup
+docker compose -f docker-compose.yml --env-file ../.env up -d --build
+# (or with legacy syntax)
+docker-compose -f docker-compose.yml --env-file ../.env up -d --build
 git clone https://github.com/your-org/Quiz-App.git
 cd Quiz-App
 

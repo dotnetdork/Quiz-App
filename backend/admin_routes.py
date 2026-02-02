@@ -1,7 +1,7 @@
 """
 Admin Routes - Teacher Dashboard.
 
-Protected routes that only users with 'teacher' role can access.
+Protected routes that only users with 'Teacher' or 'Developer' role can access.
 Shows all students and their quiz attempts.
 """
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -33,7 +33,8 @@ def require_teacher(request: Request, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     
-    if user.role != "teacher":
+    # Allow Teacher and Developer roles
+    if user.role not in ("Teacher", "Developer"):
         raise HTTPException(
             status_code=403,
             detail="Access denied. Teacher role required."
@@ -60,7 +61,7 @@ def get_all_students(
     - total_attempts (number of quizzes taken)
     - total_points (sum of all scores)
     """
-    students = db.query(User).filter(User.role == "student").all()
+    students = db.query(User).filter(User.role == "Student").all()
     
     result = []
     for student in students:
@@ -139,7 +140,7 @@ def get_admin_stats(
     Get overall statistics for the teacher dashboard.
     """
     # Total students
-    total_students = db.query(User).filter(User.role == "student").count()
+    total_students = db.query(User).filter(User.role == "Student").count()
     
     # Total quiz attempts
     total_attempts = db.query(Score).count()

@@ -22,7 +22,7 @@ from sqlalchemy.orm import Session
 from config import SECRET_KEY, FRONTEND_URL
 from database import get_db, init_db
 from models import User, Score
-from auth import oauth, get_github_user
+from auth import authorize_redirect, authorize_access_token, get_github_user
 
 # ----------------------------
 # Determine static files path
@@ -103,10 +103,10 @@ def require_user(request: Request, db: Session = Depends(get_db)):
 def require_teacher(request: Request, db: Session = Depends(get_db)):
     """
     Dependency that requires a teacher role.
-    Raises 403 if not a teacher.
+    Raises 403 if not a teacher or developer.
     """
     user = require_user(request, db)
-    if user.role != "teacher":
+    if user.role not in ("Teacher", "Developer"):
         raise HTTPException(status_code=403, detail="Teacher access required")
     return user
 
@@ -142,7 +142,7 @@ async def login(request: Request):
     Redirects to GitHub's authorization page.
     """
     redirect_uri = request.url_for("auth_callback")
-    return await oauth.github.authorize_redirect(request, redirect_uri)
+    return await authorize_redirect(request, redirect_uri)
 
 
 @app.get("/auth/callback")
@@ -154,7 +154,7 @@ async def auth_callback(request: Request, db: Session = Depends(get_db)):
     """
     try:
         # Exchange code for token
-        token = await oauth.github.authorize_access_token(request)
+        token = await authorize_access_token(request)
         
         # Get user info from GitHub
         github_user = await get_github_user(token)
@@ -166,11 +166,11 @@ async def auth_callback(request: Request, db: Session = Depends(get_db)):
         user = db.query(User).filter(User.github_id == github_id).first()
         
         if not user:
-            # Create new user as student
+            # Create new user as Student (TitleCase)
             user = User(
                 github_id=github_id,
                 username=username,
-                role="student"
+                role="Student"
             )
             db.add(user)
             db.commit()

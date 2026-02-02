@@ -2,7 +2,7 @@
  * Admin Page Component
  * 
  * Teacher-only dashboard showing all students and their attempts.
- * Requires the user to have 'teacher' role.
+ * Requires the user to have 'Teacher' or 'Developer' role.
  */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -27,7 +27,7 @@ function Admin() {
         const userData = await apiCall('/auth/me');
         setUser(userData);
         
-        if (userData.role !== 'teacher') {
+        if (userData.role !== 'Teacher' && userData.role !== 'Developer') {
           setError('Access denied. Teacher role required.');
           setLoading(false);
           return;
@@ -75,7 +75,7 @@ function Admin() {
   }
 
   // Show access denied or login prompt
-  if (error || !user || user.role !== 'teacher') {
+  if (error || !user || (user.role !== 'Teacher' && user.role !== 'Developer')) {
     return (
       <div className="text-center mt-lg">
         <h2>Access Denied</h2>
@@ -101,7 +101,7 @@ function Admin() {
       <div className="card mb-lg">
         <h1>Teacher Dashboard</h1>
         <p className="text-secondary">
-          Logged in as: <strong>{user.username}</strong> (Teacher)
+          Logged in as: <strong>{user.username}</strong> ({user.role})
         </p>
       </div>
 
@@ -222,7 +222,7 @@ function Admin() {
         <h3>Admin Note</h3>
         <p className="text-secondary">
           To promote a student to teacher, update their role directly in the 
-          SQLite database: <code>UPDATE users SET role='teacher' WHERE username='...';</code>
+          SQLite database: <code>UPDATE users SET role='Teacher' WHERE username='...';</code>
         </p>
       </div>
     </div>

@@ -69,7 +69,7 @@ function Dashboard() {
         <p className="text-secondary">
           Role: <strong>{user.role}</strong>
         </p>
-        {user.role === 'teacher' && (
+        {((user.role === 'Teacher') || (user.role === 'Developer')) && (
           <Link 
             to="/admin" 
             className="btn-secondary mt-sm"

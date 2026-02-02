@@ -18,7 +18,7 @@ class User(Base):
     - id: Primary key (auto-increment)
     - github_id: Unique GitHub user ID
     - username: GitHub username
-    - role: Either 'student' or 'teacher'
+    - role: Either 'Student', 'Teacher', or 'Developer'
     """
     __tablename__ = "users"
     
@@ -31,8 +31,8 @@ class User(Base):
     # GitHub username (display name)
     username = Column(String, nullable=False)
     
-    # Role: 'student' (default) or 'teacher'
-    role = Column(String, default="student", nullable=False)
+    # Role: 'Student' (default), 'Teacher', or 'Developer'
+    role = Column(String, default="Student", nullable=False)
     
     # Relationship to scores
     scores = relationship("Score", back_populates="user")
