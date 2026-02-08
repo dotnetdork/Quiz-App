@@ -8,6 +8,9 @@
 import { useState } from 'react';
 import './Learn.css';
 
+// Maximum number of search results to display
+const MAX_SEARCH_RESULTS = 20;
+
 /**
  * Data for each pathway/category
  */
@@ -795,7 +798,7 @@ function Learn() {
       });
     });
 
-    return results.slice(0, 20); // Limit results
+    return results.slice(0, MAX_SEARCH_RESULTS);
   };
 
   const handleBack = () => {

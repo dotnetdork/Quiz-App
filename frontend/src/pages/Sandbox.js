@@ -205,8 +205,11 @@ public class Main {
 
 /**
  * Simple code execution simulator (client-side only)
- * NOTE: This is a SIMULATION for educational purposes.
- * Real code execution would require a backend service.
+ * 
+ * NOTE: This is a SIMULATION for educational/demonstration purposes only.
+ * The regex patterns are intentionally simplified and won't handle all valid
+ * code cases (nested parentheses, multiline strings, escaped quotes, etc.).
+ * Real code execution would require a secure backend service with sandboxing.
  */
 function simulateCodeExecution(code, language) {
   // This is a simple simulation that shows what the output would look like
@@ -217,7 +220,7 @@ function simulateCodeExecution(code, language) {
   output.push('─'.repeat(40));
   
   if (language === 'python') {
-    // Simple Python simulation
+    // Simple Python print detection (intentionally basic - for demo purposes)
     const printRegex = /print\s*\(\s*(?:f?["'](.+?)["']|(.+?))\s*\)/g;
     let match;
     let foundPrints = false;
@@ -238,7 +241,7 @@ function simulateCodeExecution(code, language) {
       output.push('(No print statements found in code)');
     }
   } else if (language === 'java') {
-    // Simple Java simulation
+    // Simple Java print detection (intentionally basic - for demo purposes)
     const printRegex = /System\.out\.print(?:ln)?\s*\(\s*["']?(.+?)["']?\s*\)/g;
     let match;
     let foundPrints = false;
