@@ -48,7 +48,7 @@ if (Test-Path ".venv") {
         uv pip install -r backend/requirements.txt
     } else {
         python -m venv .venv
-        python -m pip install -r backend/requirements.txt
+        & ".\.venv\Scripts\pip.exe" install -r backend/requirements.txt
     }
 }
 

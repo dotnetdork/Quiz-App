@@ -85,7 +85,7 @@ const CATEGORIES = [
   {
     id: 'technology',
     name: 'Technology',
-    description: 'Robotics, AI, and tech concepts',
+    description: 'Robotics, AI, and other technical concepts',
     Icon: TechnologyIcon,
     color: '#607d8b'
   }
@@ -157,10 +157,10 @@ function Home() {
     <div>
       {/* Hero Section */}
       <section className="hero">
-        <h1>Welcome to Quiz-App</h1>
+        <h1>Welcome to Quiz-App!</h1>
         <p>
           Test your programming knowledge with interactive quizzes and 
-          Parsons Problems (drag-and-drop code ordering).
+          Parsons Problems.
         </p>
         
         {/* Login or Dashboard button */}
