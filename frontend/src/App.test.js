@@ -6,8 +6,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders Quiz App brand', () => {
+test('renders League Quiz brand', () => {
   render(<App />);
-  const brandElement = screen.getByText(/Quiz App/i);
+  const brandElement = screen.getByText(/League Quiz/i);
   expect(brandElement).toBeInTheDocument();
 });

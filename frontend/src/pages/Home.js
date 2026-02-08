@@ -63,7 +63,7 @@ function Home() {
     <div>
       {/* Hero Section */}
       <section className="hero">
-        <h1>Welcome to Quiz App</h1>
+        <h1>Welcome to the League Quiz</h1>
         <p>
           Test your Python knowledge with interactive quizzes and 
           Parsons Problems (drag-and-drop code ordering).
