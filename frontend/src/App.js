@@ -68,13 +68,13 @@ function Navigation() {
           <Link to="/dashboard">Dashboard</Link>
         </li>
         <li>
-          <Link to="/leaderboard">Leaderboard</Link>
+          <Link to="/learn">Learn</Link>
         </li>
         <li>
           <Link to="/sandbox">Sandbox</Link>
         </li>
         <li>
-          <Link to="/learn">Learn</Link>
+          <Link to="/leaderboard">Leaderboard</Link>
         </li>
       </ul>
     </nav>
