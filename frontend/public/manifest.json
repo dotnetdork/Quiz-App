@@ -1,6 +1,6 @@
 {
-  "short_name": "League Quiz",
-  "name": "League Quiz - Interactive Python Learning by League of Amazing Programmers",
+  "short_name": "Quiz-App",
+  "name": "Quiz-App - Interactive Learning by League of Amazing Programmers",
   "icons": [
     {
       "src": "favicon.ico",

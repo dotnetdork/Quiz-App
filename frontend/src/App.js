@@ -4,7 +4,6 @@
  * This is the root component for the Quiz App.
  * It sets up routing and provides the main layout.
  */
-import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 
@@ -16,57 +15,46 @@ import Leaderboard from './pages/Leaderboard';
 import Admin from './pages/Admin';
 
 /**
- * League Logo Component
- * Displays the League logo image with a fallback to an SVG icon
+ * App Logo Component
+ * Displays an orange square with a zap (lightning bolt) symbol
  */
-function LeagueLogo({ className, size = 40 }) {
-  const [imageError, setImageError] = useState(false);
-  
-  // External League logo URL
-  const logoUrl = "https://www.jointheleague.org/_astro/flag-girl.DP40BSEm_2jGMpO.webp";
-  
-  if (imageError) {
-    // Fallback SVG logo - stylized "L" with code brackets
-    return (
-      <svg 
-        className={className}
-        width={size} 
-        height={size} 
-        viewBox="0 0 40 40" 
-        fill="none" 
-        xmlns="http://www.w3.org/2000/svg"
-        aria-label="League of Amazing Programmers Logo"
-      >
-        <rect width="40" height="40" rx="6" fill="#ef6c00"/>
-        <path d="M10 12L16 20L10 28" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M30 12L24 20L30 28" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-        <text x="20" y="25" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold" fontFamily="Arial">L</text>
-      </svg>
-    );
-  }
-  
+function AppLogo({ className, size = 40 }) {
   return (
-    <img 
-      src={logoUrl}
-      alt="League of Amazing Programmers Logo" 
+    <svg 
       className={className}
-      style={{ height: size, width: 'auto' }}
-      onError={() => setImageError(true)}
-    />
+      width={size} 
+      height={size} 
+      viewBox="0 0 40 40" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Quiz-App Logo"
+    >
+      {/* Orange square background */}
+      <rect width="40" height="40" rx="4" fill="#ef6c00"/>
+      {/* Zap/Lightning bolt symbol */}
+      <path 
+        d="M22 6L10 22H18L16 34L30 18H22L24 6H22Z" 
+        fill="white" 
+        stroke="white" 
+        strokeWidth="1" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
 /**
  * Navigation Component
- * Shows the top navigation bar with League logo
+ * Shows the top navigation bar with Quiz-App logo
  */
 function Navigation() {
   return (
     <nav className="nav">
       {/* Brand/Logo */}
       <Link to="/" className="nav-brand">
-        <LeagueLogo className="nav-logo" size={40} />
-        League Quiz
+        <AppLogo className="nav-logo" size={40} />
+        Quiz-App
       </Link>
       
       {/* Navigation Links */}
@@ -87,13 +75,13 @@ function Navigation() {
 
 /**
  * Footer Component
- * Shows the footer with League branding
+ * Shows the footer with Quiz-App branding
  */
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <LeagueLogo className="footer-logo" size={50} />
+        <AppLogo className="footer-logo" size={50} />
         <p>© 2026 The League of Amazing Programmers</p>
         <p>
           <a href="https://www.jointheleague.org/" target="_blank" rel="noopener noreferrer">

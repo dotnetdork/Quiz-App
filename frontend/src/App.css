@@ -80,6 +80,79 @@
 }
 
 /* -----------------------------------------
+   Category Grid - Course Selection
+   ----------------------------------------- */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.category-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 3px solid transparent;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: var(--category-color, var(--color-primary));
+}
+
+.category-card.selected {
+  border-color: var(--category-color, var(--color-primary));
+  background-color: rgba(239, 108, 0, 0.05);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.category-card svg {
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+
+.category-card h3 {
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-secondary);
+}
+
+.category-card p {
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+  margin-bottom: var(--spacing-sm);
+}
+
+.category-card .quiz-count {
+  display: inline-block;
+  background-color: var(--category-color, var(--color-primary));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  font-weight: 500;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.section-header h2 {
+  margin-bottom: 0;
+}
+
+/* -----------------------------------------
    Quiz Card - League Theme
    ----------------------------------------- */
 .quiz-card {
