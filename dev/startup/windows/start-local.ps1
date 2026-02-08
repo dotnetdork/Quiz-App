@@ -53,7 +53,7 @@ Write-Host "📦 Installing Python dependencies..." -ForegroundColor Blue
 if ($UseUv) {
     uv pip install -r backend/requirements.txt
 } else {
-    & ".\.venv\Scripts\pip.exe" install -r backend/requirements.txt
+    python -m pip install -r backend/requirements.txt
 }
 
 # Check if frontend needs to be built
@@ -80,4 +80,7 @@ Write-Host "Press Ctrl+C to stop the server"
 Write-Host ""
 
 Set-Location backend
-& "..\\.venv\\Scripts\\python.exe" -m uvicorn main:app --reload --host localhost --port 8000
+# Activate venv
+& "..\.venv\Scripts\Activate.ps1"
+# Run uvicorn
+python -m uvicorn main:app --reload --host localhost --port 8000

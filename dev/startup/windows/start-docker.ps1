@@ -69,13 +69,16 @@ if ($Detach) {
 
 # Try docker compose (v2) first, then fall back to docker-compose
 $ComposeCommand = $null
-try {
-    docker compose version | Out-Null
-    $ComposeCommand = "compose"
-} catch {
-    if (Get-Command "docker-compose" -ErrorAction SilentlyContinue) {
-        $ComposeCommand = "docker-compose"
+if (Get-Command "docker" -ErrorAction SilentlyContinue) {
+    # Check if docker compose v2 is available
+    $ComposeV2 = & docker compose version 2>&1 | Out-String
+    if ($LASTEXITCODE -eq 0) {
+        $ComposeCommand = "compose"
     }
+}
+
+if (-not $ComposeCommand -and (Get-Command "docker-compose" -ErrorAction SilentlyContinue)) {
+    $ComposeCommand = "docker-compose"
 }
 
 if (-not $ComposeCommand) {

@@ -48,7 +48,7 @@ if (Test-Path ".venv") {
         uv pip install -r backend/requirements.txt
     } else {
         python -m venv .venv
-        & ".\.venv\Scripts\pip.exe" install -r backend/requirements.txt
+        python -m pip install -r backend/requirements.txt
     }
 }
 
@@ -72,4 +72,7 @@ Write-Host "Press Ctrl+C to stop the server"
 Write-Host ""
 
 Set-Location backend
-& "..\\.venv\\Scripts\\python.exe" -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Activate venv
+& "..\.venv\Scripts\Activate.ps1"
+# Run uvicorn
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
