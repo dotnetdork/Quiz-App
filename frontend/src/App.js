@@ -13,6 +13,8 @@ import Dashboard from './pages/Dashboard';
 import Quiz from './pages/Quiz';
 import Leaderboard from './pages/Leaderboard';
 import Admin from './pages/Admin';
+import Sandbox from './pages/Sandbox';
+import Learn from './pages/Learn';
 
 /**
  * App Logo Component
@@ -68,6 +70,12 @@ function Navigation() {
         <li>
           <Link to="/leaderboard">Leaderboard</Link>
         </li>
+        <li>
+          <Link to="/sandbox">Sandbox</Link>
+        </li>
+        <li>
+          <Link to="/learn">Learn</Link>
+        </li>
       </ul>
     </nav>
   );
@@ -115,6 +123,12 @@ function App() {
           
           {/* Leaderboard - top scores */}
           <Route path="/leaderboard" element={<Leaderboard />} />
+          
+          {/* Sandbox - interactive code editor */}
+          <Route path="/sandbox" element={<Sandbox />} />
+          
+          {/* Learn - IT dictionary and resources */}
+          <Route path="/learn" element={<Learn />} />
           
           {/* Admin page - teacher only */}
           <Route path="/admin" element={<Admin />} />

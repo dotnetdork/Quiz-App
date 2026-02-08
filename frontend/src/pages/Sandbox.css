@@ -1,0 +1,360 @@
+/* =========================================
+   Sandbox Page Styles
+   ========================================= */
+
+.sandbox-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sandbox-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.sandbox-header h1 {
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.sandbox-header p {
+  color: var(--text-secondary);
+}
+
+/* -----------------------------------------
+   Controls Bar
+   ----------------------------------------- */
+.sandbox-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.language-selector label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.language-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.language-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--text-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: var(--font-small);
+}
+
+.language-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.language-btn.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+}
+
+.language-btn svg {
+  border-radius: 4px;
+}
+
+/* -----------------------------------------
+   Challenges Dropdown
+   ----------------------------------------- */
+.challenge-selector {
+  position: relative;
+}
+
+.challenges-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem !important;
+}
+
+.challenges-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 350px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  border: 1px solid var(--text-light);
+}
+
+.challenges-header {
+  padding: var(--spacing-sm);
+  background: var(--bg-code);
+  border-bottom: 1px solid var(--text-light);
+}
+
+.challenge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  border-bottom: 1px solid var(--bg-code);
+  transition: background 0.2s ease;
+}
+
+.challenge-item:last-child {
+  border-bottom: none;
+}
+
+.challenge-item:hover {
+  background: var(--bg-code);
+}
+
+.challenge-item.active {
+  background: rgba(239, 108, 0, 0.1);
+  border-left: 3px solid var(--color-primary);
+}
+
+.challenge-title {
+  font-weight: 600;
+  color: var(--color-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.challenge-desc {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+}
+
+/* -----------------------------------------
+   Challenge Banner
+   ----------------------------------------- */
+.challenge-banner {
+  background: linear-gradient(135deg, rgba(239, 108, 0, 0.05) 0%, rgba(26, 54, 93, 0.05) 100%);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.challenge-banner h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-secondary);
+}
+
+.challenge-banner p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.challenge-info {
+  margin-bottom: var(--spacing-sm);
+}
+
+.challenge-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btn-hint {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-small);
+}
+
+.btn-hint:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-reset {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--text-light);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-small);
+}
+
+.btn-reset:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.hint-box {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-primary-light);
+  color: var(--text-primary);
+}
+
+/* -----------------------------------------
+   Main Editor Area
+   ----------------------------------------- */
+.sandbox-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 900px) {
+  .sandbox-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.editor-panel,
+.output-panel {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-secondary);
+  color: white;
+  font-weight: 600;
+}
+
+.panel-header span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-header svg {
+  border-radius: 4px;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-clear {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: white;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-small);
+}
+
+.btn-clear:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* -----------------------------------------
+   Code Editor
+   ----------------------------------------- */
+.code-editor {
+  flex: 1;
+  min-height: 350px;
+  padding: var(--spacing-md);
+  border: none;
+  resize: none;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  outline: none;
+}
+
+.code-editor::placeholder {
+  color: #666;
+}
+
+.editor-footer {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-code);
+  border-top: 1px solid var(--text-light);
+}
+
+.run-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-base);
+}
+
+/* -----------------------------------------
+   Output Panel
+   ----------------------------------------- */
+.code-output {
+  flex: 1;
+  min-height: 350px;
+  padding: var(--spacing-md);
+  margin: 0;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* -----------------------------------------
+   Info Section
+   ----------------------------------------- */
+.sandbox-info {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sandbox-info h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-secondary);
+}
+
+.sandbox-info ul {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  color: var(--text-secondary);
+}
+
+.sandbox-info li {
+  margin-bottom: 0.5rem;
+}
