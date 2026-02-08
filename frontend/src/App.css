@@ -210,6 +210,23 @@
 }
 
 /* -----------------------------------------
+   Dashboard Actions
+   ----------------------------------------- */
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.dashboard-actions .logout-link {
+  margin-left: auto;
+}
+
+.dashboard-username {
+  color: var(--text-primary);
+}
+
+/* -----------------------------------------
    Multiple Choice Options - League Theme
    ----------------------------------------- */
 .options-list {

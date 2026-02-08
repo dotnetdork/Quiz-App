@@ -65,21 +65,23 @@ function Dashboard() {
     <div>
       {/* User Info Header */}
       <div className="card text-center">
-        <h1>Welcome, {user.username}!</h1>
+        <h1>
+          Hello there, <span className="dashboard-username">{user.username}</span>!
+        </h1>
         <p className="text-secondary">
           Role: <strong>{user.role}</strong>
         </p>
-        {((user.role === 'Teacher') || (user.role === 'Developer')) && (
-          <Link 
-            to="/admin" 
-            className="btn-secondary mt-sm"
-            style={{ textDecoration: 'none', display: 'inline-block' }}
-          >
-            Go to Admin Dashboard
-          </Link>
-        )}
-        <div className="mt-md">
-          <a href={`${API_URL}/auth/logout`} className="btn-secondary">
+        <div className="dashboard-actions mt-md">
+          {((user.role === 'Teacher') || (user.role === 'Developer')) && (
+            <Link 
+              to="/admin" 
+              className="btn-secondary"
+              style={{ textDecoration: 'none', display: 'inline-block' }}
+            >
+              Go to Admin Dashboard
+            </Link>
+          )}
+          <a href={`${API_URL}/auth/logout`} className="btn-secondary logout-link">
             Logout
           </a>
         </div>
@@ -104,13 +106,6 @@ function Dashboard() {
         {scores.length === 0 ? (
           <div className="card">
             <p>You haven't taken any quizzes yet.</p>
-            <Link 
-              to="/" 
-              className="btn-primary mt-md"
-              style={{ textDecoration: 'none', display: 'inline-block' }}
-            >
-              Browse Quizzes
-            </Link>
           </div>
         ) : (
           <table>

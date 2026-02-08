@@ -166,7 +166,7 @@ function Home() {
         {/* Login or Dashboard button */}
         {user ? (
           <div>
-            <p>Welcome back, <strong>{user.username}</strong>!</p>
+            <p>Glad to have you back, <strong className="dashboard-username">{user.username}</strong>!</p>
             <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
               Go to Dashboard
             </Link>

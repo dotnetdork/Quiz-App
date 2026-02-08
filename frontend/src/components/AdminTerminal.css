@@ -95,15 +95,19 @@
   background-color: #1a1a2e;
   padding: var(--spacing-sm);
   min-height: 300px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .terminal-body .xterm {
   padding: var(--spacing-xs);
+  width: 100%;
 }
 
 /* Override xterm defaults for better League integration */
 .terminal-body .xterm-viewport {
   overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
 .terminal-body .xterm-viewport::-webkit-scrollbar {

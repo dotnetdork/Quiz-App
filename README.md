@@ -59,7 +59,7 @@ uv pip install -r backend/requirements.txt
 cd frontend && npm install && npm run build && cd ..
 
 # Run
-cd backend && python -m uvicorn main:app --reload --port 8000
+cd backend && python -m uvicorn main:app --reload --host localhost --port 8000
 ```
 
 ### Docker

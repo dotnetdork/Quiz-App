@@ -23,7 +23,7 @@ function AdminTerminal() {
   const wsRef = useRef(null);
   const inputBufferRef = useRef('');
   const [isConnected, setIsConnected] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
 
   // Connect to WebSocket
   const connect = useCallback(() => {

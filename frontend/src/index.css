@@ -142,22 +142,27 @@ button {
   background-color: var(--color-primary);
   color: var(--text-on-primary);
   border-color: var(--color-primary);
+  padding: calc(var(--spacing-xs) + 0.2rem) calc(var(--spacing-md) + 0.2rem);
+  border-radius: 999px;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+  color: var(--color-secondary);
 }
 
 /* Secondary Button - Navy Blue outline */
 .btn-secondary {
-  background-color: white;
-  color: var(--color-secondary);
+  background-color: var(--color-secondary);
+  color: var(--text-on-primary);
   border-color: var(--color-secondary);
+  padding: calc(var(--spacing-xs) + 0.2rem) calc(var(--spacing-md) + 0.2rem);
+  border-radius: 999px;
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-secondary);
+  background-color: #274a78;
   color: var(--text-on-primary);
 }
 

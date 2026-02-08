@@ -81,7 +81,6 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <AppLogo className="footer-logo" size={50} />
         <p>© 2026 The League of Amazing Programmers</p>
         <p>
           <a href="https://www.jointheleague.org/" target="_blank" rel="noopener noreferrer">

@@ -63,8 +63,7 @@ python -m uvicorn main:app --reload --port 8000
 
 **Terminal 2 - Frontend:**
 ```bash
-cd frontend
-npm start  # Runs on port 3000, proxies API to 8000
+cd frontend && npm start  # Runs on port 3000, proxies API to 8000
 ```
 
 ---

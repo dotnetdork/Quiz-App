@@ -35,31 +35,68 @@ router = APIRouter()
 # ----------------------------
 # Terminal Commands
 # ----------------------------
-HELP_TEXT = """
-\x1b[33mAvailable Commands:\x1b[0m
-
-\x1b[36mDatabase Commands:\x1b[0m
-  sql <query>       - Execute a SQL query on the SQLite database
-  tables            - List all database tables
-  schema <table>    - Show schema for a specific table
-  
-\x1b[36mUser Management:\x1b[0m
-  users             - List all users
-  promote <user>    - Promote a user to Teacher role
-  demote <user>     - Demote a user to Student role
-  
-\x1b[36mStatistics:\x1b[0m
-  stats             - Show database statistics
-  
-\x1b[36mOther:\x1b[0m
-  help              - Show this help message
-  clear             - Clear the terminal screen
-  
-\x1b[33mExamples:\x1b[0m
-  sql SELECT * FROM users LIMIT 5
-  schema users
-  promote johndoe
-"""
+HELP_TEXT = "\r\n".join([
+    "\x1b[33mAvailable Commands:\x1b[0m",
+    "",
+    "\x1b[36mDatabase Commands:\x1b[0m",
+    "  sql <query>       - Execute a SQL query on the SQLite database",
+    "  tables            - List all database tables",
+    "  schema <table>    - Show schema for a specific table",
+    "",
+    "\x1b[36mUser Management:\x1b[0m",
+    "  users             - List all users",
+    "  promote <user>    - Promote a user to Teacher role",
+    "  demote <user>     - Demote a user to Student role",
+    "",
+    "\x1b[36mStatistics:\x1b[0m",
+    "  stats             - Show database statistics",
+    "",
+    "\x1b[36mOther:\x1b[0m",
+    "  help              - Show this help message",
+    "  clear             - Clear the terminal screen",
+    "",
+    "\x1b[33m════════════════════════════════════════════════════════════\x1b[0m",
+    "\x1b[33mSQL Command Examples:\x1b[0m",
+    "",
+    "\x1b[36m• View Users & Roles:\x1b[0m",
+    "  sql SELECT * FROM users",
+    "  sql SELECT username, role FROM users ORDER BY username",
+    "  sql SELECT * FROM users WHERE role = 'Teacher'",
+    "",
+    "\x1b[36m• Update User Roles:\x1b[0m",
+    "  sql UPDATE users SET role = 'Teacher' WHERE username = 'johndoe'",
+    "  sql UPDATE users SET role = 'Student' WHERE username = 'janedoe'",
+    "  sql UPDATE users SET role = 'Developer' WHERE username = 'admin'",
+    "",
+    "\x1b[36m• Update Usernames:\x1b[0m",
+    "  sql UPDATE users SET username = 'new_name' WHERE username = 'old_name'",
+    "  sql UPDATE users SET username = 'johndoe2' WHERE id = 5",
+    "",
+    "\x1b[36m• View Quiz History:\x1b[0m",
+    "  sql SELECT * FROM scores ORDER BY timestamp DESC LIMIT 10",
+    "  sql SELECT * FROM scores WHERE user_id = 1",
+    "  sql SELECT u.username, s.score, s.quiz_id FROM scores s JOIN users u ON s.user_id = u.id",
+    "",
+    "\x1b[36m• Delete Quiz History:\x1b[0m",
+    "  sql DELETE FROM scores WHERE user_id = 1",
+    "  sql DELETE FROM scores WHERE username = 'johndoe'",
+    "  sql DELETE FROM scores WHERE quiz_id = 'python-basics'",
+    "  sql DELETE FROM scores WHERE score < 50",
+    "  sql DELETE FROM scores  -- Delete ALL scores (use with caution!)",
+    "",
+    "\x1b[36m• Delete Users:\x1b[0m",
+    "  sql DELETE FROM users WHERE username = 'johndoe'",
+    "  sql DELETE FROM users WHERE id = 5",
+    "  sql DELETE FROM users WHERE role = 'Student' AND id > 10",
+    "",
+    "\x1b[36m• Advanced Queries:\x1b[0m",
+    "  sql SELECT username, COUNT(*) as attempts FROM scores s JOIN users u ON s.user_id = u.id GROUP BY username",
+    "  sql SELECT quiz_id, AVG(score) as avg_score FROM scores GROUP BY quiz_id",
+    "  sql SELECT * FROM users WHERE username LIKE '%test%'",
+    "",
+    "\x1b[33m════════════════════════════════════════════════════════════\x1b[0m",
+    "\x1b[31m⚠  WARNING: SQL modifications are permanent! Use with care.\x1b[0m",
+])
 
 
 def format_table(headers: list, rows: list) -> str:
@@ -311,7 +348,7 @@ def get_stats() -> str:
             f"\x1b[36mQuiz Statistics:\x1b[0m",
             f"  Total Attempts: {total_attempts}",
             f"  Average Score:  {avg_score}",
-            f"  Highest Score:  {max_score}",
+            f"  Highest Score:  {max_score}\n",
         ]
         
         return "\r\n".join(lines)
