@@ -46,6 +46,7 @@ This document explains how the Quiz-App works at a technical level.
 | `quiz_routes.py` | Quiz endpoints, YAML parsing |
 | `leaderboard_routes.py` | Score display endpoints |
 | `admin_routes.py` | Teacher-only endpoints |
+| `terminal_routes.py` | Admin terminal WebSocket endpoint |
 
 ### Frontend (React)
 

@@ -8,6 +8,7 @@ Welcome to the Quiz-App documentation.
 |----------|-------------|
 | [Getting Started](getting-started.md) | Setup and run the application |
 | [Development Guide](development-guide.md) | Make changes, add features, contribute |
+| [Admin Terminal](admin-terminal.md) | Browser-based terminal for database management |
 
 ## Architecture
 

@@ -15,6 +15,7 @@ Quiz-App/
 │   ├── quiz_routes.py       # Quiz API endpoints
 │   ├── leaderboard_routes.py
 │   ├── admin_routes.py
+│   ├── terminal_routes.py   # Admin terminal WebSocket
 │   ├── questions.yaml       # Quiz questions
 │   └── requirements.txt     # Python dependencies
 │
@@ -23,7 +24,17 @@ Quiz-App/
 │   │   ├── App.js           # Main component with routing
 │   │   ├── api.js           # API helper functions
 │   │   ├── pages/           # Page components
+│   │   │   ├── Home.js      # Landing page
+│   │   │   ├── Dashboard.js # User dashboard
+│   │   │   ├── Quiz.js      # Quiz taking
+│   │   │   ├── Leaderboard.js
+│   │   │   ├── Admin.js     # Teacher dashboard
+│   │   │   ├── Sandbox.js   # Code sandbox
+│   │   │   └── Learn.js     # IT dictionary
 │   │   └── components/      # Reusable components
+│   │       ├── AdminTerminal.js # Terminal emulator
+│   │       ├── MultipleChoice.js
+│   │       └── ParsonsProblem.js
 │   └── package.json         # JS dependencies
 │
 ├── dev/                     # Helper scripts

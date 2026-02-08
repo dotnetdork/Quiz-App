@@ -21,6 +21,9 @@ A full-stack Quiz Application for GitHub Codespaces with support for multiple-ch
 | 🔐 **GitHub OAuth** | Login with your GitHub account |
 | 🏆 **Leaderboard** | Global high scores (top 10 players) |
 | 👨‍🏫 **Teacher Dashboard** | Admin view for teachers to monitor students |
+| 💻 **Admin Terminal** | Browser-based SQLite terminal for database management |
+| 🖥️ **Code Sandbox** | Interactive code editor for Python and Java practice |
+| 📚 **Learn Dictionary** | IT and programming reference guide with key terms |
 | ♿ **Dyslexia-Friendly** | High contrast colors, large fonts, clean spacing |
 | 🐳 **Docker Support** | Easy deployment with Docker and Docker Compose |
 | ☁️ **Codespaces Ready** | Development container configuration included |
@@ -100,6 +103,7 @@ Copy `.env-template` to `.env` and configure:
 | 🛠️ [Development Guide](docs/development-guide.md) | How to make changes, add features |
 | 🏗️ [Architecture Overview](docs/architecture/overview.md) | How the app works |
 | 📡 [API Reference](docs/architecture/api-reference.md) | All API endpoints |
+| 💻 [Admin Terminal](docs/admin-terminal.md) | Terminal commands and usage |
 
 ---
 
