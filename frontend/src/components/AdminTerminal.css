@@ -1,0 +1,135 @@
+/* =========================================
+   Admin Terminal Styles - League Theme
+   ========================================= */
+
+.admin-terminal-container {
+  margin-top: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  border: 2px solid var(--color-primary);
+}
+
+.admin-terminal-container.minimized {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Terminal Header */
+.terminal-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.terminal-title {
+  color: #e0e0e0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.terminal-subtitle {
+  font-size: var(--font-small);
+  color: #888;
+  font-weight: 400;
+  margin-left: var(--spacing-sm);
+}
+
+.connection-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.connection-status.connected {
+  background-color: #4ecdc4;
+  box-shadow: 0 0 8px #4ecdc4;
+}
+
+.connection-status.disconnected {
+  background-color: #ff6b6b;
+  box-shadow: 0 0 8px #ff6b6b;
+}
+
+/* Terminal Controls */
+.terminal-controls {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.terminal-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.terminal-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-primary);
+}
+
+.terminal-btn.reconnect {
+  font-size: 16px;
+}
+
+.terminal-btn.reconnect:hover {
+  color: var(--color-primary);
+}
+
+/* Terminal Body */
+.terminal-body {
+  background-color: #1a1a2e;
+  padding: var(--spacing-sm);
+  min-height: 300px;
+}
+
+.terminal-body .xterm {
+  padding: var(--spacing-xs);
+}
+
+/* Override xterm defaults for better League integration */
+.terminal-body .xterm-viewport {
+  overflow-y: auto !important;
+}
+
+.terminal-body .xterm-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-body .xterm-viewport::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+.terminal-body .xterm-viewport::-webkit-scrollbar-thumb {
+  background: #4a4a5a;
+  border-radius: 4px;
+}
+
+.terminal-body .xterm-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .terminal-body {
+    min-height: 200px;
+  }
+  
+  .terminal-subtitle {
+    display: none;
+  }
+}
