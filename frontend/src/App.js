@@ -15,15 +15,46 @@ import Leaderboard from './pages/Leaderboard';
 import Admin from './pages/Admin';
 
 /**
+ * App Logo Component
+ * Displays an orange square with a zap (lightning bolt) symbol
+ */
+function AppLogo({ className, size = 40 }) {
+  return (
+    <svg 
+      className={className}
+      width={size} 
+      height={size} 
+      viewBox="0 0 40 40" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Quiz-App Logo"
+    >
+      {/* Orange square background */}
+      <rect width="40" height="40" rx="4" fill="#ef6c00"/>
+      {/* Zap/Lightning bolt symbol */}
+      <path 
+        d="M22 6L10 22H18L16 34L30 18H22L24 6H22Z" 
+        fill="white" 
+        stroke="white" 
+        strokeWidth="1" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/**
  * Navigation Component
- * Shows the top navigation bar
+ * Shows the top navigation bar with Quiz-App logo
  */
 function Navigation() {
   return (
     <nav className="nav">
       {/* Brand/Logo */}
       <Link to="/" className="nav-brand">
-        📚 Quiz App
+        <AppLogo className="nav-logo" size={40} />
+        Quiz-App
       </Link>
       
       {/* Navigation Links */}
@@ -39,6 +70,26 @@ function Navigation() {
         </li>
       </ul>
     </nav>
+  );
+}
+
+/**
+ * Footer Component
+ * Shows the footer with Quiz-App branding
+ */
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-content">
+        <AppLogo className="footer-logo" size={50} />
+        <p>© 2026 The League of Amazing Programmers</p>
+        <p>
+          <a href="https://www.jointheleague.org/" target="_blank" rel="noopener noreferrer">
+            Visit jointheleague.org
+          </a>
+        </p>
+      </div>
+    </footer>
   );
 }
 
@@ -70,6 +121,9 @@ function App() {
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
+      
+      {/* Footer */}
+      <Footer />
     </BrowserRouter>
   );
 }

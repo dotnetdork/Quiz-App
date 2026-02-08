@@ -4,6 +4,8 @@
 # This file contains quiz questions in two types:
 # 1. multiple_choice - Standard MCQ questions
 # 2. parsons - Drag-and-drop code ordering
+#
+# Categories: python, java, technology
 
 quizzes:
   # -----------------------------------
@@ -12,6 +14,7 @@ quizzes:
   - id: python_basics_01
     title: "Python Fundamentals"
     description: "Test your knowledge of basic Python concepts"
+    category: "python"
     questions:
       # Multiple Choice Question 1
       - id: q1
@@ -71,6 +74,7 @@ quizzes:
   - id: python_data_structures
     title: "Python Data Structures"
     description: "Learn about lists, dictionaries, and more"
+    category: "python"
     questions:
       # Multiple Choice
       - id: ds_q1
@@ -102,3 +106,59 @@ quizzes:
           - "set"
           - "dictionary"
         answer: "set"
+
+  # -----------------------------------
+  # Quiz 3: Java Basics (Sample)
+  # -----------------------------------
+  - id: java_basics_01
+    title: "Java Fundamentals"
+    description: "Test your knowledge of basic Java concepts"
+    category: "java"
+    questions:
+      - id: java_q1
+        type: "multiple_choice"
+        prompt: "Which keyword is used to create a class in Java?"
+        options:
+          - "def"
+          - "class"
+          - "struct"
+          - "type"
+        answer: "class"
+
+      - id: java_q2
+        type: "multiple_choice"
+        prompt: "What is the correct way to declare a main method in Java?"
+        options:
+          - "def main():"
+          - "function main()"
+          - "public static void main(String[] args)"
+          - "void main()"
+        answer: "public static void main(String[] args)"
+
+  # -----------------------------------
+  # Quiz 4: Technology Concepts (Sample)
+  # -----------------------------------
+  - id: tech_concepts_01
+    title: "Technology Concepts"
+    description: "General technology and computer science concepts"
+    category: "technology"
+    questions:
+      - id: tech_q1
+        type: "multiple_choice"
+        prompt: "What does CPU stand for?"
+        options:
+          - "Central Processing Unit"
+          - "Computer Personal Unit"
+          - "Central Program Utility"
+          - "Computer Processing Utility"
+        answer: "Central Processing Unit"
+
+      - id: tech_q2
+        type: "multiple_choice"
+        prompt: "Which of the following is a version control system?"
+        options:
+          - "Git"
+          - "Python"
+          - "Java"
+          - "HTML"
+        answer: "Git"

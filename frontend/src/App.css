@@ -3,21 +3,35 @@
    ========================================= */
 
 /* -----------------------------------------
-   Navigation
+   Navigation - League Theme
    ----------------------------------------- */
 .nav {
-  background-color: var(--color-primary);
+  background-color: var(--bg-dark);
   padding: var(--spacing-sm) var(--spacing-md);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .nav-brand {
-  color: white;
+  color: var(--text-on-primary);
   font-size: var(--font-large);
   font-weight: 600;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.nav-brand:hover {
+  color: var(--color-primary-light);
+}
+
+.nav-logo {
+  height: 40px;
+  width: auto;
+  border-radius: var(--radius-sm);
 }
 
 .nav-links {
@@ -27,26 +41,35 @@
 }
 
 .nav-links a {
-  color: white;
+  color: var(--text-on-primary);
   text-decoration: none;
   font-weight: 500;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
 }
 
 .nav-links a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-primary-light);
 }
 
 /* -----------------------------------------
-   Home Page
+   Home Page - League Theme
    ----------------------------------------- */
 .hero {
   text-align: center;
   padding: var(--spacing-xl) var(--spacing-md);
+  background: linear-gradient(135deg, rgba(239, 108, 0, 0.05) 0%, rgba(26, 54, 93, 0.05) 100%);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
 }
 
 .hero h1 {
   font-size: 3rem;
   margin-bottom: var(--spacing-md);
+  color: var(--color-secondary);
 }
 
 .hero p {
@@ -57,7 +80,80 @@
 }
 
 /* -----------------------------------------
-   Quiz Card
+   Category Grid - Course Selection
+   ----------------------------------------- */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.category-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 3px solid transparent;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: var(--category-color, var(--color-primary));
+}
+
+.category-card.selected {
+  border-color: var(--category-color, var(--color-primary));
+  background-color: rgba(239, 108, 0, 0.05);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.category-card svg {
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+
+.category-card h3 {
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-secondary);
+}
+
+.category-card p {
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+  margin-bottom: var(--spacing-sm);
+}
+
+.category-card .quiz-count {
+  display: inline-block;
+  background-color: var(--category-color, var(--color-primary));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  font-weight: 500;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.section-header h2 {
+  margin-bottom: 0;
+}
+
+/* -----------------------------------------
+   Quiz Card - League Theme
    ----------------------------------------- */
 .quiz-card {
   background-color: var(--bg-card);
@@ -65,7 +161,13 @@
   padding: var(--spacing-lg);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: var(--spacing-md);
-  border-left: 5px solid var(--color-secondary);
+  border-left: 5px solid var(--color-primary);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quiz-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .quiz-card h3 {
@@ -77,7 +179,7 @@
 }
 
 /* -----------------------------------------
-   Question Styles
+   Question Styles - League Theme
    ----------------------------------------- */
 .question {
   background-color: var(--bg-card);
@@ -97,7 +199,7 @@
 .question-number {
   display: inline-block;
   background-color: var(--color-primary);
-  color: white;
+  color: var(--text-on-primary);
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -108,7 +210,7 @@
 }
 
 /* -----------------------------------------
-   Multiple Choice Options
+   Multiple Choice Options - League Theme
    ----------------------------------------- */
 .options-list {
   list-style: none;
@@ -128,23 +230,24 @@
 }
 
 .option:hover {
-  border-color: var(--color-secondary);
+  border-color: var(--color-primary);
   background-color: white;
 }
 
 .option.selected {
   border-color: var(--color-primary);
   background-color: white;
+  box-shadow: 0 0 0 3px rgba(239, 108, 0, 0.1);
 }
 
 .option.correct {
   border-color: var(--color-accent);
-  background-color: #f0fff4;
+  background-color: #e8f5e9;
 }
 
 .option.incorrect {
   border-color: var(--color-error);
-  background-color: #fff5f5;
+  background-color: #ffebee;
 }
 
 .option-letter {
@@ -152,8 +255,8 @@
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  background-color: var(--color-primary);
-  color: white;
+  background-color: var(--color-secondary);
+  color: var(--text-on-primary);
   text-align: center;
   line-height: 2rem;
   margin-right: var(--spacing-sm);
@@ -161,7 +264,7 @@
 }
 
 /* -----------------------------------------
-   Parsons Problem Styles
+   Parsons Problem Styles - League Theme
    ----------------------------------------- */
 .parsons-container {
   display: flex;
@@ -181,8 +284,8 @@
 }
 
 .parsons-block:hover {
-  border-color: var(--color-secondary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(239, 108, 0, 0.15);
 }
 
 .parsons-block.dragging {
@@ -234,7 +337,7 @@
 }
 
 /* -----------------------------------------
-   Results Page
+   Results Page - League Theme
    ----------------------------------------- */
 .results-summary {
   text-align: center;
@@ -242,6 +345,7 @@
   background-color: var(--bg-card);
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-lg);
+  border-top: 4px solid var(--color-primary);
 }
 
 .score-display {
@@ -256,7 +360,7 @@
 }
 
 /* -----------------------------------------
-   Admin Dashboard
+   Admin Dashboard - League Theme
    ----------------------------------------- */
 .admin-stats {
   display: grid;
@@ -271,6 +375,7 @@
   padding: var(--spacing-lg);
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-top: 4px solid var(--color-primary);
 }
 
 .stat-value {
@@ -326,4 +431,44 @@
 .github-icon {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+/* -----------------------------------------
+   Footer - League Theme
+   ----------------------------------------- */
+.footer {
+  background-color: var(--bg-dark);
+  color: var(--text-on-primary);
+  padding: var(--spacing-lg) var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.footer-logo {
+  height: 50px;
+  width: auto;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer p {
+  margin: 0;
+  font-size: var(--font-small);
+}
+
+.footer a {
+  color: var(--color-primary-light);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
