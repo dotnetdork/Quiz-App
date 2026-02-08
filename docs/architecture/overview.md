@@ -222,7 +222,7 @@ Uses `@dnd-kit` library:
 | CORS | Only allows configured origins |
 | SQL injection | SQLAlchemy ORM escapes queries |
 | OAuth | GitHub validates redirects |
-| Role-based access | `require_Teacher` dependency |
+| Role-based access | `require_teacher` dependency |
 
 ---
 
