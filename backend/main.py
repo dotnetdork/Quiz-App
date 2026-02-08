@@ -238,6 +238,12 @@ from admin_routes import router as admin_router
 app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
 
 # ----------------------------
+# Admin Terminal WebSocket (Teacher Only)
+# ----------------------------
+from terminal_routes import router as terminal_router
+app.include_router(terminal_router, prefix="/api/admin", tags=["terminal"])
+
+# ----------------------------
 # Static File Serving (Frontend)
 # ----------------------------
 # Serve the React frontend build if it exists
