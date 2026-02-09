@@ -5,7 +5,7 @@
  * Users can write and run Python or Java code, and try coding challenges.
  * Code is not saved - it's purely for practice and experimentation.
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import './Sandbox.css';
 
 /**
@@ -204,67 +204,617 @@ public class Main {
 };
 
 /**
- * Simple code execution simulator (client-side only)
+ * Code execution simulator (client-side only)
  * 
- * NOTE: This is a SIMULATION for educational/demonstration purposes only.
- * The regex patterns are intentionally simplified and won't handle all valid
- * code cases (nested parentheses, multiline strings, escaped quotes, etc.).
- * Real code execution would require a secure backend service with sandboxing.
+ * This simulator provides realistic output for educational/demonstration purposes.
+ * It parses and evaluates simple code constructs to show what the output would be.
+ * 
+ * NOTE: This is a SIMULATION. Real code execution would require a secure backend
+ * service with proper sandboxing. This simulator handles common patterns but
+ * won't cover all edge cases.
  */
-function simulateCodeExecution(code, language) {
-  // This is a simple simulation that shows what the output would look like
-  // In a real implementation, you would send this to a secure backend service
-  
-  const output = [];
-  output.push(`[${language.toUpperCase()} Sandbox - Simulated Output]`);
-  output.push('─'.repeat(40));
-  
-  if (language === 'python') {
-    // Simple Python print detection (intentionally basic - for demo purposes)
-    const printRegex = /print\s*\(\s*(?:f?["'](.+?)["']|(.+?))\s*\)/g;
-    let match;
-    let foundPrints = false;
+
+/**
+ * Safely evaluate simple arithmetic expressions
+ */
+function safeEvaluateExpression(expr, variables = {}) {
+  try {
+    // Clean the expression
+    let cleanExpr = expr.trim();
     
-    while ((match = printRegex.exec(code)) !== null) {
-      foundPrints = true;
-      let printContent = match[1] || match[2];
+    // Replace variables with their values
+    for (const [varName, varValue] of Object.entries(variables)) {
+      const varRegex = new RegExp(`\\b${varName}\\b`, 'g');
+      cleanExpr = cleanExpr.replace(varRegex, JSON.stringify(varValue));
+    }
+    
+    // Only allow safe characters: numbers, operators, parentheses, brackets, quotes, commas, spaces, colons
+    if (!/^[\d\s+\-*/%()[\],."':\w]+$/.test(cleanExpr)) {
+      return null;
+    }
+    
+    // Evaluate using Function constructor (safer than eval for simple math)
+    // eslint-disable-next-line no-new-func
+    const result = new Function(`"use strict"; return (${cleanExpr})`)();
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Parse Python code and extract variable assignments
+ */
+function parsePythonVariables(code) {
+  const variables = {};
+  const lines = code.split('\n');
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    
+    // Skip comments and empty lines
+    if (trimmed.startsWith('#') || !trimmed) continue;
+    
+    // Simple variable assignment: var = value
+    const assignMatch = trimmed.match(/^(\w+)\s*=\s*(.+)$/);
+    if (assignMatch) {
+      const [, varName, valueExpr] = assignMatch;
       
-      // Handle f-strings (very basic)
-      if (printContent) {
-        // Remove f-string syntax for display
-        printContent = printContent.replace(/\{[^}]+\}/g, '<value>');
-        output.push(printContent);
+      // Skip function definitions and complex assignments
+      if (valueExpr.includes('def ') || valueExpr.includes('lambda')) continue;
+      
+      // Handle list literals
+      const listMatch = valueExpr.match(/^\[(.*)\]$/);
+      if (listMatch) {
+        try {
+          const items = listMatch[1].split(',').map(item => {
+            const trimmedItem = item.trim();
+            // String item
+            if (/^["'].*["']$/.test(trimmedItem)) {
+              return trimmedItem.slice(1, -1);
+            }
+            // Number item
+            const num = parseFloat(trimmedItem);
+            if (!isNaN(num)) return num;
+            // Variable reference
+            if (variables[trimmedItem] !== undefined) return variables[trimmedItem];
+            return trimmedItem;
+          });
+          variables[varName] = items;
+        } catch {
+          variables[varName] = valueExpr;
+        }
+        continue;
+      }
+      
+      // Handle string literals
+      if (/^["'].*["']$/.test(valueExpr.trim())) {
+        variables[varName] = valueExpr.trim().slice(1, -1);
+        continue;
+      }
+      
+      // Handle numeric/expression values
+      const evaluated = safeEvaluateExpression(valueExpr, variables);
+      if (evaluated !== null) {
+        variables[varName] = evaluated;
       }
     }
     
-    if (!foundPrints) {
-      output.push('(No print statements found in code)');
-    }
-  } else if (language === 'java') {
-    // Simple Java print detection (intentionally basic - for demo purposes)
-    const printRegex = /System\.out\.print(?:ln)?\s*\(\s*["']?(.+?)["']?\s*\)/g;
-    let match;
-    let foundPrints = false;
-    
-    while ((match = printRegex.exec(code)) !== null) {
-      foundPrints = true;
-      let printContent = match[1];
-      // Clean up concatenation for display
-      printContent = printContent.replace(/"\s*\+\s*"/g, '');
-      printContent = printContent.replace(/\s*\+\s*\w+/g, ' <value>');
-      output.push(printContent);
-    }
-    
-    if (!foundPrints) {
-      output.push('(No print statements found in code)');
+    // Handle list.append() operations
+    const appendMatch = trimmed.match(/^(\w+)\.append\((.+)\)$/);
+    if (appendMatch) {
+      const [, listName, valueExpr] = appendMatch;
+      if (Array.isArray(variables[listName])) {
+        let value = valueExpr.trim();
+        if (/^["'].*["']$/.test(value)) {
+          value = value.slice(1, -1);
+        } else {
+          const num = parseFloat(value);
+          if (!isNaN(num)) value = num;
+        }
+        variables[listName].push(value);
+      }
     }
   }
   
-  output.push('─'.repeat(40));
-  output.push('');
-  output.push('💡 Note: This is a simulated preview.');
-  output.push('   For actual execution, code would be');
-  output.push('   sent to a secure backend service.');
+  return variables;
+}
+
+/**
+ * Execute a Python print statement with variable substitution
+ */
+function executePythonPrint(printContent, variables, isFString) {
+  if (!printContent) return '';
+  
+  let result = printContent;
+  
+  if (isFString) {
+    // Handle f-string: replace {expression} with evaluated values
+    result = result.replace(/\{([^}]+)\}/g, (match, expr) => {
+      const trimmedExpr = expr.trim();
+      
+      // Check for len() function
+      const lenMatch = trimmedExpr.match(/^len\((\w+)\)$/);
+      if (lenMatch) {
+        const arr = variables[lenMatch[1]];
+        if (Array.isArray(arr)) return arr.length;
+        if (typeof arr === 'string') return arr.length;
+        return match;
+      }
+      
+      // Direct variable reference
+      if (variables[trimmedExpr] !== undefined) {
+        const val = variables[trimmedExpr];
+        if (Array.isArray(val)) return JSON.stringify(val).replace(/"/g, "'");
+        return String(val);
+      }
+      
+      // Try to evaluate as expression
+      const evaluated = safeEvaluateExpression(trimmedExpr, variables);
+      if (evaluated !== null) {
+        if (Array.isArray(evaluated)) return JSON.stringify(evaluated).replace(/"/g, "'");
+        return String(evaluated);
+      }
+      
+      return match;
+    });
+  } else {
+    // Regular string - just return as-is
+    // But check if it's a variable reference
+    if (variables[result] !== undefined) {
+      const val = variables[result];
+      if (Array.isArray(val)) return JSON.stringify(val).replace(/"/g, "'");
+      return String(val);
+    }
+  }
+  
+  return result;
+}
+
+/**
+ * Simulate Python code execution
+ */
+function simulatePython(code) {
+  const output = [];
+  const variables = parsePythonVariables(code);
+  const lines = code.split('\n');
+  
+  // Track indentation for loops
+  let inForLoop = false;
+  let loopVar = '';
+  let loopIterable = [];
+  let loopBody = [];
+  let loopIndent = 0;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    const indent = line.search(/\S/);
+    
+    // Skip comments and empty lines
+    if (trimmed.startsWith('#') || !trimmed) {
+      if (inForLoop && indent > loopIndent) continue;
+      if (inForLoop && indent <= loopIndent) {
+        // Execute the loop
+        for (const iterValue of loopIterable) {
+          variables[loopVar] = iterValue;
+          for (const bodyLine of loopBody) {
+            const printOutput = processPythonPrintLine(bodyLine, variables);
+            if (printOutput !== null) output.push(printOutput);
+          }
+        }
+        inForLoop = false;
+        loopBody = [];
+      }
+      continue;
+    }
+    
+    // Check for for loop start
+    const forMatch = trimmed.match(/^for\s+(\w+)\s+in\s+(.+):$/);
+    if (forMatch) {
+      inForLoop = true;
+      loopVar = forMatch[1];
+      loopIndent = indent;
+      loopBody = [];
+      
+      const iterableExpr = forMatch[2].trim();
+      
+      // Handle range()
+      const rangeMatch = iterableExpr.match(/^range\(([^)]+)\)$/);
+      if (rangeMatch) {
+        const args = rangeMatch[1].split(',').map(a => {
+          const trimmed = a.trim();
+          const num = parseInt(trimmed);
+          if (!isNaN(num)) return num;
+          if (variables[trimmed] !== undefined) return variables[trimmed];
+          return 0;
+        });
+        
+        if (args.length === 1) {
+          loopIterable = Array.from({ length: args[0] }, (_, i) => i);
+        } else if (args.length === 2) {
+          loopIterable = Array.from({ length: args[1] - args[0] }, (_, i) => args[0] + i);
+        } else if (args.length === 3) {
+          loopIterable = [];
+          for (let j = args[0]; j < args[1]; j += args[2]) {
+            loopIterable.push(j);
+          }
+        }
+      } else if (variables[iterableExpr] && Array.isArray(variables[iterableExpr])) {
+        loopIterable = variables[iterableExpr];
+      }
+      continue;
+    }
+    
+    // Inside a loop - collect body
+    if (inForLoop && indent > loopIndent) {
+      loopBody.push(trimmed);
+      continue;
+    }
+    
+    // Loop ended - execute it
+    if (inForLoop && indent <= loopIndent) {
+      for (const iterValue of loopIterable) {
+        variables[loopVar] = iterValue;
+        for (const bodyLine of loopBody) {
+          const printOutput = processPythonPrintLine(bodyLine, variables);
+          if (printOutput !== null) output.push(printOutput);
+        }
+      }
+      inForLoop = false;
+      loopBody = [];
+    }
+    
+    // Process print statements outside of loops
+    if (!inForLoop) {
+      const printOutput = processPythonPrintLine(trimmed, variables);
+      if (printOutput !== null) output.push(printOutput);
+    }
+  }
+  
+  // Execute remaining loop if code ends inside one
+  if (inForLoop && loopBody.length > 0) {
+    for (const iterValue of loopIterable) {
+      variables[loopVar] = iterValue;
+      for (const bodyLine of loopBody) {
+        const printOutput = processPythonPrintLine(bodyLine, variables);
+        if (printOutput !== null) output.push(printOutput);
+      }
+    }
+  }
+  
+  return output;
+}
+
+/**
+ * Process a single Python print line
+ */
+function processPythonPrintLine(line, variables) {
+  // Match print() with various formats
+  const printMatch = line.match(/^print\s*\(\s*(.*)\s*\)$/);
+  if (!printMatch) return null;
+  
+  const printArg = printMatch[1].trim();
+  
+  // Empty print
+  if (!printArg) return '';
+  
+  // f-string: f"..." or f'...'
+  const fstringMatch = printArg.match(/^f(["'])(.*)\1$/);
+  if (fstringMatch) {
+    return executePythonPrint(fstringMatch[2], variables, true);
+  }
+  
+  // Regular string: "..." or '...'
+  const stringMatch = printArg.match(/^(["'])(.*)\1$/);
+  if (stringMatch) {
+    return stringMatch[2];
+  }
+  
+  // Variable or expression
+  if (variables[printArg] !== undefined) {
+    const val = variables[printArg];
+    if (Array.isArray(val)) return JSON.stringify(val).replace(/"/g, "'");
+    return String(val);
+  }
+  
+  // Try evaluating as expression
+  const evaluated = safeEvaluateExpression(printArg, variables);
+  if (evaluated !== null) {
+    if (Array.isArray(evaluated)) return JSON.stringify(evaluated).replace(/"/g, "'");
+    return String(evaluated);
+  }
+  
+  return printArg;
+}
+
+/**
+ * Parse Java code and extract variable declarations
+ */
+function parseJavaVariables(code) {
+  const variables = {};
+  const lines = code.split('\n');
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    
+    // Skip comments
+    if (trimmed.startsWith('//') || trimmed.startsWith('/*')) continue;
+    
+    // Variable declaration: type name = value;
+    const varMatch = trimmed.match(/^(int|double|float|String|boolean|char)\s+(\w+)\s*=\s*(.+?);?$/);
+    if (varMatch) {
+      const [, type, varName, valueExpr] = varMatch;
+      
+      // Handle string literals
+      if (type === 'String' && /^".*"$/.test(valueExpr.trim())) {
+        variables[varName] = valueExpr.trim().slice(1, -1);
+        continue;
+      }
+      
+      // Handle array initialization: {1, 2, 3}
+      const arrayMatch = valueExpr.match(/^\{(.+)\}$/);
+      if (arrayMatch) {
+        const items = arrayMatch[1].split(',').map(item => {
+          const trimmedItem = item.trim();
+          if (/^".*"$/.test(trimmedItem)) return trimmedItem.slice(1, -1);
+          const num = parseFloat(trimmedItem);
+          if (!isNaN(num)) return num;
+          return trimmedItem;
+        });
+        variables[varName] = items;
+        continue;
+      }
+      
+      // Handle numeric/expression
+      const evaluated = safeEvaluateExpression(valueExpr, variables);
+      if (evaluated !== null) {
+        variables[varName] = evaluated;
+      }
+    }
+    
+    // Array declaration: type[] name = {values};
+    const arrayDeclMatch = trimmed.match(/^(\w+)\[\]\s+(\w+)\s*=\s*\{(.+)\};?$/);
+    if (arrayDeclMatch) {
+      const [, , varName, itemsStr] = arrayDeclMatch;
+      const items = itemsStr.split(',').map(item => {
+        const trimmedItem = item.trim();
+        if (/^".*"$/.test(trimmedItem)) return trimmedItem.slice(1, -1);
+        const num = parseFloat(trimmedItem);
+        if (!isNaN(num)) return num;
+        return trimmedItem;
+      });
+      variables[varName] = items;
+    }
+  }
+  
+  return variables;
+}
+
+/**
+ * Execute a Java print statement with variable substitution
+ */
+function executeJavaPrint(printContent, variables, isPrintln) {
+  if (!printContent) return isPrintln ? '' : null;
+  
+  let result = '';
+  
+  // Handle string concatenation
+  const parts = printContent.split(/\s*\+\s*/);
+  
+  for (const part of parts) {
+    const trimmedPart = part.trim();
+    
+    // String literal
+    if (/^".*"$/.test(trimmedPart)) {
+      result += trimmedPart.slice(1, -1);
+      continue;
+    }
+    
+    // Variable reference
+    if (variables[trimmedPart] !== undefined) {
+      const val = variables[trimmedPart];
+      if (Array.isArray(val)) {
+        result += val.join(' ');
+      } else {
+        result += String(val);
+      }
+      continue;
+    }
+    
+    // Try to evaluate as expression
+    const evaluated = safeEvaluateExpression(trimmedPart, variables);
+    if (evaluated !== null) {
+      result += String(evaluated);
+      continue;
+    }
+    
+    // Unknown - keep as placeholder
+    result += trimmedPart;
+  }
+  
+  return result;
+}
+
+/**
+ * Simulate Java code execution
+ */
+function simulateJava(code) {
+  const output = [];
+  const variables = parseJavaVariables(code);
+  const lines = code.split('\n');
+  
+  let currentOutput = '';
+  let inForLoop = false;
+  let loopVar = '';
+  let loopStart = 0;
+  let loopEnd = 0;
+  let loopStep = 1;
+  let loopBody = [];
+  let braceCount = 0;
+  let isForEachLoop = false;
+  let forEachArray = [];
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    
+    // Skip comments
+    if (trimmed.startsWith('//') || trimmed.startsWith('/*')) continue;
+    
+    // Check for standard for loop: for (int i = 0; i < n; i++)
+    const forMatch = trimmed.match(/^for\s*\(\s*int\s+(\w+)\s*=\s*(\d+)\s*;\s*\w+\s*(<|<=)\s*(\d+|\w+)\s*;\s*\w+\+\+\s*\)/);
+    if (forMatch && !inForLoop) {
+      inForLoop = true;
+      isForEachLoop = false;
+      loopVar = forMatch[1];
+      loopStart = parseInt(forMatch[2]);
+      const comparison = forMatch[3];
+      let endVal = forMatch[4];
+      
+      // Check if endVal is a variable
+      if (variables[endVal] !== undefined) {
+        endVal = variables[endVal];
+      } else {
+        endVal = parseInt(endVal);
+      }
+      
+      loopEnd = comparison === '<' ? endVal : endVal + 1;
+      loopStep = 1;
+      loopBody = [];
+      braceCount = (trimmed.includes('{') ? 1 : 0);
+      continue;
+    }
+    
+    // Check for for-each loop: for (Type item : array)
+    const forEachMatch = trimmed.match(/^for\s*\(\s*\w+\s+(\w+)\s*:\s*(\w+)\s*\)/);
+    if (forEachMatch && !inForLoop) {
+      inForLoop = true;
+      isForEachLoop = true;
+      loopVar = forEachMatch[1];
+      const arrayName = forEachMatch[2];
+      forEachArray = variables[arrayName] || [];
+      loopBody = [];
+      braceCount = (trimmed.includes('{') ? 1 : 0);
+      continue;
+    }
+    
+    // Track braces inside loop
+    if (inForLoop) {
+      if (trimmed.includes('{')) braceCount++;
+      if (trimmed.includes('}')) braceCount--;
+      
+      if (braceCount === 0 || (braceCount === 1 && trimmed === '}')) {
+        // Execute the loop
+        if (isForEachLoop) {
+          for (const iterValue of forEachArray) {
+            variables[loopVar] = iterValue;
+            for (const bodyLine of loopBody) {
+              const printResult = processJavaPrintLine(bodyLine, variables);
+              if (printResult !== null) {
+                if (printResult.isPrintln) {
+                  output.push(currentOutput + printResult.text);
+                  currentOutput = '';
+                } else {
+                  currentOutput += printResult.text;
+                }
+              }
+            }
+          }
+        } else {
+          for (let j = loopStart; j < loopEnd; j += loopStep) {
+            variables[loopVar] = j;
+            for (const bodyLine of loopBody) {
+              const printResult = processJavaPrintLine(bodyLine, variables);
+              if (printResult !== null) {
+                if (printResult.isPrintln) {
+                  output.push(currentOutput + printResult.text);
+                  currentOutput = '';
+                } else {
+                  currentOutput += printResult.text;
+                }
+              }
+            }
+          }
+        }
+        inForLoop = false;
+        loopBody = [];
+        continue;
+      }
+      
+      // Collect loop body
+      if (trimmed && trimmed !== '{') {
+        loopBody.push(trimmed);
+      }
+      continue;
+    }
+    
+    // Process print statements outside loops
+    const printResult = processJavaPrintLine(trimmed, variables);
+    if (printResult !== null) {
+      if (printResult.isPrintln) {
+        output.push(currentOutput + printResult.text);
+        currentOutput = '';
+      } else {
+        currentOutput += printResult.text;
+      }
+    }
+  }
+  
+  // Add any remaining non-newline output
+  if (currentOutput) {
+    output.push(currentOutput);
+  }
+  
+  return output;
+}
+
+/**
+ * Process a single Java print line
+ */
+function processJavaPrintLine(line, variables) {
+  // Match System.out.println() or System.out.print()
+  const printlnMatch = line.match(/System\.out\.println\s*\(\s*(.*?)\s*\);?$/);
+  const printMatch = line.match(/System\.out\.print\s*\(\s*(.*?)\s*\);?$/);
+  
+  if (printlnMatch) {
+    const content = executeJavaPrint(printlnMatch[1], variables, true);
+    return { text: content, isPrintln: true };
+  }
+  
+  if (printMatch) {
+    const content = executeJavaPrint(printMatch[1], variables, false);
+    return { text: content || '', isPrintln: false };
+  }
+  
+  return null;
+}
+
+/**
+ * Main simulation function
+ */
+function simulateCodeExecution(code, language) {
+  const output = [];
+  
+  try {
+    if (language === 'python') {
+      const pythonOutput = simulatePython(code);
+      if (pythonOutput.length === 0) {
+        output.push('(No output - add print() statements to see results)');
+      } else {
+        output.push(...pythonOutput);
+      }
+    } else if (language === 'java') {
+      const javaOutput = simulateJava(code);
+      if (javaOutput.length === 0) {
+        output.push('(No output - add System.out.println() statements to see results)');
+      } else {
+        output.push(...javaOutput);
+      }
+    }
+  } catch (error) {
+    output.push(`Error: ${error.message}`);
+  }
   
   return output.join('\n');
 }
@@ -302,6 +852,25 @@ function Sandbox() {
   const [selectedChallenge, setSelectedChallenge] = useState(null);
   const [showChallenges, setShowChallenges] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [executionMode, setExecutionMode] = useState('checking'); // 'backend', 'simulation', 'checking'
+
+  // Check backend availability on mount
+  useEffect(() => {
+    const checkBackend = async () => {
+      try {
+        const response = await fetch('/api/sandbox/status');
+        if (response.ok) {
+          setExecutionMode('backend');
+        } else {
+          setExecutionMode('simulation');
+        }
+      } catch {
+        setExecutionMode('simulation');
+      }
+    };
+    checkBackend();
+  }, []);
 
   // Handle language change
   const handleLanguageChange = useCallback((newLanguage) => {
@@ -313,10 +882,50 @@ function Sandbox() {
   }, []);
 
   // Handle code execution
-  const handleRunCode = useCallback(() => {
-    const result = simulateCodeExecution(code, language);
-    setOutput(result);
-  }, [code, language]);
+  const handleRunCode = useCallback(async () => {
+    setIsRunning(true);
+    setOutput('Running...');
+
+    try {
+      // Try backend execution first
+      if (executionMode === 'backend') {
+        const response = await fetch('/api/sandbox/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            code: code,
+            language: language
+          })
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          let outputText = result.output || '';
+          if (result.error) {
+            outputText += (outputText ? '\n' : '') + result.error;
+          }
+          if (result.execution_time) {
+            outputText += `\n\n⏱️ Execution time: ${result.execution_time}s`;
+          }
+          setOutput(outputText || '(No output)');
+          setIsRunning(false);
+          return;
+        }
+      }
+
+      // Fallback to simulation
+      const result = simulateCodeExecution(code, language);
+      setOutput(result + '\n\n💡 (Simulated output - backend not available)');
+    } catch (error) {
+      // Fallback to simulation on any error
+      const result = simulateCodeExecution(code, language);
+      setOutput(result + '\n\n💡 (Simulated output - backend not available)');
+    }
+
+    setIsRunning(false);
+  }, [code, language, executionMode]);
 
   // Handle challenge selection
   const handleSelectChallenge = useCallback((challenge) => {
@@ -454,11 +1063,22 @@ function Sandbox() {
             onChange={(e) => setCode(e.target.value)}
             spellCheck={false}
             placeholder={`Enter your ${language} code here...`}
+            disabled={isRunning}
           />
           <div className="editor-footer">
-            <button className="btn-primary run-btn" onClick={handleRunCode}>
-              ▶ Run Code
+            <button 
+              className="btn-primary run-btn" 
+              onClick={handleRunCode}
+              disabled={isRunning}
+            >
+              {isRunning ? '⏳ Running...' : '▶ Run Code'}
             </button>
+            {executionMode === 'backend' && (
+              <span className="execution-mode-badge backend">🔗 Live Execution</span>
+            )}
+            {executionMode === 'simulation' && (
+              <span className="execution-mode-badge simulation">🔮 Simulation Mode</span>
+            )}
           </div>
         </div>
 
@@ -485,7 +1105,11 @@ function Sandbox() {
           <li>Use the language selector to switch between Python and Java</li>
           <li>Try the coding challenges to practice specific concepts</li>
           <li>Your code is not saved - copy it before leaving if you want to keep it</li>
-          <li>This sandbox simulates output - for real execution, you would need a backend service</li>
+          <li>
+            {executionMode === 'backend' 
+              ? 'Code is executed securely on the server with time limits and restrictions'
+              : 'Running in simulation mode - output shows what the code would produce'}
+          </li>
         </ul>
       </div>
     </div>

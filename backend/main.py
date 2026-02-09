@@ -52,7 +52,7 @@ app.add_middleware(
 
 # CORS middleware for frontend (needed for development with separate servers)
 # Build allowed origins list based on FRONTEND_URL configuration
-cors_origins = ["http://localhost:3000"]
+cors_origins = ["http://localhost:3000", "http://localhost:3456"]
 if FRONTEND_URL:
     cors_origins.append(FRONTEND_URL)
 
@@ -242,6 +242,12 @@ app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
 # ----------------------------
 from terminal_routes import router as terminal_router
 app.include_router(terminal_router, prefix="/api/admin", tags=["terminal"])
+
+# ----------------------------
+# Sandbox Code Execution Endpoints
+# ----------------------------
+from sandbox_routes import router as sandbox_router
+app.include_router(sandbox_router, prefix="/api/sandbox", tags=["sandbox"])
 
 # ----------------------------
 # Static File Serving (Frontend)
