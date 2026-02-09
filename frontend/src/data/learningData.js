@@ -1965,6 +1965,399 @@ Invented the World Wide Web, HTML, HTTP, and URLs while working at CERN.
         `
       }
     ]
+  },
+
+  // ============================================
+  // AI & MACHINE LEARNING
+  // ============================================
+  {
+    id: 'ai-ml-fundamentals',
+    title: 'AI & Machine Learning',
+    icon: '🧠',
+    color: '#9c27b0',
+    category: 'ai-ml',
+    description: 'Understand the fundamentals of artificial intelligence and machine learning.',
+    estimatedTime: '55 min',
+    sections: [
+      {
+        id: 'intro',
+        title: 'What is AI?',
+        content: `
+Artificial Intelligence (AI) is the simulation of human intelligence in machines. These systems are designed to think, learn, and make decisions similarly to humans.
+
+### Key Concepts
+
+- **Artificial Intelligence**: The broad field of creating intelligent machines
+- **Machine Learning**: Teaching computers to learn from data
+- **Deep Learning**: Using neural networks with many layers
+- **Natural Language Processing**: Understanding human language
+
+### Why AI Matters
+
+AI is transforming every industry:
+- Healthcare: Disease diagnosis, drug discovery
+- Transportation: Self-driving cars
+- Entertainment: Recommendation systems (Netflix, Spotify)
+- Education: Personalized learning, tutoring systems
+        `
+      },
+      {
+        id: 'ml-basics',
+        title: 'Machine Learning Basics',
+        content: `
+### How Machines Learn
+
+Machine learning is a subset of AI where computers learn patterns from data without being explicitly programmed for each task.
+
+**Traditional Programming:**
+Data + Rules → Answer
+
+**Machine Learning:**
+Data + Answers → Rules (Model)
+
+### The ML Workflow
+
+1. **Collect Data**: Gather relevant examples
+2. **Prepare Data**: Clean and format for training
+3. **Choose Model**: Select appropriate algorithm
+4. **Train Model**: Let it learn from data
+5. **Evaluate**: Test on new data
+6. **Deploy**: Use in real applications
+        `,
+        mermaid: `flowchart LR
+    D[📊 Data] --> P[🔧 Prepare]
+    P --> T[🎯 Train]
+    T --> E[📈 Evaluate]
+    E --> |Good| Deploy[🚀 Deploy]
+    E --> |Poor| T`
+      },
+      {
+        id: 'ml-types',
+        title: 'Types of Machine Learning',
+        content: `
+### Supervised Learning
+
+The model learns from labeled examples where the correct answer is known.
+
+**Examples:**
+- Email spam detection (spam/not spam labels)
+- Image classification (cat/dog labels)
+- Price prediction (historical prices)
+
+### Unsupervised Learning
+
+The model finds patterns in unlabeled data without guidance.
+
+**Examples:**
+- Customer segmentation
+- Anomaly detection
+- Topic modeling
+
+### Reinforcement Learning
+
+The model learns through trial and error with rewards and penalties.
+
+**Examples:**
+- Game playing (Chess, Go)
+- Robotics
+- Resource management
+
+| Type | Data | Goal | Example |
+|------|------|------|---------|
+| Supervised | Labeled | Predict labels | Spam filter |
+| Unsupervised | Unlabeled | Find patterns | Customer groups |
+| Reinforcement | Rewards | Maximize reward | Game AI |
+        `
+      },
+      {
+        id: 'neural-networks',
+        title: 'Neural Networks',
+        content: `
+### Inspired by the Brain
+
+Neural networks are computing systems loosely inspired by biological neural networks in our brains.
+
+### Structure
+
+Input Layer → Hidden Layer(s) → Output Layer
+
+**Key Components:**
+- **Neurons (Nodes)**: Processing units that receive and transmit information
+- **Weights**: Numbers that determine the strength of connections
+- **Activation Functions**: Determine if a neuron should "fire"
+- **Layers**: Groups of neurons at different stages
+
+### Deep Learning
+
+When neural networks have many hidden layers (deep networks), we call it deep learning. These can learn very complex patterns.
+
+**Applications:**
+- Image recognition (faces, objects)
+- Speech recognition (Siri, Alexa)
+- Language translation
+- Art generation
+        `
+      },
+      {
+        id: 'ai-tools',
+        title: 'AI in Practice',
+        content: `
+### Large Language Models (LLMs)
+
+LLMs like GPT, Claude, and LLaMA are trained on massive text datasets to understand and generate human-like text.
+
+**Capabilities:**
+- Answer questions
+- Write code
+- Summarize documents
+- Creative writing
+- Language translation
+
+### Prompt Engineering
+
+The art of crafting inputs to get better outputs from AI models.
+
+**Tips for Good Prompts:**
+1. Be specific and clear
+2. Provide context
+3. Give examples of desired output
+4. Break complex tasks into steps
+5. Iterate and refine
+
+### Generative AI
+
+AI that creates new content:
+- **Text**: ChatGPT, Claude
+- **Images**: DALL-E, Midjourney, Stable Diffusion
+- **Audio**: Music generation, voice synthesis
+- **Video**: Animation, visual effects
+
+### Ethical Considerations
+
+- **Bias**: AI can reflect biases in training data
+- **Privacy**: Data collection concerns
+- **Misinformation**: Fake content generation
+- **Job displacement**: Automation concerns
+- **Transparency**: Understanding AI decisions
+        `
+      }
+    ]
+  },
+
+  // ============================================
+  // SOFTWARE ENGINEERING & CAREER
+  // ============================================
+  {
+    id: 'software-engineering',
+    title: 'Software Engineering & Career',
+    icon: '👔',
+    color: '#2196f3',
+    category: 'career',
+    description: 'Professional practices, methodologies, and career paths in software development.',
+    estimatedTime: '50 min',
+    sections: [
+      {
+        id: 'intro',
+        title: 'What is Software Engineering?',
+        content: `
+Software Engineering is the systematic application of engineering principles to the design, development, testing, and maintenance of software.
+
+### Beyond Coding
+
+While programming is writing code, software engineering encompasses:
+- **Planning**: Requirements, design, architecture
+- **Collaboration**: Working with teams
+- **Quality**: Testing, code reviews
+- **Maintenance**: Updates, bug fixes
+- **Documentation**: Making code understandable
+
+### Why It Matters
+
+Good software engineering practices lead to:
+- Fewer bugs
+- Faster development
+- Easier maintenance
+- Better collaboration
+- Scalable systems
+        `
+      },
+      {
+        id: 'methodologies',
+        title: 'Development Methodologies',
+        content: `
+### Agile Development
+
+An iterative approach emphasizing flexibility and rapid delivery.
+
+**Core Principles:**
+- Individuals over processes
+- Working software over documentation
+- Customer collaboration over contracts
+- Responding to change over following plans
+
+### Scrum Framework
+
+A popular Agile implementation:
+
+**Sprint (2-4 weeks)**
+- Sprint Planning
+- Daily Standups (15 min)
+- Development Work
+- Sprint Review
+- Sprint Retrospective
+
+**Roles:**
+- **Product Owner**: Defines what to build
+- **Scrum Master**: Facilitates the process
+- **Development Team**: Builds the product
+
+### Kanban
+
+Visual workflow management using boards with columns:
+To Do → In Progress → Review → Done
+        `,
+        mermaid: `flowchart LR
+    PB[Product Backlog] --> SP[Sprint Planning]
+    SP --> S[Sprint 2-4 weeks]
+    S --> SR[Sprint Review]
+    SR --> Retro[Retrospective]
+    Retro --> SP`
+      },
+      {
+        id: 'practices',
+        title: 'Best Practices',
+        content: `
+### Code Review
+
+Having peers examine your code before merging.
+
+**Benefits:**
+- Catches bugs early
+- Shares knowledge across team
+- Maintains code quality
+- Mentorship opportunity
+
+### CI/CD (Continuous Integration/Deployment)
+
+Automating the build, test, and deployment process.
+
+Code Push → Build → Test → Deploy
+
+### Testing Pyramid
+
+- **Unit Tests (Many)**: Test individual functions
+- **Integration Tests (Some)**: Test component interactions
+- **E2E Tests (Few)**: Test entire user flows
+
+### Technical Debt
+
+Shortcuts taken that need to be paid back later.
+
+**Managing Technical Debt:**
+- Track it explicitly
+- Allocate time for refactoring
+- Don't let it accumulate
+- Balance speed vs. quality
+        `
+      },
+      {
+        id: 'career-paths',
+        title: 'Career Paths',
+        content: `
+### Software Development Roles
+
+| Role | Focus | Skills |
+|------|-------|--------|
+| Frontend Developer | User interfaces | HTML, CSS, JavaScript, React |
+| Backend Developer | Server logic, APIs | Python, Java, Databases |
+| Full-Stack Developer | Both frontend & backend | Versatile skillset |
+| Mobile Developer | iOS/Android apps | Swift, Kotlin, React Native |
+| DevOps Engineer | Infrastructure, deployment | Cloud, CI/CD, Linux |
+| Data Engineer | Data pipelines | SQL, Python, Spark |
+| Data Scientist | Analysis, ML models | Statistics, Python, ML |
+| Security Engineer | System security | Networking, cryptography |
+
+### Career Progression
+
+Junior Developer (0-2 years)
+↓
+Mid-Level Developer (2-5 years)
+↓
+Senior Developer (5+ years)
+↓
+Tech Lead / Architect / Engineering Manager
+
+### Skills for Success
+
+**Technical:**
+- Programming languages
+- Data structures & algorithms
+- Version control (Git)
+- Testing
+- System design
+
+**Non-Technical:**
+- Communication
+- Problem-solving
+- Teamwork
+- Time management
+- Continuous learning
+        `
+      },
+      {
+        id: 'getting-started',
+        title: 'Getting Started',
+        content: `
+### Building Your Portfolio
+
+Your portfolio is your proof of skills. Include:
+
+1. **Personal Projects**: Build things you're passionate about
+2. **GitHub Profile**: Keep it active and organized
+3. **Documentation**: Explain what you built and why
+4. **Deployed Projects**: Show working applications
+5. **Contributions**: Open source participation
+
+### Learning Path
+
+1. Learn Programming Basics
+2. Build Small Projects
+3. Learn Version Control (Git)
+4. Study Data Structures
+5. Build Larger Projects
+6. Contribute to Open Source
+7. Apply for Internships/Jobs
+
+### Resources
+
+**Free Learning:**
+- freeCodeCamp
+- The Odin Project
+- CS50 (Harvard)
+- Codecademy
+
+**Practice:**
+- LeetCode
+- HackerRank
+- Codewars
+- Project Euler
+
+**Community:**
+- Stack Overflow
+- GitHub
+- Discord servers
+- Local meetups
+
+### First Job Tips
+
+1. **Apply broadly**: Don't wait until you feel "ready"
+2. **Network**: Connections matter
+3. **Practice interviews**: Technical and behavioral
+4. **Be humble**: You'll learn a lot on the job
+5. **Ask questions**: It's expected of beginners
+        `
+      }
+    ]
   }
 ];
 

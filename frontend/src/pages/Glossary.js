@@ -1342,6 +1342,235 @@ const PATHWAYS = [
         ]
       }
     ]
+  },
+  {
+    id: 'ai-ml',
+    name: 'AI & Machine Learning',
+    icon: '🤖',
+    color: '#9c27b0',
+    description: 'Artificial intelligence, machine learning, and data science concepts',
+    subcategories: [
+      {
+        id: 'ai-basics',
+        name: 'AI Fundamentals',
+        content: [
+          {
+            term: 'Artificial Intelligence (AI)',
+            definition: 'The simulation of human intelligence in machines programmed to think and learn like humans. AI systems can perform tasks like speech recognition, decision-making, and language translation.',
+            keyFeatures: ['Mimics human intelligence', 'Learns from data', 'Makes decisions', 'Automates tasks']
+          },
+          {
+            term: 'Machine Learning (ML)',
+            definition: 'A subset of AI where computers learn from data without being explicitly programmed. The system improves its performance over time as it processes more data.',
+            keyFeatures: ['Learns from data', 'Improves over time', 'Pattern recognition', 'Predictions']
+          },
+          {
+            term: 'Neural Network',
+            definition: 'A computing system inspired by biological neural networks in the brain. Consists of layers of interconnected nodes (neurons) that process information.',
+            keyFeatures: ['Inspired by brain', 'Layers of nodes', 'Pattern recognition', 'Deep learning foundation']
+          },
+          {
+            term: 'Deep Learning',
+            definition: 'A subset of machine learning using neural networks with many layers (deep networks). Excels at image recognition, natural language processing, and complex pattern detection.',
+            keyFeatures: ['Many layers', 'Complex patterns', 'Image/speech recognition', 'Requires large datasets']
+          },
+          {
+            term: 'Training Data',
+            definition: 'The dataset used to teach a machine learning model. The quality and quantity of training data directly affects model performance.',
+            keyFeatures: ['Input for learning', 'Quality matters', 'Labeled or unlabeled', 'Represents real-world']
+          },
+          {
+            term: 'Model',
+            definition: 'The mathematical representation of a real-world process created by training on data. A trained model can make predictions on new, unseen data.',
+            keyFeatures: ['Learned patterns', 'Makes predictions', 'Trained on data', 'Can be deployed']
+          }
+        ]
+      },
+      {
+        id: 'ml-types',
+        name: 'Types of Machine Learning',
+        content: [
+          {
+            term: 'Supervised Learning',
+            definition: 'Training with labeled data where the correct answers are provided. The model learns to map inputs to known outputs (e.g., classifying emails as spam or not spam).',
+            example: 'Training a model with images labeled "cat" or "dog" to classify new images.',
+            keyFeatures: ['Labeled data', 'Known outputs', 'Classification/Regression', 'Most common type']
+          },
+          {
+            term: 'Unsupervised Learning',
+            definition: 'Training with unlabeled data to find hidden patterns or groupings. The algorithm discovers structure in the data on its own.',
+            example: 'Grouping customers by purchasing behavior without predefined categories.',
+            keyFeatures: ['No labels', 'Finds patterns', 'Clustering', 'Dimensionality reduction']
+          },
+          {
+            term: 'Reinforcement Learning',
+            definition: 'Learning through trial and error with rewards and penalties. The agent learns to make decisions by performing actions and receiving feedback.',
+            example: 'Training an AI to play chess by rewarding wins and penalizing losses.',
+            keyFeatures: ['Rewards/penalties', 'Trial and error', 'Game playing', 'Robotics']
+          },
+          {
+            term: 'Classification',
+            definition: 'A supervised learning task that predicts categorical labels (discrete categories) for input data.',
+            example: 'Is this email spam or not? Is this tumor malignant or benign?',
+            keyFeatures: ['Discrete categories', 'Supervised task', 'Binary or multi-class', 'Examples: spam detection']
+          },
+          {
+            term: 'Regression',
+            definition: 'A supervised learning task that predicts continuous numerical values.',
+            example: 'Predicting house prices based on features like size, location, and bedrooms.',
+            keyFeatures: ['Continuous values', 'Numerical prediction', 'Price/temperature', 'Linear/polynomial']
+          }
+        ]
+      },
+      {
+        id: 'ai-applications',
+        name: 'AI Applications',
+        content: [
+          {
+            term: 'Natural Language Processing (NLP)',
+            definition: 'The branch of AI focused on enabling computers to understand, interpret, and generate human language.',
+            keyFeatures: ['Text analysis', 'Chatbots', 'Translation', 'Sentiment analysis']
+          },
+          {
+            term: 'Computer Vision',
+            definition: 'The field of AI that enables computers to interpret and understand visual information from images and videos.',
+            keyFeatures: ['Image recognition', 'Object detection', 'Facial recognition', 'Self-driving cars']
+          },
+          {
+            term: 'Large Language Model (LLM)',
+            definition: 'A type of AI trained on massive amounts of text data to understand and generate human-like text. Examples include GPT, Claude, and LLaMA.',
+            keyFeatures: ['Trained on text', 'Generates responses', 'ChatGPT/Claude', 'Billions of parameters']
+          },
+          {
+            term: 'Generative AI',
+            definition: 'AI systems that can create new content including text, images, audio, and video. Learns patterns from training data to generate similar but original content.',
+            keyFeatures: ['Creates content', 'Images/text/audio', 'DALL-E, Midjourney', 'Creative applications']
+          },
+          {
+            term: 'Prompt Engineering',
+            definition: 'The practice of designing and optimizing inputs (prompts) to get desired outputs from AI models, especially LLMs.',
+            keyFeatures: ['Crafting inputs', 'Better outputs', 'Context matters', 'Emerging skill']
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'software-engineering',
+    name: 'Software Engineering & Career',
+    icon: '👔',
+    color: '#2196f3',
+    description: 'Professional software development practices and career guidance',
+    subcategories: [
+      {
+        id: 'dev-practices',
+        name: 'Development Practices',
+        content: [
+          {
+            term: 'Agile Development',
+            definition: 'An iterative approach to software development that emphasizes flexibility, collaboration, and delivering working software in short cycles (sprints).',
+            keyFeatures: ['Iterative', 'Flexible', 'Short sprints', 'Customer feedback']
+          },
+          {
+            term: 'Scrum',
+            definition: 'A popular Agile framework with defined roles (Scrum Master, Product Owner, Team), ceremonies (standups, sprints), and artifacts (backlog, board).',
+            keyFeatures: ['Sprint cycles', 'Daily standups', 'Product backlog', 'Scrum Master role']
+          },
+          {
+            term: 'Code Review',
+            definition: 'The practice of having other developers examine code changes before they are merged. Catches bugs, ensures quality, and shares knowledge.',
+            keyFeatures: ['Peer review', 'Quality assurance', 'Knowledge sharing', 'Pull requests']
+          },
+          {
+            term: 'Technical Debt',
+            definition: 'The implied cost of additional work caused by choosing quick solutions instead of better approaches. Like financial debt, it accumulates interest over time.',
+            keyFeatures: ['Shortcuts cost later', 'Needs refactoring', 'Slows development', 'Should be managed']
+          },
+          {
+            term: 'Refactoring',
+            definition: 'Restructuring existing code without changing its external behavior. Improves code readability, reduces complexity, and makes maintenance easier.',
+            keyFeatures: ['Improves structure', 'Same behavior', 'Reduces complexity', 'Ongoing process']
+          },
+          {
+            term: 'CI/CD (Continuous Integration/Deployment)',
+            definition: 'Practices that automate building, testing, and deploying code changes. CI merges code frequently; CD automatically deploys to production.',
+            keyFeatures: ['Automated builds', 'Automated tests', 'Fast feedback', 'Frequent releases']
+          }
+        ]
+      },
+      {
+        id: 'career',
+        name: 'Career Paths',
+        content: [
+          {
+            term: 'Frontend Developer',
+            definition: 'A developer who specializes in building the user interface and user experience of websites and applications using HTML, CSS, and JavaScript.',
+            keyFeatures: ['UI/UX focus', 'HTML/CSS/JS', 'React/Vue/Angular', 'Visual design']
+          },
+          {
+            term: 'Backend Developer',
+            definition: 'A developer who builds and maintains the server-side logic, databases, and APIs that power applications.',
+            keyFeatures: ['Server-side', 'Databases', 'APIs', 'Python/Java/Node']
+          },
+          {
+            term: 'Full-Stack Developer',
+            definition: 'A developer skilled in both frontend and backend development, capable of building complete applications from start to finish.',
+            keyFeatures: ['Both frontend/backend', 'Complete applications', 'Versatile', 'In high demand']
+          },
+          {
+            term: 'DevOps Engineer',
+            definition: 'A professional who bridges development and operations, focusing on automation, infrastructure, and deployment pipelines.',
+            keyFeatures: ['Automation', 'Infrastructure', 'CI/CD pipelines', 'Cloud platforms']
+          },
+          {
+            term: 'Data Scientist',
+            definition: 'A professional who uses statistics, programming, and domain knowledge to extract insights from data and build predictive models.',
+            keyFeatures: ['Data analysis', 'Machine learning', 'Statistics', 'Python/R']
+          },
+          {
+            term: 'Software Architect',
+            definition: 'A senior role responsible for high-level design decisions, technology choices, and overall system structure.',
+            keyFeatures: ['System design', 'Technical decisions', 'Senior role', 'Big picture thinking']
+          }
+        ]
+      },
+      {
+        id: 'soft-skills',
+        name: 'Professional Skills',
+        content: [
+          {
+            term: 'Technical Communication',
+            definition: 'The ability to explain complex technical concepts clearly to both technical and non-technical audiences. Essential for documentation and collaboration.',
+            keyFeatures: ['Clear explanations', 'Documentation', 'Presentations', 'Cross-team work']
+          },
+          {
+            term: 'Problem Decomposition',
+            definition: 'Breaking down complex problems into smaller, manageable pieces. A fundamental skill for tackling any programming challenge.',
+            keyFeatures: ['Break down problems', 'Manageable pieces', 'Step by step', 'Core skill']
+          },
+          {
+            term: 'Debugging',
+            definition: 'The process of finding and fixing errors (bugs) in code. Involves reading error messages, using debugging tools, and systematic investigation.',
+            keyFeatures: ['Find errors', 'Read error messages', 'Use debugger', 'Systematic approach']
+          },
+          {
+            term: 'Version Control',
+            definition: 'Systems like Git that track changes to code over time, enabling collaboration and the ability to revert to previous versions.',
+            keyFeatures: ['Track changes', 'Collaboration', 'Git/GitHub', 'Branch/merge']
+          },
+          {
+            term: 'Portfolio',
+            definition: 'A collection of projects that demonstrates your skills to potential employers. Essential for landing your first tech job.',
+            keyFeatures: ['Showcase projects', 'GitHub profile', 'Personal website', 'Job applications']
+          },
+          {
+            term: 'Open Source',
+            definition: 'Software whose source code is freely available for anyone to view, use, modify, and distribute. Contributing to open source is great for learning and networking.',
+            keyFeatures: ['Free to use', 'Community driven', 'Great for learning', 'Build reputation']
+          }
+        ]
+      }
+    ]
   }
 ];
 

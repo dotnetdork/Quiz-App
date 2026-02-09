@@ -15,7 +15,9 @@ const CATEGORIES = {
   python: { name: 'Python', icon: '🐍', color: '#3776ab' },
   java: { name: 'Java', icon: '☕', color: '#f89820' },
   technology: { name: 'Technology', icon: '🖥️', color: '#607d8b' },
-  'computer-science': { name: 'Computer Science', icon: '🎓', color: '#9c27b0' }
+  'computer-science': { name: 'Computer Science', icon: '🎓', color: '#9c27b0' },
+  'ai-ml': { name: 'AI & Machine Learning', icon: '🧠', color: '#9c27b0' },
+  'career': { name: 'Career & Professional', icon: '👔', color: '#2196f3' }
 };
 
 /**
