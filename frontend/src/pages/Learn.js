@@ -112,6 +112,7 @@ function ContentRenderer({ content }) {
           return <CodeBlock key={index} code={segment.content} language={segment.language} />;
         }
         // Render text with basic markdown support
+        // Note: Content is from static learningData.js, not user input
         return (
           <div 
             key={index} 
@@ -127,21 +128,28 @@ function ContentRenderer({ content }) {
 }
 
 /**
- * Simple markdown renderer
+ * Simple markdown renderer for static content from learningData.js
+ * Note: This is safe because content is hardcoded, not user-generated
  */
 function renderMarkdown(text) {
-  return text
-    // Headers
+  // First, escape any HTML that might be in the content
+  let escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  
+  return escaped
+    // Headers (must process before line breaks)
     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
     .replace(/^## (.*$)/gim, '<h2>$1</h2>')
     .replace(/^# (.*$)/gim, '<h1>$1</h1>')
     // Bold
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Italic
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    // Italic (avoid matching ** already processed)
+    .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
     // Inline code
     .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
-    // Line breaks
+    // Line breaks (process after headers)
     .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br>');
 }
