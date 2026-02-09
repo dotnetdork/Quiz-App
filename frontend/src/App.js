@@ -15,6 +15,7 @@ import Leaderboard from './pages/Leaderboard';
 import Admin from './pages/Admin';
 import Sandbox from './pages/Sandbox';
 import Learn from './pages/Learn';
+import Glossary from './pages/Glossary';
 
 /**
  * App Logo Component
@@ -69,6 +70,9 @@ function Navigation() {
         </li>
         <li>
           <Link to="/learn">Learn</Link>
+        </li>
+        <li>
+          <Link to="/glossary">Glossary</Link>
         </li>
         <li>
           <Link to="/sandbox">Sandbox</Link>
@@ -127,8 +131,11 @@ function App() {
           {/* Sandbox - interactive code editor */}
           <Route path="/sandbox" element={<Sandbox />} />
           
-          {/* Learn - IT dictionary and resources */}
+          {/* Learn - comprehensive learning hub with mini-courses */}
           <Route path="/learn" element={<Learn />} />
+          
+          {/* Glossary - IT dictionary and reference */}
+          <Route path="/glossary" element={<Glossary />} />
           
           {/* Admin page - teacher only */}
           <Route path="/admin" element={<Admin />} />
