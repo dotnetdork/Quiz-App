@@ -215,7 +215,8 @@ public class Main {
  */
 
 /**
- * Safely evaluate simple arithmetic expressions
+ * Safely evaluate simple arithmetic expressions (simulation mode only)
+ * Only allows basic math operations on numbers and pre-evaluated variables
  */
 function safeEvaluateExpression(expr, variables = {}) {
   try {
@@ -225,15 +226,35 @@ function safeEvaluateExpression(expr, variables = {}) {
     // Replace variables with their values
     for (const [varName, varValue] of Object.entries(variables)) {
       const varRegex = new RegExp(`\\b${varName}\\b`, 'g');
-      cleanExpr = cleanExpr.replace(varRegex, JSON.stringify(varValue));
+      // Only substitute numeric values or arrays
+      if (typeof varValue === 'number') {
+        cleanExpr = cleanExpr.replace(varRegex, String(varValue));
+      } else if (Array.isArray(varValue)) {
+        cleanExpr = cleanExpr.replace(varRegex, JSON.stringify(varValue));
+      }
     }
     
-    // Only allow safe characters: numbers, operators, parentheses, brackets, quotes, commas, spaces, colons
-    if (!/^[\d\s+\-*/%()[\],."':\w]+$/.test(cleanExpr)) {
+    // Strict validation: only allow numbers, basic math operators, parentheses, brackets, commas, spaces
+    // No letters (except in JSON array content), no colons, no dots except decimals
+    if (!/^[\d\s+\-*/%()[\],"]+$/.test(cleanExpr)) {
+      // Check if it's a simple array literal
+      if (/^\[[\d\s,."'a-zA-Z]*\]$/.test(cleanExpr)) {
+        try {
+          return JSON.parse(cleanExpr.replace(/'/g, '"'));
+        } catch {
+          return null;
+        }
+      }
       return null;
     }
     
-    // Evaluate using Function constructor (safer than eval for simple math)
+    // Additional safety: reject if expression contains function-like patterns
+    if (/\w+\s*\(/.test(cleanExpr)) {
+      return null;
+    }
+    
+    // Evaluate simple arithmetic using Function constructor
+    // This is only used for simulation fallback, not for actual code execution
     // eslint-disable-next-line no-new-func
     const result = new Function(`"use strict"; return (${cleanExpr})`)();
     return result;

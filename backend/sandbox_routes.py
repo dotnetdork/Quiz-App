@@ -113,7 +113,7 @@ def check_dangerous_patterns(code: str, language: str) -> Optional[str]:
     
     for pattern in patterns:
         if re.search(pattern, code, re.IGNORECASE):
-            return f"Potentially unsafe code detected. Pattern '{pattern}' is not allowed in the sandbox."
+            return f"Potentially unsafe code detected. This operation is not allowed in the sandbox for security reasons."
     
     return None
 
@@ -125,10 +125,14 @@ def execute_python(code: str, work_dir: str) -> tuple[str, str, float]:
     """
     import time
     
-    # Create a wrapper script with restricted builtins
+    # Write user code to a separate file (safer than string embedding)
+    user_code_path = os.path.join(work_dir, 'user_code.py')
+    with open(user_code_path, 'w', encoding='utf-8') as f:
+        f.write(code)
+    
+    # Create a wrapper script with restricted builtins that reads and executes user code
     wrapper_code = '''
 import sys
-import builtins
 
 # Restrict dangerous builtins
 _safe_builtins = {
@@ -137,7 +141,7 @@ _safe_builtins = {
     'callable': callable, 'chr': chr, 'classmethod': classmethod,
     'complex': complex, 'dict': dict, 'dir': dir, 'divmod': divmod,
     'enumerate': enumerate, 'filter': filter, 'float': float,
-    'format': format, 'frozenset': frozenset, 'hasattr': hasattr,
+    'format': format, 'frozenset': frozenset,
     'hash': hash, 'hex': hex, 'id': id, 'int': int,
     'isinstance': isinstance, 'issubclass': issubclass, 'iter': iter,
     'len': len, 'list': list, 'map': map, 'max': max, 'min': min,
@@ -159,16 +163,18 @@ _safe_builtins = {
 # User code will be executed with restricted globals
 __user_globals__ = {'__builtins__': _safe_builtins}
 
-# Execute user code
+# Read and execute user code from file
 try:
-    exec("""''' + code.replace('"""', '\\"\\"\\"').replace('\\', '\\\\') + '''""", __user_globals__)
+    with open('user_code.py', 'r', encoding='utf-8') as f:
+        user_code = f.read()
+    exec(compile(user_code, 'user_code.py', 'exec'), __user_globals__)
 except Exception as e:
     print(f"Error: {type(e).__name__}: {e}", file=sys.stderr)
 '''
     
     # Write the wrapper script
     script_path = os.path.join(work_dir, 'script.py')
-    with open(script_path, 'w') as f:
+    with open(script_path, 'w', encoding='utf-8') as f:
         f.write(wrapper_code)
     
     # Execute with timeout
