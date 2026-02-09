@@ -2358,6 +2358,372 @@ Your portfolio is your proof of skills. Include:
         `
       }
     ]
+  },
+
+  // ============================================
+  // WEB DEVELOPMENT FUNDAMENTALS
+  // ============================================
+  {
+    id: 'web-development',
+    title: 'Web Development Fundamentals',
+    icon: '🌐',
+    color: '#e44d26',
+    category: 'web',
+    description: 'Learn HTML, CSS, and JavaScript - the building blocks of the web.',
+    estimatedTime: '60 min',
+    sections: [
+      {
+        id: 'intro',
+        title: 'Introduction to Web Development',
+        content: `
+Web development is the process of building websites and web applications. Every website you visit is made up of three core technologies working together.
+
+### The Three Pillars of the Web
+
+- **HTML (HyperText Markup Language)**: The structure and content
+- **CSS (Cascading Style Sheets)**: The styling and layout
+- **JavaScript**: The interactivity and behavior
+
+### How They Work Together
+
+Think of building a house:
+- **HTML** is the frame and walls (structure)
+- **CSS** is the paint, furniture, and decoration (appearance)
+- **JavaScript** is the electricity and plumbing (functionality)
+
+### Frontend vs Backend
+
+| Aspect | Frontend | Backend |
+|--------|----------|---------|
+| What | What users see | Server logic |
+| Languages | HTML, CSS, JS | Python, Java, Node.js |
+| Where | Browser | Server |
+| Focus | UI/UX | Data, APIs, logic |
+        `,
+        mermaid: `flowchart LR
+    U[👤 User] --> B[🌐 Browser]
+    B --> F[Frontend: HTML/CSS/JS]
+    F --> A[🔌 API]
+    A --> S[⚙️ Server/Backend]
+    S --> D[(🗄️ Database)]`
+      },
+      {
+        id: 'html',
+        title: 'HTML Basics',
+        content: `
+### What is HTML?
+
+HTML (HyperText Markup Language) is the standard language for creating web pages. It uses **tags** to define elements on a page.
+
+### Basic HTML Structure
+
+\`\`\`html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    <p>This is a paragraph.</p>
+  </body>
+</html>
+\`\`\`
+
+### Common HTML Tags
+
+| Tag | Purpose | Example |
+|-----|---------|---------|
+| \`<h1>\` to \`<h6>\` | Headings | \`<h1>Title</h1>\` |
+| \`<p>\` | Paragraph | \`<p>Text here</p>\` |
+| \`<a>\` | Link | \`<a href="url">Click</a>\` |
+| \`<img>\` | Image | \`<img src="pic.jpg">\` |
+| \`<div>\` | Container | \`<div>Content</div>\` |
+| \`<ul>\`, \`<li>\` | Lists | \`<ul><li>Item</li></ul>\` |
+| \`<button>\` | Button | \`<button>Click</button>\` |
+
+### Semantic HTML
+
+Use meaningful tags to describe your content:
+
+- \`<header>\` - Page or section header
+- \`<nav>\` - Navigation links
+- \`<main>\` - Main content
+- \`<article>\` - Self-contained content
+- \`<section>\` - Thematic grouping
+- \`<footer>\` - Page or section footer
+
+Semantic HTML improves accessibility and SEO!
+        `
+      },
+      {
+        id: 'css',
+        title: 'CSS Basics',
+        content: `
+### What is CSS?
+
+CSS (Cascading Style Sheets) controls how HTML elements look. It handles colors, fonts, spacing, layout, and more.
+
+### CSS Syntax
+
+\`\`\`css
+selector {
+  property: value;
+}
+
+/* Example */
+h1 {
+  color: blue;
+  font-size: 24px;
+}
+\`\`\`
+
+### Ways to Add CSS
+
+1. **Inline**: \`<p style="color: red;">Text</p>\`
+2. **Internal**: \`<style>\` tag in HTML head
+3. **External**: Separate .css file (recommended)
+
+### Common CSS Properties
+
+| Property | What it does | Example |
+|----------|--------------|---------|
+| \`color\` | Text color | \`color: #333;\` |
+| \`background\` | Background | \`background: blue;\` |
+| \`font-size\` | Text size | \`font-size: 16px;\` |
+| \`margin\` | Outside spacing | \`margin: 10px;\` |
+| \`padding\` | Inside spacing | \`padding: 20px;\` |
+| \`border\` | Border | \`border: 1px solid;\` |
+| \`width/height\` | Size | \`width: 100%;\` |
+
+### The Box Model
+
+Every HTML element is a box with:
+
+\`\`\`
++---------------------------+
+|         MARGIN            |
+|  +---------------------+  |
+|  |      BORDER         |  |
+|  |  +---------------+  |  |
+|  |  |    PADDING    |  |  |
+|  |  |  +---------+  |  |  |
+|  |  |  | CONTENT |  |  |  |
+|  |  |  +---------+  |  |  |
+|  |  +---------------+  |  |
+|  +---------------------+  |
++---------------------------+
+\`\`\`
+        `,
+        mermaid: `flowchart TB
+    subgraph Box Model
+        M[Margin - Outside spacing]
+        B[Border - Edge line]
+        P[Padding - Inside spacing]
+        C[Content - Your text/images]
+    end
+    M --> B --> P --> C`
+      },
+      {
+        id: 'javascript',
+        title: 'JavaScript Basics',
+        content: `
+### What is JavaScript?
+
+JavaScript is a programming language that makes web pages interactive. It runs in the browser and can respond to user actions.
+
+### Variables
+
+\`\`\`javascript
+// Modern way to declare variables
+let name = "Alice";      // Can change
+const age = 25;          // Cannot change
+\`\`\`
+
+### Functions
+
+\`\`\`javascript
+// Define a function
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+// Arrow function (modern)
+const greet = (name) => "Hello, " + name + "!";
+
+// Call the function
+greet("World");  // "Hello, World!"
+\`\`\`
+
+### DOM Manipulation
+
+The DOM (Document Object Model) lets JavaScript interact with HTML:
+
+\`\`\`javascript
+// Select an element
+const button = document.querySelector('#myButton');
+
+// Add event listener
+button.addEventListener('click', () => {
+  alert('Button clicked!');
+});
+
+// Change content
+document.getElementById('title').textContent = 'New Title';
+\`\`\`
+
+### Events
+
+| Event | When it fires |
+|-------|---------------|
+| \`click\` | Element is clicked |
+| \`submit\` | Form is submitted |
+| \`keydown\` | Key is pressed |
+| \`load\` | Page finishes loading |
+| \`mouseover\` | Mouse hovers over |
+        `,
+        mermaid: `flowchart LR
+    E[🖱️ User Event] --> J[📜 JavaScript]
+    J --> D[📄 DOM Update]
+    D --> V[👁️ Visual Change]`
+      },
+      {
+        id: 'responsive',
+        title: 'Responsive Design',
+        content: `
+### What is Responsive Design?
+
+Making websites look good on all devices - phones, tablets, and desktops.
+
+### Media Queries
+
+CSS that applies only at certain screen sizes:
+
+\`\`\`css
+/* Base styles (mobile first) */
+.container {
+  width: 100%;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .container {
+    width: 960px;
+  }
+}
+\`\`\`
+
+### Flexbox
+
+Modern layout system for arranging items:
+
+\`\`\`css
+.container {
+  display: flex;
+  justify-content: space-between;  /* Horizontal spacing */
+  align-items: center;              /* Vertical alignment */
+  gap: 20px;                        /* Space between items */
+}
+\`\`\`
+
+### CSS Grid
+
+For complex two-dimensional layouts:
+
+\`\`\`css
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* 3 equal columns */
+  gap: 20px;
+}
+\`\`\`
+
+### Mobile-First Approach
+
+Start with mobile styles, then add complexity for larger screens:
+
+1. Write base CSS for mobile
+2. Add media queries for larger screens
+3. Test on multiple devices
+        `,
+        mermaid: `flowchart LR
+    subgraph Breakpoints
+        M[📱 Mobile < 768px]
+        T[📱 Tablet 768-1024px]
+        D[💻 Desktop > 1024px]
+    end
+    M --> T --> D`
+      },
+      {
+        id: 'tools',
+        title: 'Developer Tools',
+        content: `
+### Browser Developer Tools
+
+Every modern browser has built-in tools for web development. Press **F12** or right-click → "Inspect" to open them.
+
+### Key Panels
+
+| Panel | Purpose |
+|-------|---------|
+| **Elements** | Inspect and edit HTML/CSS live |
+| **Console** | Run JavaScript, see errors |
+| **Network** | Monitor requests, loading times |
+| **Sources** | Debug JavaScript |
+| **Application** | Storage, cookies, cache |
+
+### Essential Tools for Beginners
+
+**Code Editors:**
+- VS Code (most popular, free)
+- Sublime Text
+- Atom
+
+**Version Control:**
+- Git + GitHub
+
+**Package Managers:**
+- npm (Node Package Manager)
+
+**Frameworks to Learn Later:**
+- React (most popular)
+- Vue.js (beginner-friendly)
+- Angular (enterprise)
+
+### Your First Project Checklist
+
+1. ✅ Create an HTML file
+2. ✅ Add a linked CSS file
+3. ✅ Add a JavaScript file
+4. ✅ Build something simple (portfolio, to-do list)
+5. ✅ Make it responsive
+6. ✅ Deploy it online (GitHub Pages, Netlify)
+
+### Learning Path
+
+\`\`\`
+HTML Basics (1-2 weeks)
+    ↓
+CSS Fundamentals (2-3 weeks)
+    ↓
+JavaScript Basics (3-4 weeks)
+    ↓
+Build Projects (ongoing)
+    ↓
+Learn a Framework (React, Vue)
+    ↓
+Backend Development (Node.js, Python)
+\`\`\`
+        `
+      }
+    ]
   }
 ];
 

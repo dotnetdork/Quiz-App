@@ -343,7 +343,7 @@
    ----------------------------------------- */
 .mermaid-container {
   background: #f8f9fa;
-  border: 2px dashed var(--text-light);
+  border: 2px solid var(--text-light);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
   margin: var(--spacing-md) 0;
@@ -355,7 +355,27 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.mermaid-code {
+.mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-loading {
+  text-align: center;
+  padding: var(--spacing-lg);
+  color: var(--text-secondary);
+}
+
+.mermaid-error .mermaid-code {
   background: #1e1e1e;
   color: #9cdcfe;
   padding: var(--spacing-md);
@@ -369,6 +389,7 @@
   font-size: var(--font-small);
   color: var(--text-secondary);
   margin: 0;
+  text-align: center;
 }
 
 .mermaid-note a {

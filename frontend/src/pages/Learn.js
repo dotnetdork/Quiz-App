@@ -4,9 +4,18 @@
  * A comprehensive learning hub with mini-courses, structured content,
  * and interactive timeline for computer history.
  */
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import mermaid from 'mermaid';
 import { learningModules } from '../data/learningData';
 import './Learn.css';
+
+// Initialize mermaid with configuration
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'default',
+  securityLevel: 'loose',
+  fontFamily: 'inherit'
+});
 
 /**
  * Category metadata for display
@@ -17,7 +26,8 @@ const CATEGORIES = {
   technology: { name: 'Technology', icon: '🖥️', color: '#607d8b' },
   'computer-science': { name: 'Computer Science', icon: '🎓', color: '#9c27b0' },
   'ai-ml': { name: 'AI & Machine Learning', icon: '🧠', color: '#9c27b0' },
-  'career': { name: 'Career & Professional', icon: '👔', color: '#2196f3' }
+  'career': { name: 'Career & Professional', icon: '👔', color: '#2196f3' },
+  'web': { name: 'Web Development', icon: '🌐', color: '#e44d26' }
 };
 
 /**
@@ -54,19 +64,58 @@ function CodeBlock({ code, language }) {
 }
 
 /**
- * Mermaid Diagram Placeholder Component
- * Displays Mermaid code that can be rendered by external tools
+ * Mermaid Diagram Component
+ * Renders Mermaid diagrams directly in the page
  */
 function MermaidDiagram({ code }) {
+  const containerRef = useRef(null);
+  const [svg, setSvg] = useState('');
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const renderDiagram = async () => {
+      if (!code) return;
+      
+      try {
+        // Generate unique ID for this diagram
+        const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+        const { svg } = await mermaid.render(id, code);
+        setSvg(svg);
+        setError(null);
+      } catch (err) {
+        console.error('Mermaid rendering error:', err);
+        setError(err.message);
+      }
+    };
+
+    renderDiagram();
+  }, [code]);
+
+  if (error) {
+    return (
+      <div className="mermaid-container mermaid-error">
+        <div className="mermaid-label">📊 Diagram</div>
+        <pre className="mermaid-code">
+          <code>{code}</code>
+        </pre>
+        <p className="mermaid-note">
+          <em>Unable to render diagram. <a href="https://mermaid.live" target="_blank" rel="noopener noreferrer">View on mermaid.live</a></em>
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="mermaid-container">
-      <div className="mermaid-label">📊 Diagram (Mermaid.js)</div>
-      <pre className="mermaid-code">
-        <code>{code}</code>
-      </pre>
-      <p className="mermaid-note">
-        <em>Paste this code into <a href="https://mermaid.live" target="_blank" rel="noopener noreferrer">mermaid.live</a> to view the diagram.</em>
-      </p>
+    <div className="mermaid-container" ref={containerRef}>
+      <div className="mermaid-label">📊 Diagram</div>
+      {svg ? (
+        <div 
+          className="mermaid-diagram"
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
+      ) : (
+        <div className="mermaid-loading">Loading diagram...</div>
+      )}
     </div>
   );
 }
