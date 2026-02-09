@@ -591,8 +591,8 @@ const PATHWAYS = [
         content: [
           {
             term: 'Password Security',
-            definition: 'Creating and managing strong, unique passwords for all accounts. Use password managers and enable multi-factor authentication. Strong passwords use mixed case, numbers, symbols, and are at least 12 characters.',
-            example: 'Strong: Tr0ub4dor&3\nWeak: password123, admin',
+            definition: 'The practice of creating and managing strong, unique passwords for all accounts to protect against unauthorized access.',
+            example: 'Strong: Tr0ub4dor&3 (mixed case, numbers, symbols, 12+ chars)\nWeak: password123, admin',
             keyFeatures: ['Long & complex', 'Unique per account', 'Password manager', 'MFA enabled']
           },
           {
@@ -602,7 +602,7 @@ const PATHWAYS = [
           },
           {
             term: 'Backup Strategy',
-            definition: 'Regularly backing up important data following the 3-2-1 rule: 3 copies, 2 different media types, 1 offsite. The best way to prevent data loss.',
+            definition: 'Regularly backing up important data following the 3-2-1 rule: 3 copies, 2 different media types, 1 offsite. Critical for preventing data loss.',
             keyFeatures: ['Regular backups', 'Test restoration', 'Encrypted backups', 'Offsite storage']
           },
           {
