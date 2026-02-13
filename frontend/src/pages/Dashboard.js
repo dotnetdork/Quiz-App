@@ -1,7 +1,7 @@
 /**
  * Dashboard Page Component
  * 
- * Shows the user's quiz history and scores.
+ * Unified dashboard showing quiz options, user stats, and leaderboard.
  * Requires authentication.
  */
 import { useState, useEffect } from 'react';
@@ -9,9 +9,11 @@ import { Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
 
 function Dashboard() {
-  // State for user and scores
+  // State for user, scores, quizzes, and leaderboard
   const [user, setUser] = useState(null);
   const [scores, setScores] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,6 +28,14 @@ function Dashboard() {
         // Get user's scores
         const scoreData = await apiCall(`/api/leaderboard/user/${userData.username}`);
         setScores(scoreData.scores || []);
+        
+        // Get quizzes
+        const quizData = await apiCall('/api/quiz/questions');
+        setQuizzes(quizData.quizzes || []);
+        
+        // Get leaderboard
+        const leaderboardData = await apiCall('/api/leaderboard/');
+        setLeaderboard(leaderboardData.leaderboard || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -99,55 +109,69 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Quiz History */}
+      {/* Available Quizzes */}
       <section className="mt-lg">
-        <h2>Your Quiz History</h2>
-        
-        {scores.length === 0 ? (
+        <h2>Available Quizzes</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+          {quizzes.map((quiz) => (
+            <div key={quiz.id} className="quiz-card">
+              <h3>{quiz.title}</h3>
+              <p>{quiz.description}</p>
+              <p className="text-secondary">
+                {quiz.questions?.length || 0} questions • {quiz.category}
+              </p>
+              <Link 
+                to={`/quiz/${quiz.id}`} 
+                className="btn-primary"
+                style={{ textDecoration: 'none', display: 'inline-block', marginTop: '1rem' }}
+              >
+                Start Quiz
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Leaderboard */}
+      <section className="mt-lg">
+        <h2>🏆 Leaderboard</h2>
+        {leaderboard.length === 0 ? (
           <div className="card">
-            <p>You haven't taken any quizzes yet.</p>
+            <p>No scores yet. Be the first to take a quiz!</p>
           </div>
         ) : (
-          <table>
+          <table className="leaderboard-table">
             <thead>
               <tr>
-                <th>Quiz</th>
-                <th>Score</th>
-                <th>Date</th>
+                <th style={{ width: '80px' }}>Rank</th>
+                <th>Player</th>
+                <th style={{ width: '150px' }}>Role</th>
+                <th style={{ width: '150px' }}>Total Points</th>
               </tr>
             </thead>
             <tbody>
-              {scores.map((score, index) => (
-                <tr key={index}>
-                  <td>{score.quiz_id}</td>
-                  <td>{score.score}</td>
-                  <td>{new Date(score.timestamp).toLocaleDateString()}</td>
+              {leaderboard.map((entry) => (
+                <tr key={entry.rank} className={entry.username === user.username ? 'highlight-row' : ''}>
+                  <td>
+                    <span className={`rank-badge ${entry.rank <= 3 ? `rank-${entry.rank}` : ''}`}>
+                      {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
+                    </span>
+                  </td>
+                  <td>
+                    <strong>{entry.username}</strong>
+                    {entry.username === user.username && <span style={{ color: '#ef6c00', marginLeft: '0.5rem' }}>← You</span>}
+                  </td>
+                  <td>
+                    <span className="role-badge">{entry.role}</span>
+                  </td>
+                  <td>
+                    <strong>{entry.total_points}</strong> pts
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
-      </section>
-
-      {/* Quick Links */}
-      <section className="mt-lg">
-        <h2>Quick Links</h2>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Link 
-            to="/" 
-            className="btn-primary"
-            style={{ textDecoration: 'none' }}
-          >
-            Take a Quiz
-          </Link>
-          <Link 
-            to="/leaderboard" 
-            className="btn-secondary"
-            style={{ textDecoration: 'none' }}
-          >
-            View Leaderboard
-          </Link>
-        </div>
       </section>
     </div>
   );

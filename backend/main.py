@@ -237,17 +237,18 @@ app.include_router(leaderboard_router, prefix="/api/leaderboard", tags=["leaderb
 from admin_routes import router as admin_router
 app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
 
-# ----------------------------
-# Admin Terminal WebSocket (Teacher Only)
-# ----------------------------
-from terminal_routes import router as terminal_router
-app.include_router(terminal_router, prefix="/api/admin", tags=["terminal"])
+# Terminal and Sandbox features removed in core components version
+# # ----------------------------
+# # Admin Terminal WebSocket (Teacher Only)
+# # ----------------------------
+# from terminal_routes import router as terminal_router
+# app.include_router(terminal_router, prefix="/api/admin", tags=["terminal"])
 
-# ----------------------------
-# Sandbox Code Execution Endpoints
-# ----------------------------
-from sandbox_routes import router as sandbox_router
-app.include_router(sandbox_router, prefix="/api/sandbox", tags=["sandbox"])
+# # ----------------------------
+# # Sandbox Code Execution Endpoints
+# # ----------------------------
+# from sandbox_routes import router as sandbox_router
+# app.include_router(sandbox_router, prefix="/api/sandbox", tags=["sandbox"])
 
 # ----------------------------
 # Static File Serving (Frontend)
