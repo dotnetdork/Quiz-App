@@ -297,7 +297,7 @@ function Login() {
       <div className="login-container">
         <h1 className="login-title">
           <span className="title-bracket">&lt;</span>
-          Quiz-App
+          Welcome to Quiz-App
           <span className="title-bracket">/&gt;</span>
         </h1>
         <p className="login-subtitle">
