@@ -17,7 +17,11 @@ function ProtectedRoute({ children }) {
       try {
         await apiCall('/auth/me');
         setIsAuthenticated(true);
-      } catch {
+      } catch (error) {
+        // Log error in development for debugging
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Authentication check failed:', error.message);
+        }
         setIsAuthenticated(false);
       } finally {
         setLoading(false);

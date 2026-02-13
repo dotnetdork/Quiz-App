@@ -121,6 +121,11 @@ function Dashboard() {
 
   // Calculate skills from quiz history
   const calculateSkills = () => {
+    // Ensure both scores and quizzes are loaded
+    if (!scores.length || !quizzes.length) {
+      return {};
+    }
+    
     const skillCounts = {};
     scores.forEach(score => {
       // Extract category from quiz_id (e.g., "python-basics" -> "python")

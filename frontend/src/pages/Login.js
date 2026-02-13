@@ -13,7 +13,7 @@ function Login() {
         <div className="login-logo">
           <img 
             src="/images/logo_JTL_horiz.png" 
-            alt="The League of Amazing Programmers"
+            alt="The League of Amazing Programmers Logo"
             className="league-logo"
           />
         </div>
