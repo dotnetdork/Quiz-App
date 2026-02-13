@@ -618,7 +618,7 @@
 @media (min-width: 500px) {
   .login-container h1,
   .login-title {
-    white-space: normal;
+    white-space: nowrap;
   }
 }
 
