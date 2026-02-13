@@ -114,7 +114,7 @@ function Home() {
           setUser(userData);
           
           // If logged in, also get their scores
-          const scoreData = await apiCall(`/api/leaderboard/user/${userData.username}`);
+          const scoreData = await apiCall(`/api/leaderboard/user/${encodeURIComponent(userData.username)}`);
           setScores(scoreData.scores || []);
         } catch {
           // Not logged in - that's okay
