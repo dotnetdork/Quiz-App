@@ -1108,6 +1108,7 @@
 .quiz-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: 1fr;
   gap: var(--spacing-lg);
   margin-top: var(--spacing-md);
 }
@@ -1154,19 +1155,22 @@
   color: var(--color-secondary);
   margin-bottom: var(--spacing-sm);
   font-size: 1.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .quiz-card-modern p {
   color: var(--text-secondary);
   margin-bottom: var(--spacing-md);
   font-size: var(--font-small);
-  flex-grow: 1;
 }
 
 .quiz-meta {
   color: var(--text-light);
   font-size: var(--font-small);
   margin-bottom: var(--spacing-md);
+  margin-top: auto;
 }
 
 .btn-retake-quiz {
