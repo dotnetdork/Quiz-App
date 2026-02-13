@@ -107,6 +107,21 @@ Copy `.env-template` to `.env` and configure:
 
 ---
 
+## Troubleshooting
+
+### Database Migration Error
+
+If you see `no such column: scores.correct_questions` after updating:
+
+```bash
+cd backend
+python migrate_db.py
+```
+
+See [backend/MIGRATION.md](backend/MIGRATION.md) for details.
+
+---
+
 ## Support & Contact
 
 | | |
