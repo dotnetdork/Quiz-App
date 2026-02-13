@@ -26,19 +26,26 @@ const CODE_SNIPPETS = [
   '<Quiz />',
 ];
 
-// Vibrant colors for code snippets that are visible on dark background
+// Vibrant colors for code snippets (RGB format for easier opacity handling)
 const CODE_COLORS = [
-  '#64ffda', // Cyan/Teal
-  '#ff6b9d', // Pink
-  '#ffd93d', // Yellow
-  '#6bcb77', // Green
-  '#4d96ff', // Blue
-  '#ff8c42', // Orange
-  '#c9b1ff', // Lavender
-  '#00d4ff', // Electric Blue
-  '#ff5e78', // Coral
-  '#98d8aa', // Mint
+  { r: 100, g: 255, b: 218 }, // Cyan/Teal
+  { r: 255, g: 107, b: 157 }, // Pink
+  { r: 255, g: 217, b: 61 },  // Yellow
+  { r: 107, g: 203, b: 119 }, // Green
+  { r: 77, g: 150, b: 255 },  // Blue
+  { r: 255, g: 140, b: 66 },  // Orange
+  { r: 201, g: 177, b: 255 }, // Lavender
+  { r: 0, g: 212, b: 255 },   // Electric Blue
+  { r: 255, g: 94, b: 120 },  // Coral
+  { r: 152, g: 216, b: 170 }, // Mint
 ];
+
+// Shooting star color constants
+const SHOOTING_STAR_YELLOW_PROBABILITY = 0.3;
+const SHOOTING_STAR_COLORS = {
+  yellow: { r: 255, g: 217, b: 61 },
+  white: { r: 255, g: 255, b: 255 }
+};
 
 // Space background with stars, floating code, and tech elements
 function SpaceBackground() {
@@ -243,7 +250,9 @@ function SpaceBackground() {
         length: 60 + Math.random() * 80,
         opacity: 0.8 + Math.random() * 0.2,
         life: 1,
-        color: Math.random() > 0.7 ? '#ffd93d' : '#ffffff'
+        color: Math.random() < SHOOTING_STAR_YELLOW_PROBABILITY 
+          ? SHOOTING_STAR_COLORS.yellow 
+          : SHOOTING_STAR_COLORS.white
       });
     };
 
@@ -585,13 +594,18 @@ function SpaceBackground() {
         
         // Draw shooting star with trail
         const trailLength = star.length * star.life;
-        const gradient = ctx.createLinearGradient(
-          star.x, star.y,
-          star.x - (star.vx / Math.sqrt(star.vx*star.vx + star.vy*star.vy)) * trailLength,
-          star.y - (star.vy / Math.sqrt(star.vx*star.vx + star.vy*star.vy)) * trailLength
-        );
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity * star.life})`);
-        gradient.addColorStop(0.3, star.color + Math.floor(star.opacity * star.life * 200).toString(16).padStart(2, '0'));
+        const magnitude = Math.sqrt(star.vx * star.vx + star.vy * star.vy);
+        const normalizedVx = star.vx / magnitude;
+        const normalizedVy = star.vy / magnitude;
+        const trailEndX = star.x - normalizedVx * trailLength;
+        const trailEndY = star.y - normalizedVy * trailLength;
+        
+        const gradient = ctx.createLinearGradient(star.x, star.y, trailEndX, trailEndY);
+        const starAlpha = Math.min(star.opacity * star.life, 1);
+        const colorAlpha = Math.min(star.opacity * star.life * 0.8, 1);
+        
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${starAlpha})`);
+        gradient.addColorStop(0.3, `rgba(${star.color.r}, ${star.color.g}, ${star.color.b}, ${colorAlpha})`);
         gradient.addColorStop(1, 'transparent');
         
         ctx.strokeStyle = gradient;
@@ -599,10 +613,7 @@ function SpaceBackground() {
         ctx.lineCap = 'round';
         ctx.beginPath();
         ctx.moveTo(star.x, star.y);
-        ctx.lineTo(
-          star.x - (star.vx / Math.sqrt(star.vx*star.vx + star.vy*star.vy)) * trailLength,
-          star.y - (star.vy / Math.sqrt(star.vx*star.vx + star.vy*star.vy)) * trailLength
-        );
+        ctx.lineTo(trailEndX, trailEndY);
         ctx.stroke();
         
         // Bright head
@@ -623,7 +634,7 @@ function SpaceBackground() {
         
         // Calculate depth-based scaling (closer = larger)
         star.z -= star.speed * 2;
-        if (star.z <= 0) {
+        if (star.z <= 1) {
           star.z = 1000;
           star.angle = Math.random() * Math.PI * 2;
           star.distance = Math.random() * 50;
@@ -690,7 +701,7 @@ function SpaceBackground() {
           ctx.save();
           ctx.font = `${code.size * Math.min(scale, 2)}px 'Courier New', monospace`;
           const opacity = Math.min(code.opacity * scale * 0.5, 0.8);
-          ctx.fillStyle = code.color + Math.floor(opacity * 255).toString(16).padStart(2, '0');
+          ctx.fillStyle = `rgba(${code.color.r}, ${code.color.g}, ${code.color.b}, ${opacity})`;
           ctx.fillText(code.text, projectedX, projectedY);
           ctx.restore();
         }
