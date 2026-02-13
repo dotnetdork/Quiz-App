@@ -537,11 +537,11 @@
 
 .login-container {
   text-align: center;
-  max-width: 580px;
+  max-width: 640px;
   width: 100%;
   background: white;
   backdrop-filter: blur(20px);
-  padding: calc(var(--spacing-xl) + 0.5rem) calc(var(--spacing-xl) + 1.5rem);
+  padding: calc(var(--spacing-xl) + 0.5rem) calc(var(--spacing-xl) + 2rem);
   border-radius: 20px;
   box-shadow: 
     0 25px 80px rgba(0, 0, 0, 0.5),
