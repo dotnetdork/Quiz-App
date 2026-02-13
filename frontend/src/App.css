@@ -1538,3 +1538,90 @@
 .score-badge.secondary {
   background: var(--text-secondary);
 }
+
+/* -----------------------------------------
+   Page Transition Animations
+   ----------------------------------------- */
+
+/* Login page exit animation */
+.login-page-fullscreen.transitioning-out {
+  animation: pageZoomFadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pageZoomFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+/* Dashboard entrance animation */
+.dashboard-container {
+  animation: dashboardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dashboardFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dashboard exit animation for logout */
+.dashboard-container.transitioning-out {
+  animation: dashboardFadeOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes dashboardFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.98);
+  }
+}
+
+/* Nav and footer fade out with dashboard */
+.nav.transitioning-out,
+.footer.transitioning-out {
+  animation: navFadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes navFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Login button click effect */
+.github-login-btn.clicked {
+  transform: scale(0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth page transitions for container */
+.container {
+  animation: containerFadeIn 0.4s ease;
+}
+
+@keyframes containerFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

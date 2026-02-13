@@ -165,6 +165,7 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showProfileAnimation, setShowProfileAnimation] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const profileRef = useRef(null);
 
   useEffect(() => {
@@ -194,6 +195,20 @@ function Dashboard() {
     
     loadData();
   }, []);
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    setIsLoggingOut(true);
+    
+    // Add transition class to nav and footer
+    document.querySelector('.nav')?.classList.add('transitioning-out');
+    document.querySelector('.footer')?.classList.add('transitioning-out');
+    
+    // Navigate after animation completes
+    setTimeout(() => {
+      window.location.href = `${API_URL}/auth/logout`;
+    }, 450);
+  };
 
   if (loading) {
     return <div className="loading-spinner"><p>Loading dashboard...</p></div>;
@@ -267,7 +282,7 @@ function Dashboard() {
   const historyGroups = groupedHistory();
 
   return (
-    <div className="dashboard-container">
+    <div className={`dashboard-container ${isLoggingOut ? 'transitioning-out' : ''}`}>
       {/* User Profile Card */}
       <div className={`user-profile-card ${showProfileAnimation ? 'loaded' : ''}`} ref={profileRef}>
         <div className="profile-header">
@@ -287,7 +302,13 @@ function Dashboard() {
             <h2>{user.username}</h2>
             <div className="role-badge">{user.role}</div>
           </div>
-          <a href={`${API_URL}/auth/logout`} className="btn-logout">Logout</a>
+          <a 
+            href={`${API_URL}/auth/logout`} 
+            className="btn-logout"
+            onClick={handleLogout}
+          >
+            Logout
+          </a>
         </div>
 
         {/* Skills Chart with Animation */}
