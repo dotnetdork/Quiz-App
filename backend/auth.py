@@ -4,69 +4,6 @@ Handles login, callback, and session management.
 """
 from authlib.integrations.starlette_client import OAuth
 from starlette.config import Config
-
-from config import (
-    GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET,
-    GITHUB_REDIRECT_URI
-)
-
-# ----------------------------
-# OAuth Configuration
-# ----------------------------
-# Create OAuth instance
-oauth = OAuth()
-
-# Register GitHub as OAuth provider
-github = oauth.register(
-    name="github",
-    client_id=GITHUB_CLIENT_ID,
-    client_secret=GITHUB_CLIENT_SECRET,
-    access_token_url="https://github.com/login/oauth/access_token",
-    access_token_params=None,
-    authorize_url="https://github.com/login/oauth/authorize",
-    authorize_params=None,
-    api_base_url="https://api.github.com/",
-    client_kwargs={"scope": "user:email read:user"},
-)
-
-
-from authlib.integrations.starlette_client import OAuth
-from starlette.config import Config
-from typing import Any, cast
-
-from config import (
-    GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET,
-    GITHUB_REDIRECT_URI
-)
-
-# ----------------------------
-# OAuth Configuration
-# ----------------------------
-# Create OAuth instance
-oauth = OAuth()
-
-# Register GitHub as OAuth provider
-github = oauth.register(
-    name="github",
-    client_id=GITHUB_CLIENT_ID,
-    client_secret=GITHUB_CLIENT_SECRET,
-    access_token_url="https://github.com/login/oauth/access_token",
-    access_token_params=None,
-    authorize_url="https://github.com/login/oauth/authorize",
-    authorize_params=None,
-    api_base_url="https://api.github.com/",
-    client_kwargs={"scope": "user:email read:user"},
-)
-
-# Cast to Any so static analyzers accept dynamic attributes
-"""
-GitHub OAuth authentication module.
-Handles login, callback, and session management.
-"""
-from authlib.integrations.starlette_client import OAuth
-from starlette.config import Config
 from typing import Any, cast
 
 from config import (
