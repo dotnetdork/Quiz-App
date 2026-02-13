@@ -1,0 +1,169 @@
+id: java_oop_01
+title: Java OOP & Logic
+description: Object-Oriented Programming concepts and logic
+category: java
+questions:
+- id: java_oop_q1
+  type: multiple_choice
+  prompt: Which concept allows a class to acquire properties and methods from another
+    class?
+  options:
+  - Polymorphism
+  - Inheritance
+  - Encapsulation
+  - Abstraction
+  answer: Inheritance
+- id: java_oop_q2
+  type: parsons
+  prompt: Arrange the code to create an object of class 'Car'.
+  blocks:
+  - public class Main {
+  - '    public static void main(String[] args) {'
+  - '        Car myCar = new Car();'
+  - '    }'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: java_oop_q3
+  type: multiple_choice
+  prompt: Which keyword refers to the current object instance?
+  options:
+  - super
+  - this
+  - that
+  - object
+  answer: this
+- id: java_oop_q4
+  type: multiple_choice
+  prompt: Which access modifier makes a variable visible only within its own class?
+  options:
+  - public
+  - protected
+  - private
+  - package
+  answer: private
+- id: java_oop_q5
+  type: parsons
+  prompt: Order the code to handle an exception using try-catch.
+  blocks:
+  - try {
+  - '    int data = 50 / 0;'
+  - '} catch (ArithmeticException e) {'
+  - '    System.out.println(e);'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: java_oop_q6
+  type: multiple_choice
+  prompt: What is a constructor?
+  options:
+  - A method that destroys objects
+  - A special method called when an object is created
+  - A variable that holds class data
+  - A tool to build Java files
+  answer: A special method called when an object is created
+- id: java_oop_q7
+  type: multiple_choice
+  prompt: Which keyword is used to import a package?
+  options:
+  - package
+  - get
+  - import
+  - include
+  answer: import
+- id: java_oop_q8
+  type: parsons
+  prompt: Create a subclass 'Dog' that extends 'Animal'.
+  blocks:
+  - public class Animal {
+  - '}'
+  - public class Dog extends Animal {
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: java_oop_q9
+  type: multiple_choice
+  prompt: Method Overloading occurs when...
+  options:
+  - A method has the same name but different parameters
+  - A method is too long
+  - A subclass provides a specific implementation of a method
+  - A method calls itself
+  answer: A method has the same name but different parameters
+- id: java_oop_q10
+  type: parsons
+  prompt: Arrange the enhanced for-loop to print all names in an array.
+  blocks:
+  - String[] names = {"Code", "Tech"};
+  - 'for (String i : names) {'
+  - '    System.out.println(i);'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: java_oop_q11
+  type: multiple_choice
+  prompt: An interface in Java is...
+  options:
+  - A concrete class with all methods defined
+  - A blueprint of a class containing abstract methods
+  - A graphical user window
+  - A variable type
+  answer: A blueprint of a class containing abstract methods
+- id: java_oop_q12
+  type: multiple_choice
+  prompt: What does the 'static' keyword mean?
+  options:
+  - The variable can change frequently
+  - The member belongs to the class, not instances
+  - The code is frozen
+  - The method is private
+  answer: The member belongs to the class, not instances
+- id: java_oop_q13
+  type: parsons
+  prompt: Order the code to define and call a method.
+  blocks:
+  - static void myMethod() {
+  - '    System.out.println("Executed!");'
+  - '}'
+  - public static void main(String[] args) {
+  - '    myMethod();'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: java_oop_q14
+  type: multiple_choice
+  prompt: Which package is automatically imported in all Java programs?
+  options:
+  - java.util
+  - java.io
+  - java.lang
+  - java.net
+  answer: java.lang
+- id: java_oop_q15
+  type: multiple_choice
+  prompt: What is the result of 10 > 9?
+  options:
+  - '1'
+  - 'true'
+  - '0'
+  - 'false'
+  answer: 'true'

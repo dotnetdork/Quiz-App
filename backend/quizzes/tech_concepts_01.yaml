@@ -1,0 +1,159 @@
+id: tech_concepts_01
+title: Technology Concepts
+description: General technology and computer science concepts
+category: technology
+questions:
+- id: tech_q1
+  type: multiple_choice
+  prompt: What does CPU stand for?
+  options:
+  - Central Processing Unit
+  - Computer Personal Unit
+  - Central Program Utility
+  - Computer Processing Utility
+  answer: Central Processing Unit
+- id: tech_q2
+  type: multiple_choice
+  prompt: Which of the following is a version control system?
+  options:
+  - Git
+  - Python
+  - Java
+  - HTML
+  answer: Git
+- id: tech_q3
+  type: multiple_choice
+  prompt: What does RAM stand for?
+  options:
+  - Read Access Memory
+  - Random Access Memory
+  - Run All Memory
+  - Real Access Module
+  answer: Random Access Memory
+- id: tech_q4
+  type: parsons
+  prompt: Order these storage units from smallest to largest.
+  blocks:
+  - Kilobyte (KB)
+  - Megabyte (MB)
+  - Gigabyte (GB)
+  - Terabyte (TB)
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: tech_q5
+  type: multiple_choice
+  prompt: Which protocol is used for secure web browsing?
+  options:
+  - HTTP
+  - FTP
+  - HTTPS
+  - SMTP
+  answer: HTTPS
+- id: tech_q6
+  type: multiple_choice
+  prompt: What is the binary representation of the decimal number 1?
+  options:
+  - '10'
+  - '01'
+  - '11'
+  - '00'
+  answer: '01'
+- id: tech_q7
+  type: multiple_choice
+  prompt: Which component is considered the 'brain' of the computer?
+  options:
+  - Hard Drive
+  - RAM
+  - CPU
+  - GPU
+  answer: CPU
+- id: tech_q8
+  type: parsons
+  prompt: Order the steps of the basic computing processing cycle.
+  blocks:
+  - Input
+  - Processing
+  - Output
+  - Storage
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: tech_q9
+  type: multiple_choice
+  prompt: Which of these is an Operating System?
+  options:
+  - Linux
+  - Chrome
+  - Dell
+  - Intel
+  answer: Linux
+- id: tech_q10
+  type: multiple_choice
+  prompt: What is 'Phishing'?
+  options:
+  - Optimizing code for speed
+  - A fraudulent attempt to obtain sensitive information
+  - Repairing hardware connections
+  - Searching for bugs in software
+  answer: A fraudulent attempt to obtain sensitive information
+- id: tech_q11
+  type: multiple_choice
+  prompt: Which of the following is NOT a programming language?
+  options:
+  - Python
+  - Java
+  - HTML
+  - C++
+  answer: HTML
+- id: tech_q12
+  type: parsons
+  prompt: Arrange the layers of the OSI model from lowest to highest.
+  blocks:
+  - Physical
+  - Data Link
+  - Network
+  - Transport
+  - Session
+  - Presentation
+  - Application
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+- id: tech_q13
+  type: multiple_choice
+  prompt: What does 'HTTP' stand for?
+  options:
+  - HyperText Transfer Protocol
+  - High Tech Transfer Protocol
+  - Hyperlink Text Transfer Protocol
+  - Home Transfer Text Protocol
+  answer: HyperText Transfer Protocol
+- id: tech_q14
+  type: multiple_choice
+  prompt: Which of the following is a type of malware?
+  options:
+  - Firewall
+  - Antivirus
+  - Ransomware
+  - VPN
+  answer: Ransomware
+- id: tech_q15
+  type: multiple_choice
+  prompt: Which type of storage device has no moving parts and is faster than a traditional
+    Hard Disk Drive (HDD)?
+  options:
+  - SSD (Solid State Drive)
+  - DVD-ROM
+  - Floppy Disk
+  - Magnetic Tape
+  answer: SSD (Solid State Drive)

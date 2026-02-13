@@ -1,0 +1,162 @@
+id: robotics_01
+title: Robotics Fundamentals
+description: Sensors, actuators, and control logic
+category: technology
+questions:
+- id: robo_q1
+  type: multiple_choice
+  prompt: What is an Actuator?
+  options:
+  - A device that converts energy into motion
+  - A sensor that detects light
+  - The brain of the robot
+  - A battery unit
+  answer: A device that converts energy into motion
+- id: robo_q2
+  type: parsons
+  prompt: Order the logic for a simple obstacle avoidance robot.
+  blocks:
+  - Read ultrasonic distance sensor
+  - 'if distance < 10cm:'
+  - '    stop motors'
+  - '    turn right'
+  - 'else: drive forward'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: robo_q3
+  type: multiple_choice
+  prompt: Which sensor is best for measuring distance using sound waves?
+  options:
+  - Infrared
+  - Ultrasonic
+  - Gyroscope
+  - Thermistor
+  answer: Ultrasonic
+- id: robo_q4
+  type: multiple_choice
+  prompt: What does 'DOF' stand for in robotics?
+  options:
+  - Depth of Field
+  - Degrees of Freedom
+  - Digital Output Format
+  - Direct Operating Frequency
+  answer: Degrees of Freedom
+- id: robo_q5
+  type: parsons
+  prompt: Arrange the typical control loop of a robot.
+  blocks:
+  - Sense (Input from environment)
+  - Plan (Process data)
+  - Act (Output to motors)
+  answer:
+  - 0
+  - 1
+  - 2
+- id: robo_q6
+  type: multiple_choice
+  prompt: What is the 'End Effector'?
+  options:
+  - The battery pack
+  - The device at the end of a robotic arm (e.g., gripper)
+  - The main power switch
+  - The coding environment
+  answer: The device at the end of a robotic arm (e.g., gripper)
+- id: robo_q7
+  type: multiple_choice
+  prompt: Which component is commonly used to control the precise angle of a joint?
+  options:
+  - DC Motor
+  - Servo Motor
+  - LED
+  - Resistor
+  answer: Servo Motor
+- id: robo_q8
+  type: parsons
+  prompt: Order the code to make a robot blink an LED.
+  blocks:
+  - turn LED on
+  - wait 1 second
+  - turn LED off
+  - wait 1 second
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: robo_q9
+  type: multiple_choice
+  prompt: What is a 'LIDAR' sensor used for?
+  options:
+  - Measuring temperature
+  - Mapping environments using laser light
+  - Detecting magnetic fields
+  - Recording audio
+  answer: Mapping environments using laser light
+- id: robo_q10
+  type: multiple_choice
+  prompt: What does PWM stand for (used for controlling motor speed)?
+  options:
+  - Power With Motion
+  - Pulse Width Modulation
+  - Program Width Mode
+  - Position Wire Map
+  answer: Pulse Width Modulation
+- id: robo_q11
+  type: parsons
+  prompt: Arrange the logic for a line-following robot.
+  blocks:
+  - Check ground sensor
+  - 'If sensor sees black line:'
+  - '    Move forward'
+  - 'Else (sees white):'
+  - '    Turn to find line'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: robo_q12
+  type: multiple_choice
+  prompt: 'A robot that operates without human intervention is called:'
+  options:
+  - Teleoperated
+  - Autonomous
+  - Manual
+  - Static
+  answer: Autonomous
+- id: robo_q13
+  type: multiple_choice
+  prompt: Which pin on a microcontroller handles only On/Off signals?
+  options:
+  - Analog
+  - Digital (GPIO)
+  - Ground
+  - VCC
+  answer: Digital (GPIO)
+- id: robo_q14
+  type: parsons
+  prompt: Order the components of a robotic system from power to movement.
+  blocks:
+  - Battery (Power)
+  - Microcontroller (Logic)
+  - Motor Driver (Power Control)
+  - Motor (Movement)
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: robo_q15
+  type: multiple_choice
+  prompt: What is an 'E-Stop'?
+  options:
+  - Electronic Start
+  - Emergency Stop button
+  - Energy Saver
+  - Engine Stall
+  answer: Emergency Stop button

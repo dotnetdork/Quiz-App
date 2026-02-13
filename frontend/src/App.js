@@ -4,18 +4,14 @@
  * This is the root component for the Quiz App.
  * It sets up routing and provides the main layout.
  */
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
 
 // Import page components
-import Home from './pages/Home';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Quiz from './pages/Quiz';
 import Leaderboard from './pages/Leaderboard';
-import Admin from './pages/Admin';
-import Sandbox from './pages/Sandbox';
-import Learn from './pages/Learn';
-import Glossary from './pages/Glossary';
+import Quiz from './pages/Quiz';
 
 /**
  * App Logo Component
@@ -63,19 +59,7 @@ function Navigation() {
       {/* Navigation Links */}
       <ul className="nav-links">
         <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
           <Link to="/dashboard">Dashboard</Link>
-        </li>
-        <li>
-          <Link to="/learn">Learn</Link>
-        </li>
-        <li>
-          <Link to="/glossary">Glossary</Link>
-        </li>
-        <li>
-          <Link to="/sandbox">Sandbox</Link>
         </li>
         <li>
           <Link to="/leaderboard">Leaderboard</Link>
@@ -110,41 +94,43 @@ function Footer() {
 function App() {
   return (
     <BrowserRouter>
-      {/* Navigation bar */}
-      <Navigation />
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+/**
+ * AppContent - Handles conditional rendering of nav/footer based on route
+ */
+function AppContent() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/';
+
+  return (
+    <>
+      {/* Navigation bar - hide on login page */}
+      {!isLoginPage && <Navigation />}
       
       {/* Main content area */}
-      <main className="container">
+      <main className={isLoginPage ? '' : 'container'}>
         <Routes>
-          {/* Home page - shows welcome and quiz list */}
-          <Route path="/" element={<Home />} />
+          {/* Login page - centered login with no nav/footer */}
+          <Route path="/" element={<Login />} />
           
-          {/* Dashboard - user's quiz history */}
+          {/* Dashboard - user's quiz history and quiz browsing */}
           <Route path="/dashboard" element={<Dashboard />} />
+          
+          {/* Leaderboard - personal stats and top scores */}
+          <Route path="/leaderboard" element={<Leaderboard />} />
           
           {/* Quiz page - take a specific quiz */}
           <Route path="/quiz/:quizId" element={<Quiz />} />
-          
-          {/* Leaderboard - top scores */}
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          
-          {/* Sandbox - interactive code editor */}
-          <Route path="/sandbox" element={<Sandbox />} />
-          
-          {/* Learn - comprehensive learning hub with mini-courses */}
-          <Route path="/learn" element={<Learn />} />
-          
-          {/* Glossary - IT dictionary and reference */}
-          <Route path="/glossary" element={<Glossary />} />
-          
-          {/* Admin page - teacher only */}
-          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
       
-      {/* Footer */}
-      <Footer />
-    </BrowserRouter>
+      {/* Footer - hide on login page */}
+      {!isLoginPage && <Footer />}
+    </>
   );
 }
 

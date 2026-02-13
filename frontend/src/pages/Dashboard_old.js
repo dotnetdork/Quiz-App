@@ -1,8 +1,9 @@
 /**
- * Home Page Component
+ * Dashboard Page Component
  * 
- * Shows welcome message, login button, and category grid for quizzes.
- * This is the landing page for the Quiz App.
+ * Shows the user's quiz history, scores, and available quizzes.
+ * Combines the old Dashboard with quiz browsing from Home.
+ * Requires authentication.
  */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -91,30 +92,30 @@ const CATEGORIES = [
   }
 ];
 
-function Home() {
-  // State for quizzes, user, and selected category
-  const [quizzes, setQuizzes] = useState([]);
+function Dashboard() {
+  // State for user, scores, and quizzes
   const [user, setUser] = useState(null);
+  const [scores, setScores] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Load quizzes and check user on mount
+  // Load user data and quizzes on mount
   useEffect(() => {
     async function loadData() {
       try {
+        // Get current user
+        const userData = await apiCall('/auth/me');
+        setUser(userData);
+        
+        // Get user's scores
+        const scoreData = await apiCall(`/api/leaderboard/user/${userData.username}`);
+        setScores(scoreData.scores || []);
+        
         // Get quizzes
         const quizData = await apiCall('/api/quiz/questions');
         setQuizzes(quizData.quizzes || []);
-        
-        // Try to get current user (may fail if not logged in)
-        try {
-          const userData = await apiCall('/auth/me');
-          setUser(userData);
-        } catch {
-          // Not logged in - that's okay
-          setUser(null);
-        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -139,52 +140,92 @@ function Home() {
   if (loading) {
     return (
       <div className="loading">
-        <p>Loading quizzes...</p>
+        <p>Loading dashboard...</p>
       </div>
     );
   }
 
-  // Show error state
-  if (error) {
+  // Show login prompt if not authenticated
+  if (error || !user) {
     return (
-      <div className="error-message">
-        <p>Error: {error}</p>
+      <div className="text-center mt-lg">
+        <h2>Please Log In</h2>
+        <p>You need to log in to view your dashboard.</p>
+        <a href={`${API_URL}/auth/login`} className="github-login mt-md" style={{ display: 'inline-flex' }}>
+          <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          Login with GitHub
+        </a>
       </div>
     );
   }
+
+  // Calculate total points
+  const totalPoints = scores.reduce((sum, s) => sum + s.score, 0);
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="hero">
-        <h1>Welcome to Quiz-App!</h1>
-        <p>
-          Test your programming knowledge with interactive quizzes and 
-          Parsons Problems.
+      {/* User Info Header */}
+      <div className="card text-center">
+        <h1>
+          Hello there, <span className="dashboard-username">{user.username}</span>!
+        </h1>
+        <p className="text-secondary">
+          Role: <strong>{user.role}</strong>
         </p>
+        <div className="dashboard-actions mt-md">
+          <a href={`${API_URL}/auth/logout`} className="btn-secondary logout-link">
+            Logout
+          </a>
+        </div>
+      </div>
+
+      {/* Stats Summary */}
+      <div className="admin-stats mt-lg">
+        <div className="stat-card">
+          <div className="stat-value">{totalPoints}</div>
+          <div className="stat-label">Total Points</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{scores.length}</div>
+          <div className="stat-label">Quizzes Completed</div>
+        </div>
+      </div>
+
+      {/* Quiz History */}
+      <section className="mt-lg">
+        <h2>Your Quiz History</h2>
         
-        {/* Login or Dashboard button */}
-        {user ? (
-          <div>
-            <p>Glad to have you back, <strong className="dashboard-username">{user.username}</strong>!</p>
-            <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
-              Go to Dashboard
-            </Link>
+        {scores.length === 0 ? (
+          <div className="card">
+            <p>You haven't taken any quizzes yet. Browse available quizzes below!</p>
           </div>
         ) : (
-          <a href={`${API_URL}/auth/login`} className="github-login">
-            {/* GitHub Icon SVG */}
-            <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            Login with GitHub
-          </a>
+          <table>
+            <thead>
+              <tr>
+                <th>Quiz</th>
+                <th>Score</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scores.map((score, index) => (
+                <tr key={index}>
+                  <td>{score.quiz_id}</td>
+                  <td>{score.score}</td>
+                  <td>{new Date(score.timestamp).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </section>
 
-      {/* Category Grid */}
+      {/* Category Grid - Quiz Selection */}
       <section className="mt-lg">
-        <h2>Choose a Category</h2>
+        <h2>Browse Quizzes</h2>
         <p className="text-secondary mb-md">Click on a category to see available quizzes</p>
         
         <div className="category-grid">
@@ -236,20 +277,30 @@ function Home() {
                 <p className="text-secondary">
                   {quiz.questions?.length || 0} questions
                 </p>
-                <Link 
-                  to={`/quiz/${quiz.id}`} 
-                  className="btn-primary"
-                  style={{ textDecoration: 'none', display: 'inline-block', marginTop: '1rem' }}
-                >
-                  Start Quiz
-                </Link>
+                <p className="text-secondary">
+                  Note: Quiz taking functionality coming soon!
+                </p>
               </div>
             ))
           )}
         </section>
       )}
+
+      {/* Quick Links */}
+      <section className="mt-lg">
+        <h2>Quick Links</h2>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <Link 
+            to="/leaderboard" 
+            className="btn-primary"
+            style={{ textDecoration: 'none' }}
+          >
+            View Leaderboard
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
 
-export default Home;
+export default Dashboard;

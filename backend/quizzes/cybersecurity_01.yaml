@@ -1,0 +1,155 @@
+id: cybersecurity_01
+title: Cybersecurity Fundamentals
+description: Learn about protecting systems, networks, and data
+category: technology
+questions:
+- id: cyber_q1
+  type: multiple_choice
+  prompt: What is the primary purpose of a Firewall?
+  options:
+  - To speed up internet connection
+  - To monitor and control incoming/outgoing network traffic
+  - To delete viruses from files
+  - To encrypt passwords
+  answer: To monitor and control incoming/outgoing network traffic
+- id: cyber_q2
+  type: multiple_choice
+  prompt: Which of these is a strong password?
+  options:
+  - password123
+  - admin
+  - Tr0ub4dor&3
+  - '12345678'
+  answer: Tr0ub4dor&3
+- id: cyber_q3
+  type: parsons
+  prompt: Arrange the steps of a typical 'Man-in-the-Middle' attack scenario.
+  blocks:
+  - Attacker intercepts communication between User and Server
+  - Attacker relays modified messages to Server
+  - Server responds to Attacker (thinking it is User)
+  - Attacker sends response back to User
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: cyber_q4
+  type: multiple_choice
+  prompt: What does 'Encryption' do to data?
+  options:
+  - Deletes it permanently
+  - Compresses it to save space
+  - Scrambles it so it is unreadable without a key
+  - Copies it to the cloud
+  answer: Scrambles it so it is unreadable without a key
+- id: cyber_q5
+  type: multiple_choice
+  prompt: Which term describes malicious software that demands payment to restore
+    access to data?
+  options:
+  - Spyware
+  - Ransomware
+  - Adware
+  - Freeware
+  answer: Ransomware
+- id: cyber_q6
+  type: parsons
+  prompt: Order the components of Multi-Factor Authentication (MFA).
+  blocks:
+  - Something you know (Password)
+  - Something you have (Phone/Token)
+  - Something you are (Biometrics/Fingerprint)
+  answer:
+  - 0
+  - 1
+  - 2
+- id: cyber_q7
+  type: multiple_choice
+  prompt: What is 'Social Engineering'?
+  options:
+  - Building social media apps
+  - Manipulating people into divulging confidential information
+  - Organizing team-building events
+  - Connecting computers in a social network
+  answer: Manipulating people into divulging confidential information
+- id: cyber_q8
+  type: multiple_choice
+  prompt: What is a packet?
+  options:
+  - A small unit of data transmitted over a network
+  - A type of malware
+  - An encrypted file
+  - A physical storage device
+  answer: A small unit of data transmitted over a network
+- id: cyber_q9
+  type: parsons
+  prompt: Arrange the phases of the 'Cyber Kill Chain' (simplified).
+  blocks:
+  - Reconnaissance (Gathering info)
+  - Weaponization (Creating exploit)
+  - Delivery (Sending exploit)
+  - Exploitation (Executing code)
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: cyber_q10
+  type: multiple_choice
+  prompt: What is a 'Zero-Day' vulnerability?
+  options:
+  - A virus that lasts for zero days
+  - A flaw known to the vendor for zero days (unpatched)
+  - A software update released on Sunday
+  - A computer with no operating system
+  answer: A flaw known to the vendor for zero days (unpatched)
+- id: cyber_q11
+  type: multiple_choice
+  prompt: Which tool is commonly used to test network security by simulating attacks?
+  options:
+  - Photoshop
+  - Wireshark
+  - Metasploit
+  - Excel
+  answer: Metasploit
+- id: cyber_q12
+  type: multiple_choice
+  prompt: What does 'VPN' stand for?
+  options:
+  - Virtual Private Network
+  - Visual Processing Node
+  - Verified Public Network
+  - Variable Power Number
+  answer: Virtual Private Network
+- id: cyber_q13
+  type: parsons
+  prompt: Order the steps to securely update software.
+  blocks:
+  - Check for updates from official source
+  - Download update package
+  - Verify digital signature/checksum
+  - Install update
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: cyber_q14
+  type: multiple_choice
+  prompt: Which attack floods a server with traffic to crash it?
+  options:
+  - SQL Injection
+  - DDoS (Distributed Denial of Service)
+  - Cross-Site Scripting
+  - Brute Force
+  answer: DDoS (Distributed Denial of Service)
+- id: cyber_q15
+  type: multiple_choice
+  prompt: What is the best way to prevent data loss?
+  options:
+  - Regular Backups
+  - Installing a faster CPU
+  - Using a larger monitor
+  - Sharing passwords
+  answer: Regular Backups

@@ -26,7 +26,13 @@ from models import User, Score
 # ----------------------------
 router = APIRouter()
 
-# Path to questions file (uses QUIZFILES_PATH from config)
+# Path to quizzes directory (uses QUIZFILES_PATH from config)
+QUIZZES_DIR = os.path.join(
+    QUIZFILES_PATH,
+    "quizzes"
+)
+
+# Fallback to old questions.yaml if quizzes directory doesn't exist
 QUESTIONS_FILE = os.path.join(
     QUIZFILES_PATH,
     "questions.yaml"
@@ -40,15 +46,33 @@ PROGRESS_FILE = os.path.join(
 
 
 # ----------------------------
-# Helper: Load questions from YAML
+# Helper: Load questions from individual quiz files or YAML
 # ----------------------------
 def load_questions():
     """
-    Load quiz questions from the YAML file.
+    Load quiz questions from individual quiz files in the quizzes/ directory,
+    or fall back to the old questions.yaml file.
     
     Returns:
         dict containing quiz data
     """
+    # Try loading from individual quiz files first
+    if os.path.isdir(QUIZZES_DIR):
+        try:
+            quizzes = []
+            for filename in sorted(os.listdir(QUIZZES_DIR)):
+                if filename.endswith('.yaml') or filename.endswith('.yml'):
+                    filepath = os.path.join(QUIZZES_DIR, filename)
+                    with open(filepath, 'r') as file:
+                        quiz_data = yaml.safe_load(file)
+                        if quiz_data:
+                            quizzes.append(quiz_data)
+            return {"quizzes": quizzes}
+        except Exception as e:
+            # Fall through to try questions.yaml
+            print(f"Error loading individual quiz files: {e}")
+    
+    # Fallback to old questions.yaml format
     try:
         with open(QUESTIONS_FILE, "r") as file:
             data = yaml.safe_load(file)

@@ -1,0 +1,154 @@
+id: java_basics_01
+title: Java Fundamentals
+description: Test your knowledge of basic Java concepts
+category: java
+questions:
+- id: java_q1
+  type: multiple_choice
+  prompt: Which keyword is used to create a class in Java?
+  options:
+  - def
+  - class
+  - struct
+  - type
+  answer: class
+- id: java_q2
+  type: multiple_choice
+  prompt: What is the correct way to declare a main method in Java?
+  options:
+  - 'def main():'
+  - function main()
+  - public static void main(String[] args)
+  - void main()
+  answer: public static void main(String[] args)
+- id: java_q3
+  type: multiple_choice
+  prompt: Which data type is used to store text?
+  options:
+  - string
+  - String
+  - Txt
+  - Char
+  answer: String
+- id: java_q4
+  type: multiple_choice
+  prompt: How do you end a statement in Java?
+  options:
+  - .
+  - ':'
+  - ;
+  - '}'
+  answer: ;
+- id: java_q5
+  type: parsons
+  prompt: Arrange the code to print 'Hello Java' to the console.
+  blocks:
+  - public class Main {
+  - '    public static void main(String[] args) {'
+  - '        System.out.println("Hello Java");'
+  - '    }'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: java_q6
+  type: multiple_choice
+  prompt: Which variable type stores whole numbers?
+  options:
+  - float
+  - int
+  - double
+  - boolean
+  answer: int
+- id: java_q7
+  type: parsons
+  prompt: Reorder to declare an integer and assign it a value.
+  blocks:
+  - int myNum;
+  - myNum = 15;
+  - System.out.println(myNum);
+  answer:
+  - 0
+  - 1
+  - 2
+- id: java_q8
+  type: multiple_choice
+  prompt: How do you write a single-line comment in Java?
+  options:
+  - '#'
+  - //
+  - /*
+  - --
+  answer: //
+- id: java_q9
+  type: multiple_choice
+  prompt: Which keyword creates a variable that cannot be changed (constant)?
+  options:
+  - static
+  - final
+  - const
+  - abstract
+  answer: final
+- id: java_q10
+  type: parsons
+  prompt: Construct a standard 'if' statement in Java.
+  blocks:
+  - int x = 20;
+  - if (x > 18) {
+  - '    System.out.println("Adult");'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: java_q11
+  type: multiple_choice
+  prompt: Which operator is used to compare two values for equality?
+  options:
+  - '='
+  - ==
+  - <>
+  - equals
+  answer: ==
+- id: java_q12
+  type: multiple_choice
+  prompt: Arrays in Java are initialized with which brackets?
+  options:
+  - ()
+  - '[]'
+  - '{}'
+  - <>
+  answer: '{}'
+- id: java_q13
+  type: parsons
+  prompt: Create a simple 'for' loop counting from 0 to 4.
+  blocks:
+  - for (int i = 0; i < 5; i++) {
+  - '    System.out.println(i);'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: java_q14
+  type: multiple_choice
+  prompt: Which data type stores true or false values?
+  options:
+  - bool
+  - Boolean
+  - boolean
+  - bit
+  answer: boolean
+- id: java_q15
+  type: multiple_choice
+  prompt: Which symbol calculates the remainder (modulus)?
+  options:
+  - /
+  - '%'
+  - '*'
+  - \
+  answer: '%'
