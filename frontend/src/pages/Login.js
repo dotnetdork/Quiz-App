@@ -48,6 +48,8 @@ const SHOOTING_STAR_COLORS = {
 };
 
 // Animation speed multipliers for different elements
+const STAR_Z_SPEED_MULTIPLIER = 1;
+const STAR_DISTANCE_SPEED_MULTIPLIER = 0.25;
 const ASTEROID_Z_SPEED_MULTIPLIER = 0.75;
 const ASTEROID_DISTANCE_SPEED_MULTIPLIER = 0.15;
 const CODE_Z_SPEED_MULTIPLIER = 0.5;
@@ -639,7 +641,7 @@ function SpaceBackground() {
         const twinkle = Math.sin(time * star.twinkleSpeed * 100) * 0.3 + 0.7;
         
         // Calculate depth-based scaling (closer = larger)
-        star.z -= star.speed;
+        star.z -= star.speed * STAR_Z_SPEED_MULTIPLIER;
         if (star.z <= 1) {
           star.z = 1000;
           star.angle = Math.random() * Math.PI * 2;
@@ -660,7 +662,7 @@ function SpaceBackground() {
           ctx.fill();
         }
         
-        star.distance += star.speed * 0.25;
+        star.distance += star.speed * STAR_DISTANCE_SPEED_MULTIPLIER;
       });
 
       // Draw and animate asteroids (gravitating towards screen)
