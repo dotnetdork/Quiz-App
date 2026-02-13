@@ -604,7 +604,7 @@
 .login-title {
   color: var(--color-secondary);
   margin-bottom: var(--spacing-md);
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-family: 'Courier New', 'Monaco', monospace;
   font-weight: 700;
   letter-spacing: -1px;
@@ -649,6 +649,7 @@
   min-width: 260px;
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .github-login-btn::before {
@@ -802,7 +803,7 @@
   border-radius: 50%;
   border: 3px solid transparent;
   border-top-color: var(--color-primary);
-  animation: avatarSpin 2s linear infinite;
+  animation: avatarSpin 4s linear infinite;
 }
 
 @keyframes avatarSpin {
@@ -823,13 +824,14 @@
 
 .role-badge {
   display: inline-block;
-  background: linear-gradient(135deg, var(--color-secondary) 0%, #274a78 100%);
-  color: white;
+  background: transparent;
+  color: var(--text-secondary);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: 999px;
   font-size: var(--font-small);
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(26, 54, 93, 0.3);
+  text-transform: uppercase;
+  border: 2px solid var(--bg-code);
 }
 
 .btn-logout {
@@ -936,7 +938,7 @@
   width: 50%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  animation: shimmer 2s infinite;
+  animation: shimmer 4s infinite;
 }
 
 @keyframes shimmer {
@@ -960,7 +962,7 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
 }
@@ -1003,6 +1005,7 @@
   letter-spacing: 2px;
   font-weight: 600;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
 }
 
 /* Tabs */
