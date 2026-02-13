@@ -152,6 +152,20 @@ function Quiz() {
           <div className="score-label">
             {results.percentage}% Correct
           </div>
+          
+          {/* Show points awarded info for retakes */}
+          {results.is_retake && (
+            <div className="points-awarded-info">
+              <p>
+                <strong>Points Awarded:</strong> +{results.points_awarded} pts
+                {results.points_awarded < results.score && (
+                  <span className="points-note">
+                    (Only new correct answers earn points on retakes)
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Show individual results */}
@@ -173,11 +187,8 @@ function Quiz() {
 
         {/* Navigation buttons */}
         <div className="mt-lg" style={{ display: 'flex', gap: '1rem' }}>
-          <Link to="/" className="btn-primary" style={{ textDecoration: 'none' }}>
-            Back to Home
-          </Link>
-          <Link to="/leaderboard" className="btn-secondary" style={{ textDecoration: 'none' }}>
-            View Leaderboard
+          <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none' }}>
+            Back to Dashboard
           </Link>
         </div>
       </div>

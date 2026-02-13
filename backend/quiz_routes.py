@@ -184,6 +184,10 @@ def submit_quiz(
     """
     Submit answers for a quiz.
     Calculates score and saves progress.
+    
+    On retakes, only awards points for questions that were:
+    - Answered correctly this time AND
+    - Never answered correctly before on this quiz
     """
     # Get current user from session
     github_id = request.session.get("user_id")
@@ -205,10 +209,29 @@ def submit_quiz(
     if not quiz:
         raise HTTPException(status_code=404, detail="Quiz not found")
     
-    # Calculate score
-    score = 0
+    # Get all previous attempts for this quiz by this user
+    previous_scores = (
+        db.query(Score)
+        .filter(Score.user_id == user.id, Score.quiz_id == submission.quiz_id)
+        .all()
+    )
+    
+    # Build set of all previously correct question IDs
+    previously_correct = set()
+    for prev_score in previous_scores:
+        if prev_score.correct_questions:
+            try:
+                prev_correct = json.loads(prev_score.correct_questions)
+                previously_correct.update(prev_correct)
+            except (json.JSONDecodeError, TypeError):
+                pass
+    
+    # Calculate score - only count NEW correct answers
+    total_correct_this_attempt = 0
+    new_correct_count = 0
     total = len(quiz["questions"])
     results = []
+    current_correct_questions = []
     
     for question in quiz["questions"]:
         # Find the submitted answer
@@ -227,7 +250,12 @@ def submit_quiz(
             correct = submitted == question["answer"]
         
         if correct:
-            score += 1
+            total_correct_this_attempt += 1
+            current_correct_questions.append(question["id"])
+            
+            # Only award point if this is a newly correct answer
+            if question["id"] not in previously_correct:
+                new_correct_count += 1
         
         results.append({
             "question_id": question["id"],
@@ -235,11 +263,12 @@ def submit_quiz(
             "correct": correct
         })
     
-    # Save score to database
+    # Save score to database (only new points awarded)
     new_score = Score(
         user_id=user.id,
         quiz_id=submission.quiz_id,
-        score=score
+        score=new_correct_count,
+        correct_questions=json.dumps(current_correct_questions)
     )
     db.add(new_score)
     db.commit()
@@ -251,14 +280,20 @@ def submit_quiz(
         answers={
             "quiz_id": submission.quiz_id,
             "results": results,
-            "score": score,
+            "score": new_correct_count,
+            "total_correct": total_correct_this_attempt,
             "total": total
         }
     )
     
+    # Response shows actual performance AND points awarded
+    is_retake = len(previous_scores) > 0
+    
     return {
-        "score": score,
+        "score": total_correct_this_attempt,  # Actual correct answers
         "total": total,
-        "percentage": round((score / total) * 100, 1) if total > 0 else 0,
-        "results": results
+        "percentage": round((total_correct_this_attempt / total) * 100, 1) if total > 0 else 0,
+        "results": results,
+        "points_awarded": new_correct_count,  # Points awarded (new correct only)
+        "is_retake": is_retake
     }

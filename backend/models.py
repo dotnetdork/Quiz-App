@@ -3,7 +3,7 @@ SQLAlchemy models for the Quiz App database.
 Defines Users and Scores tables.
 """
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -47,8 +47,9 @@ class Score(Base):
     - id: Primary key (auto-increment)
     - user_id: Foreign key to Users table
     - quiz_id: ID of the quiz taken
-    - score: Points earned
+    - score: Points earned (only newly correct answers on retakes)
     - timestamp: When the quiz was completed
+    - correct_questions: JSON string of question IDs answered correctly
     """
     __tablename__ = "scores"
     
@@ -61,11 +62,14 @@ class Score(Base):
     # Quiz identifier
     quiz_id = Column(String, nullable=False)
     
-    # Score achieved
+    # Score achieved (only points for newly correct answers)
     score = Column(Integer, nullable=False)
     
     # When the quiz was taken
     timestamp = Column(DateTime, default=datetime.utcnow)
+    
+    # JSON string of question IDs answered correctly (for tracking retakes)
+    correct_questions = Column(Text, default="[]")
     
     # Relationship to user
     user = relationship("User", back_populates="scores")

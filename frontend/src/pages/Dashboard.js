@@ -3,10 +3,10 @@
  * 
  * Dynamic tabbed interface with:
  * - Quizzes tab (browse and take quizzes)
- * - History tab (user's quiz attempts)
+ * - History tab (user's quiz attempts with collapsible groups)
  * - Leaderboard tab (global rankings and personal stats)
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
 
@@ -62,6 +62,99 @@ const CATEGORIES = [
   { id: 'technology', name: 'Technology', Icon: TechnologyIcon, color: '#607d8b' }
 ];
 
+// Animated Skill Bar component
+function AnimatedSkillBar({ skill, count, totalQuizzes, color, delay }) {
+  const [width, setWidth] = useState(0);
+  const percentage = (count / totalQuizzes) * 100;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setWidth(percentage);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [percentage, delay]);
+
+  const skillLabels = {
+    'python': 'Python',
+    'java': 'Java',
+    'technology': 'Technology'
+  };
+
+  return (
+    <div className="skill-bar-container animated">
+      <div className="skill-label">
+        <span>{skillLabels[skill] || skill}</span>
+        <span className="skill-count">{count} quiz{count !== 1 ? 'zes' : ''}</span>
+      </div>
+      <div className="skill-bar">
+        <div 
+          className="skill-bar-fill animated-fill" 
+          style={{ 
+            width: `${width}%`,
+            backgroundColor: color,
+            transition: `width 1s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`
+          }}
+        >
+          <span className="skill-percentage">{Math.round(percentage)}%</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Collapsible quiz history group
+function QuizHistoryGroup({ quizTitle, quizId, attempts, onRetake }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const latestAttempt = attempts[0];
+  const attemptCount = attempts.length;
+
+  return (
+    <div className={`history-group ${isExpanded ? 'expanded' : ''}`}>
+      <div 
+        className="history-group-header"
+        onClick={() => attemptCount > 1 && setIsExpanded(!isExpanded)}
+        style={{ cursor: attemptCount > 1 ? 'pointer' : 'default' }}
+      >
+        <div className="history-group-info">
+          <div className="history-quiz-title">
+            <strong>{quizTitle}</strong>
+            {attemptCount > 1 && (
+              <span className="attempt-count-badge">
+                {attemptCount} attempt{attemptCount !== 1 ? 's' : ''}
+              </span>
+            )}
+          </div>
+          <div className="history-latest">
+            <span className="score-badge">{latestAttempt.score} pts</span>
+            <span className="history-date">{new Date(latestAttempt.timestamp).toLocaleDateString()}</span>
+          </div>
+        </div>
+        <div className="history-group-actions">
+          <Link to={`/quiz/${quizId}`} className="btn-retake" onClick={(e) => e.stopPropagation()}>
+            Retake Quiz →
+          </Link>
+          {attemptCount > 1 && (
+            <span className={`expand-icon ${isExpanded ? 'rotated' : ''}`}>
+              ▼
+            </span>
+          )}
+        </div>
+      </div>
+      {isExpanded && attemptCount > 1 && (
+        <div className="history-group-details">
+          {attempts.slice(1).map((attempt, index) => (
+            <div key={index} className="history-attempt-row">
+              <span className="attempt-number">Attempt {attemptCount - index - 1}</span>
+              <span className="score-badge secondary">{attempt.score} pts</span>
+              <span className="history-date">{new Date(attempt.timestamp).toLocaleDateString()}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Dashboard() {
   const [activeTab, setActiveTab] = useState('quizzes');
   const [user, setUser] = useState(null);
@@ -71,6 +164,8 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [profileLoaded, setProfileLoaded] = useState(false);
+  const profileRef = useRef(null);
 
   useEffect(() => {
     async function loadData() {
@@ -87,6 +182,9 @@ function Dashboard() {
         setScores(scoreData.scores || []);
         setQuizzes(quizData.quizzes || []);
         setLeaderboard(leaderData.leaderboard || []);
+        
+        // Trigger profile animation after data loads
+        setTimeout(() => setProfileLoaded(true), 100);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -119,16 +217,17 @@ function Dashboard() {
     ? quizzes.filter(quiz => quiz.category === selectedCategory)
     : [];
 
+  // Get set of completed quiz IDs
+  const completedQuizIds = new Set(scores.map(s => s.quiz_id));
+
   // Calculate skills from quiz history
   const calculateSkills = () => {
-    // Ensure both scores and quizzes are loaded
     if (!scores.length || !quizzes.length) {
       return {};
     }
     
     const skillCounts = {};
     scores.forEach(score => {
-      // Extract category from quiz_id (e.g., "python-basics" -> "python")
       const quiz = quizzes.find(q => q.id === score.quiz_id);
       if (quiz && quiz.category) {
         const category = quiz.category;
@@ -140,13 +239,32 @@ function Dashboard() {
 
   const skills = calculateSkills();
   const totalQuizzes = Object.values(skills).reduce((sum, count) => sum + count, 0);
-  
-  // Skill labels with proper capitalization
-  const skillLabels = {
-    'python': 'Python',
-    'java': 'Java',
-    'technology': 'Technology'
+
+  // Group scores by quiz for history display
+  const groupedHistory = () => {
+    const groups = {};
+    scores.forEach(score => {
+      if (!groups[score.quiz_id]) {
+        groups[score.quiz_id] = [];
+      }
+      groups[score.quiz_id].push(score);
+    });
+    
+    // Sort each group by timestamp (most recent first)
+    Object.keys(groups).forEach(quizId => {
+      groups[quizId].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    });
+    
+    return groups;
   };
+
+  // Get quiz title by ID
+  const getQuizTitle = (quizId) => {
+    const quiz = quizzes.find(q => q.id === quizId);
+    return quiz ? quiz.title : quizId;
+  };
+
+  const historyGroups = groupedHistory();
 
   return (
     <div className="dashboard-container">
@@ -156,16 +274,19 @@ function Dashboard() {
       </div>
 
       {/* User Profile Card */}
-      <div className="user-profile-card">
+      <div className={`user-profile-card ${profileLoaded ? 'loaded' : ''}`} ref={profileRef}>
         <div className="profile-header">
-          <div className="profile-avatar">
-            <img 
-              src={`https://github.com/${user.username}.png`} 
-              alt={`${user.username}'s avatar`}
-              onError={(e) => {
-                e.target.src = '/images/clearRobot3Color1.png';
-              }}
-            />
+          <div className="profile-avatar-wrapper">
+            <div className="profile-avatar">
+              <img 
+                src={`https://github.com/${user.username}.png`} 
+                alt={`${user.username}'s avatar`}
+                onError={(e) => {
+                  e.target.src = '/images/clearRobot3Color1.png';
+                }}
+              />
+            </div>
+            <div className="avatar-ring"></div>
           </div>
           <div className="profile-info">
             <h2>{user.username}</h2>
@@ -174,35 +295,27 @@ function Dashboard() {
           <a href={`${API_URL}/auth/logout`} className="btn-logout">Logout</a>
         </div>
 
-        {/* Skills Chart */}
+        {/* Skills Chart with Animation */}
         <div className="skills-section">
-          <h3>Skills Profile</h3>
+          <h3>📊 Skills Profile</h3>
           {totalQuizzes > 0 ? (
             <div className="skills-chart">
-              {Object.entries(skills).map(([skill, count]) => {
-                const percentage = (count / totalQuizzes) * 100;
+              {Object.entries(skills).map(([skill, count], index) => {
                 const categoryData = CATEGORIES.find(c => c.id === skill);
                 return (
-                  <div key={skill} className="skill-bar-container">
-                    <div className="skill-label">
-                      <span>{skillLabels[skill] || skill}</span>
-                      <span className="skill-count">{count} quiz{count !== 1 ? 'zes' : ''}</span>
-                    </div>
-                    <div className="skill-bar">
-                      <div 
-                        className="skill-bar-fill" 
-                        style={{ 
-                          width: `${percentage}%`,
-                          backgroundColor: categoryData?.color || '#607d8b'
-                        }}
-                      />
-                    </div>
-                  </div>
+                  <AnimatedSkillBar
+                    key={skill}
+                    skill={skill}
+                    count={count}
+                    totalQuizzes={totalQuizzes}
+                    color={categoryData?.color || '#607d8b'}
+                    delay={profileLoaded ? index * 200 : 0}
+                  />
                 );
               })}
             </div>
           ) : (
-            <p className="text-secondary">Complete quizzes to build your skills profile!</p>
+            <p className="text-secondary empty-skills">Complete quizzes to build your skills profile!</p>
           )}
         </div>
       </div>
@@ -287,18 +400,22 @@ function Dashboard() {
                     <p>No quizzes available in this category.</p>
                   ) : (
                     <div className="quiz-grid">
-                      {filteredQuizzes.map((quiz) => (
-                        <div key={quiz.id} className="quiz-card-modern">
-                          <h4>{quiz.title}</h4>
-                          <p>{quiz.description}</p>
-                          <div className="quiz-meta">
-                            <span>📝 {quiz.questions?.length || 0} questions</span>
+                      {filteredQuizzes.map((quiz) => {
+                        const isCompleted = completedQuizIds.has(quiz.id);
+                        return (
+                          <div key={quiz.id} className={`quiz-card-modern ${isCompleted ? 'completed' : ''}`}>
+                            {isCompleted && <span className="completed-badge">✓ Completed</span>}
+                            <h4>{quiz.title}</h4>
+                            <p>{quiz.description}</p>
+                            <div className="quiz-meta">
+                              <span>📝 {quiz.questions?.length || 0} questions</span>
+                            </div>
+                            <Link to={`/quiz/${quiz.id}`} className={`btn-primary btn-block ${isCompleted ? 'btn-retake-quiz' : ''}`}>
+                              {isCompleted ? 'Retake Quiz →' : 'Start Quiz →'}
+                            </Link>
                           </div>
-                          <Link to={`/quiz/${quiz.id}`} className="btn-primary btn-block">
-                            Start Quiz →
-                          </Link>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -317,24 +434,16 @@ function Dashboard() {
                   </button>
                 </div>
               ) : (
-                <table className="modern-table">
-                  <thead>
-                    <tr>
-                      <th>Quiz</th>
-                      <th>Score</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {scores.map((score, index) => (
-                      <tr key={index}>
-                        <td><strong>{score.quiz_id}</strong></td>
-                        <td><span className="score-badge">{score.score} pts</span></td>
-                        <td>{new Date(score.timestamp).toLocaleDateString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="history-list">
+                  {Object.keys(historyGroups).map((quizId) => (
+                    <QuizHistoryGroup
+                      key={quizId}
+                      quizId={quizId}
+                      quizTitle={getQuizTitle(quizId)}
+                      attempts={historyGroups[quizId]}
+                    />
+                  ))}
+                </div>
               )}
             </div>
           )}
