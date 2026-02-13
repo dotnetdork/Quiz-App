@@ -92,7 +92,7 @@ function AnimatedSkillBar({ skill, count, totalQuizzes, color, delay }) {
           style={{ 
             width: `${width}%`,
             backgroundColor: color,
-            transition: `width 1s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`
+            transition: `width 2s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`
           }}
         >
           <span className="skill-percentage">{Math.round(percentage)}%</span>
@@ -268,11 +268,6 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      {/* Welcome Header */}
-      <div className="dashboard-welcome">
-        <h1>Welcome, <span className="username-highlight">{user.username}</span>!</h1>
-      </div>
-
       {/* User Profile Card */}
       <div className={`user-profile-card ${showProfileAnimation ? 'loaded' : ''}`} ref={profileRef}>
         <div className="profile-header">
