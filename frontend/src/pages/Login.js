@@ -52,10 +52,14 @@ function SpaceBackground() {
       ];
     };
 
-    // Animation loop
+    // Animation loop with delta time for smooth animations
+    let lastTime = performance.now();
     let time = 0;
-    const animate = () => {
-      time += 0.016; // ~60fps
+    const animate = (currentTime) => {
+      const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+      lastTime = currentTime;
+      time += deltaTime;
+      
       ctx.fillStyle = 'rgba(10, 15, 30, 1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -115,7 +119,7 @@ function SpaceBackground() {
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    animate();
+    animationFrameId = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);

@@ -103,7 +103,7 @@ function AnimatedSkillBar({ skill, count, totalQuizzes, color, delay }) {
 }
 
 // Collapsible quiz history group
-function QuizHistoryGroup({ quizTitle, quizId, attempts, onRetake }) {
+function QuizHistoryGroup({ quizTitle, quizId, attempts }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const latestAttempt = attempts[0];
   const attemptCount = attempts.length;
@@ -164,7 +164,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [profileLoaded, setProfileLoaded] = useState(false);
+  const [showProfileAnimation, setShowProfileAnimation] = useState(false);
   const profileRef = useRef(null);
 
   useEffect(() => {
@@ -184,7 +184,7 @@ function Dashboard() {
         setLeaderboard(leaderData.leaderboard || []);
         
         // Trigger profile animation after data loads
-        setTimeout(() => setProfileLoaded(true), 100);
+        setTimeout(() => setShowProfileAnimation(true), 100);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -274,7 +274,7 @@ function Dashboard() {
       </div>
 
       {/* User Profile Card */}
-      <div className={`user-profile-card ${profileLoaded ? 'loaded' : ''}`} ref={profileRef}>
+      <div className={`user-profile-card ${showProfileAnimation ? 'loaded' : ''}`} ref={profileRef}>
         <div className="profile-header">
           <div className="profile-avatar-wrapper">
             <div className="profile-avatar">
@@ -297,7 +297,7 @@ function Dashboard() {
 
         {/* Skills Chart with Animation */}
         <div className="skills-section">
-          <h3>📊 Skills Profile</h3>
+          <h3 aria-label="Skills Profile">📊 Skills Profile</h3>
           {totalQuizzes > 0 ? (
             <div className="skills-chart">
               {Object.entries(skills).map(([skill, count], index) => {
@@ -309,7 +309,7 @@ function Dashboard() {
                     count={count}
                     totalQuizzes={totalQuizzes}
                     color={categoryData?.color || '#607d8b'}
-                    delay={profileLoaded ? index * 200 : 0}
+                    delay={showProfileAnimation ? index * 200 : 0}
                   />
                 );
               })}

@@ -8,6 +8,7 @@ This module handles:
 """
 import base64
 import json
+import logging
 import os
 from datetime import datetime
 from typing import List, Any
@@ -20,6 +21,9 @@ from sqlalchemy.orm import Session
 from config import QUIZFILES_PATH
 from database import get_db
 from models import User, Score
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # ----------------------------
 # Router setup
@@ -223,8 +227,10 @@ def submit_quiz(
             try:
                 prev_correct = json.loads(prev_score.correct_questions)
                 previously_correct.update(prev_correct)
-            except (json.JSONDecodeError, TypeError):
-                pass
+            except (json.JSONDecodeError, TypeError) as e:
+                logger.warning(
+                    f"Failed to parse correct_questions for score {prev_score.id}: {e}"
+                )
     
     # Calculate score - only count NEW correct answers
     total_correct_this_attempt = 0
