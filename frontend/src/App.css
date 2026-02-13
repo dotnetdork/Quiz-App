@@ -516,12 +516,15 @@
    Login Page - Space Theme Design
    ----------------------------------------- */
 .login-page-fullscreen {
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: var(--spacing-lg);
-  position: relative;
   overflow: hidden;
   background: #0a0f1e;
 }
@@ -1542,58 +1545,199 @@
    Page Transition Animations
    ----------------------------------------- */
 
-/* Login page exit animation */
+/* Login page exit animation - warp speed background */
 .login-page-fullscreen.transitioning-out {
-  animation: pageZoomFadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: warpSpeed 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@keyframes pageZoomFadeOut {
+.login-page-fullscreen.transitioning-out .space-canvas {
+  animation: backgroundWarpSpeed 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes warpSpeed {
   0% {
     opacity: 1;
-    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: scale(1.1);
   }
 }
 
-/* Dashboard entrance animation */
+@keyframes backgroundWarpSpeed {
+  0% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
+  50% {
+    transform: scale(1.3);
+    filter: blur(3px);
+  }
+  100% {
+    transform: scale(2);
+    filter: blur(10px);
+  }
+}
+
+/* Login card morphing to loading bar */
+.login-container.morphing-to-bar {
+  animation: morphToBar 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.login-container.morphing-to-bar h1,
+.login-container.morphing-to-bar p,
+.login-container.morphing-to-bar a,
+.login-container.morphing-to-bar .login-logo-footer {
+  animation: fadeOutContent 0.3s ease forwards;
+}
+
+@keyframes morphToBar {
+  0% {
+    width: 640px;
+    height: auto;
+    max-width: 640px;
+    border-radius: 20px;
+    padding: calc(var(--spacing-xl) + 0.5rem) calc(var(--spacing-xl) + 2rem);
+  }
+  100% {
+    width: 500px;
+    height: 60px;
+    max-width: 500px;
+    border-radius: 30px;
+    padding: 0;
+  }
+}
+
+@keyframes fadeOutContent {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Loading bar container and animation */
+.loading-bar-container {
+  width: 500px;
+  height: 60px;
+  background: white;
+  border-radius: 30px;
+  padding: 8px;
+  box-shadow: 
+    0 25px 80px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(239, 108, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 1;
+  animation: loadingBarAppear 0.4s ease forwards, loadingBarFadeOut 0.6s ease 0.9s forwards;
+}
+
+.loading-bar-container::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(90deg, 
+    var(--color-primary), 
+    var(--color-accent), 
+    var(--color-secondary), 
+    var(--color-primary));
+  background-size: 300% 100%;
+  border-radius: 33px;
+  z-index: -1;
+  animation: rainbowShift 1s linear infinite;
+}
+
+.loading-bar {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-code);
+  border-radius: 26px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    var(--color-primary), 
+    var(--color-primary-light));
+  border-radius: 26px;
+  animation: fillBar 1s ease forwards;
+  box-shadow: 0 0 20px rgba(239, 108, 0, 0.5);
+}
+
+@keyframes loadingBarAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fillBar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes loadingBarFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Dashboard entrance animation - fade in from loading bar */
 .dashboard-container {
-  animation: dashboardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: dashboardFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes dashboardFadeIn {
   0% {
     opacity: 0;
-    transform: translateY(30px) scale(0.98);
+    transform: scale(0.95);
+    filter: blur(5px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
+    filter: blur(0px);
   }
 }
 
-/* Dashboard exit animation for logout */
+/* Dashboard exit animation for logout - reverse login animation */
 .dashboard-container.transitioning-out {
-  animation: dashboardFadeOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: dashboardFadeOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes dashboardFadeOut {
   0% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
+    filter: blur(0px);
   }
   100% {
     opacity: 0;
-    transform: translateY(-30px) scale(0.98);
+    transform: scale(0.95);
+    filter: blur(5px);
   }
 }
 
 /* Nav and footer fade out with dashboard */
 .nav.transitioning-out,
 .footer.transitioning-out {
-  animation: navFadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: navFadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes navFadeOut {

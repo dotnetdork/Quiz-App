@@ -203,7 +203,7 @@ function Dashboard() {
     // Navigate after animation completes
     setTimeout(() => {
       window.location.href = `${API_URL}/auth/logout`;
-    }, 450);
+    }, 800);
   };
 
   if (loading) {

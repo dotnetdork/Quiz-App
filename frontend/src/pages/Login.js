@@ -98,7 +98,7 @@ function SpaceBackground() {
           z: Math.random() * 1000 + 100, // Depth for 3D effect
           size: Math.random() * 2 + 0.5,
           baseSize: Math.random() * 2 + 0.5,
-          speed: Math.random() * 2 + 1,
+          speed: Math.random() * 1 + 0.5,
           opacity: Math.random() * 0.5 + 0.5,
           twinkleSpeed: Math.random() * 0.02 + 0.01,
           angle: angle,
@@ -153,7 +153,7 @@ function SpaceBackground() {
           x: getCenterX() + Math.cos(angle) * distance,
           y: getCenterY() + Math.sin(angle) * distance,
           z: Math.random() * 800 + 200,
-          speed: Math.random() * 3 + 1,
+          speed: Math.random() * 1.5 + 0.5,
           opacity: Math.random() * 0.4 + 0.3,
           size: Math.random() * 6 + 12,
           color: CODE_COLORS[Math.floor(Math.random() * CODE_COLORS.length)],
@@ -192,7 +192,7 @@ function SpaceBackground() {
           size: Math.random() * 15 + 8,
           rotation: Math.random() * Math.PI * 2,
           rotationSpeed: (Math.random() - 0.5) * 0.05,
-          speed: Math.random() * 2 + 0.5,
+          speed: Math.random() * 1 + 0.25,
           angle: angle,
           distance: distance,
           vertices: generateAsteroidVertices(),
@@ -217,7 +217,7 @@ function SpaceBackground() {
     const createShootingStar = () => {
       const side = Math.floor(Math.random() * 4);
       let x, y, vx, vy;
-      const speed = 8 + Math.random() * 6;
+      const speed = 4 + Math.random() * 3;
       
       switch(side) {
         case 0: // Top
@@ -633,7 +633,7 @@ function SpaceBackground() {
         const twinkle = Math.sin(time * star.twinkleSpeed * 100) * 0.3 + 0.7;
         
         // Calculate depth-based scaling (closer = larger)
-        star.z -= star.speed * 2;
+        star.z -= star.speed * 1;
         if (star.z <= 1) {
           star.z = 1000;
           star.angle = Math.random() * Math.PI * 2;
@@ -654,12 +654,12 @@ function SpaceBackground() {
           ctx.fill();
         }
         
-        star.distance += star.speed * 0.5;
+        star.distance += star.speed * 0.25;
       });
 
       // Draw and animate asteroids (gravitating towards screen)
       asteroids.forEach(asteroid => {
-        asteroid.z -= asteroid.speed * 1.5;
+        asteroid.z -= asteroid.speed * 0.75;
         asteroid.rotation += asteroid.rotationSpeed;
         
         if (asteroid.z <= 50) {
@@ -671,7 +671,7 @@ function SpaceBackground() {
         const scale = 800 / asteroid.z;
         asteroid.x = centerX + Math.cos(asteroid.angle) * asteroid.distance * scale;
         asteroid.y = centerY + Math.sin(asteroid.angle) * asteroid.distance * scale;
-        asteroid.distance += asteroid.speed * 0.3;
+        asteroid.distance += asteroid.speed * 0.15;
         
         if (asteroid.x >= -50 && asteroid.x <= canvas.width + 50 &&
             asteroid.y >= -50 && asteroid.y <= canvas.height + 50) {
@@ -681,7 +681,7 @@ function SpaceBackground() {
 
       // Draw floating code snippets (gravitating towards screen)
       codeElements.forEach(code => {
-        code.z -= code.speed;
+        code.z -= code.speed * 0.5;
         
         if (code.z <= 50) {
           code.z = 800;
@@ -694,7 +694,7 @@ function SpaceBackground() {
         const scale = 600 / code.z;
         const projectedX = centerX + Math.cos(code.angle) * code.distance * scale;
         const projectedY = centerY + Math.sin(code.angle) * code.distance * scale;
-        code.distance += code.speed * 0.4;
+        code.distance += code.speed * 0.2;
         
         if (projectedX >= -100 && projectedX <= canvas.width + 100 &&
             projectedY >= -50 && projectedY <= canvas.height + 50) {
@@ -769,49 +769,63 @@ function SpaceBackground() {
 
 function Login() {
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showLoadingBar, setShowLoadingBar] = useState(false);
 
   const handleLoginClick = (e) => {
     e.preventDefault();
     setIsTransitioning(true);
     
-    // Navigate after animation completes
+    // Show loading bar after card transforms
+    setTimeout(() => {
+      setShowLoadingBar(true);
+    }, 400);
+    
+    // Navigate after full animation sequence completes
     setTimeout(() => {
       window.location.href = `${API_URL}/auth/login`;
-    }, 500);
+    }, 1500);
   };
 
   return (
     <div className={`login-page-fullscreen ${isTransitioning ? 'transitioning-out' : ''}`}>
       <SpaceBackground />
-      <div className="login-container">
-        <h1 className="login-title">
-          <span className="title-bracket">&lt;</span>
-          Welcome to Quiz-App
-          <span className="title-bracket">/&gt;</span>
-        </h1>
-        <p className="login-subtitle">
-          Level up your coding skills! Take interactive quizzes on Python, Java, and more.
-        </p>
-        
-        <a 
-          href={`${API_URL}/auth/login`} 
-          className={`github-login-btn ${isTransitioning ? 'clicked' : ''}`}
-          onClick={handleLoginClick}
-        >
-          <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          Login with GitHub
-        </a>
-        
-        <div className="login-logo-footer">
-          <img 
-            src="/images/logo_JTL_horiz.png" 
-            alt="The League of Amazing Programmers"
-            className="league-logo"
-          />
+      {!showLoadingBar ? (
+        <div className={`login-container ${isTransitioning ? 'morphing-to-bar' : ''}`}>
+          <h1 className="login-title">
+            <span className="title-bracket">&lt;</span>
+            Welcome to Quiz-App
+            <span className="title-bracket">/&gt;</span>
+          </h1>
+          <p className="login-subtitle">
+            Level up your coding skills! Take interactive quizzes on Python, Java, and more.
+          </p>
+          
+          <a 
+            href={`${API_URL}/auth/login`} 
+            className={`github-login-btn ${isTransitioning ? 'clicked' : ''}`}
+            onClick={handleLoginClick}
+          >
+            <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            Login with GitHub
+          </a>
+          
+          <div className="login-logo-footer">
+            <img 
+              src="/images/logo_JTL_horiz.png" 
+              alt="The League of Amazing Programmers"
+              className="league-logo"
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="loading-bar-container">
+          <div className="loading-bar">
+            <div className="loading-bar-fill"></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
