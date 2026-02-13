@@ -7,7 +7,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
-import AdminTerminal from '../components/AdminTerminal';
 
 function Admin() {
   // State
@@ -226,9 +225,6 @@ function Admin() {
           SQLite database: <code>UPDATE users SET role='Teacher' WHERE username='...';</code>
         </p>
       </div>
-
-      {/* Admin Terminal */}
-      <AdminTerminal />
     </div>
   );
 }
