@@ -100,17 +100,6 @@ def require_user(request: Request, db: Session = Depends(get_db)):
     return user
 
 
-def require_teacher(request: Request, db: Session = Depends(get_db)):
-    """
-    Dependency that requires a teacher role.
-    Raises 403 if not a teacher or developer.
-    """
-    user = require_user(request, db)
-    if user.role not in ("Teacher", "Developer"):
-        raise HTTPException(status_code=403, detail="Teacher access required")
-    return user
-
-
 # ----------------------------
 # Root endpoint
 # ----------------------------
@@ -230,24 +219,6 @@ app.include_router(quiz_router, prefix="/api/quiz", tags=["quiz"])
 # ----------------------------
 from leaderboard_routes import router as leaderboard_router
 app.include_router(leaderboard_router, prefix="/api/leaderboard", tags=["leaderboard"])
-
-# ----------------------------
-# Admin Endpoints (Teacher Only)
-# ----------------------------
-from admin_routes import router as admin_router
-app.include_router(admin_router, prefix="/api/admin", tags=["admin"])
-
-# ----------------------------
-# Admin Terminal WebSocket (Teacher Only)
-# ----------------------------
-from terminal_routes import router as terminal_router
-app.include_router(terminal_router, prefix="/api/admin", tags=["terminal"])
-
-# ----------------------------
-# Sandbox Code Execution Endpoints
-# ----------------------------
-from sandbox_routes import router as sandbox_router
-app.include_router(sandbox_router, prefix="/api/sandbox", tags=["sandbox"])
 
 # ----------------------------
 # Static File Serving (Frontend)
