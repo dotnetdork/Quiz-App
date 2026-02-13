@@ -151,7 +151,7 @@ function Dashboard() {
             </thead>
             <tbody>
               {leaderboard.map((entry) => (
-                <tr key={entry.rank} className={entry.username === user.username ? 'highlight-row' : ''}>
+                <tr key={entry.rank} className={user && entry.username === user.username ? 'highlight-row' : ''}>
                   <td>
                     <span className={`rank-badge ${entry.rank <= 3 ? `rank-${entry.rank}` : ''}`}>
                       {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
@@ -159,7 +159,7 @@ function Dashboard() {
                   </td>
                   <td>
                     <strong>{entry.username}</strong>
-                    {entry.username === user.username && <span style={{ color: '#ef6c00', marginLeft: '0.5rem' }}>← You</span>}
+                    {user && entry.username === user.username && <span style={{ color: '#ef6c00', marginLeft: '0.5rem' }}>← You</span>}
                   </td>
                   <td>
                     <span className="role-badge">{entry.role}</span>
