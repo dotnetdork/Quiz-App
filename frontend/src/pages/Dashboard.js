@@ -405,7 +405,7 @@ function Dashboard() {
                         return (
                           <div key={quiz.id} className={`quiz-card-modern ${isCompleted ? 'completed' : ''}`}>
                             {isCompleted && <span className="completed-badge">✓ Completed</span>}
-                            <h4>{quiz.title}</h4>
+                            <h4 title={quiz.title}>{quiz.title}</h4>
                             <p>{quiz.description}</p>
                             <div className="quiz-meta">
                               <span>📝 {quiz.questions?.length || 0} questions</span>

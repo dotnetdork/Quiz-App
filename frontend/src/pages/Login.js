@@ -105,8 +105,6 @@ function SpaceBackground() {
         { type: 'gear', x: canvas.width * 0.85, y: canvas.height * 0.25, size: 30, phase: Math.PI / 3, speed: 0.2, rotation: 0 },
         // Code brackets
         { type: 'brackets', x: canvas.width * 0.15, y: canvas.height * 0.65, size: 25, phase: Math.PI / 2, speed: 0.25 },
-        // Lightning bolt
-        { type: 'bolt', x: canvas.width * 0.82, y: canvas.height * 0.55, size: 28, phase: Math.PI, speed: 0.22 },
       ];
     };
 
@@ -144,24 +142,6 @@ function SpaceBackground() {
       ctx.fillStyle = `rgba(76, 175, 80, ${opacity})`;
       ctx.textAlign = 'center';
       ctx.fillText('{ }', x, y);
-      ctx.restore();
-    };
-
-    // Draw lightning bolt icon
-    const drawBolt = (x, y, size, opacity) => {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.fillStyle = `rgba(255, 193, 7, ${opacity})`;
-      ctx.beginPath();
-      ctx.moveTo(0, -size);
-      ctx.lineTo(size * 0.3, -size * 0.2);
-      ctx.lineTo(0, -size * 0.1);
-      ctx.lineTo(size * 0.15, size);
-      ctx.lineTo(-size * 0.15, size * 0.1);
-      ctx.lineTo(0, size * 0.2);
-      ctx.lineTo(-size * 0.3, -size * 0.3);
-      ctx.closePath();
-      ctx.fill();
       ctx.restore();
     };
 
@@ -269,8 +249,6 @@ function SpaceBackground() {
           drawGear(currentX, currentY, icon.size, icon.rotation, opacity);
         } else if (icon.type === 'brackets') {
           drawBrackets(currentX, currentY, icon.size, opacity);
-        } else if (icon.type === 'bolt') {
-          drawBolt(currentX, currentY, icon.size, opacity);
         }
       });
 
@@ -297,7 +275,7 @@ function Login() {
       <div className="login-container">
         <h1 className="login-title">
           <span className="title-bracket">&lt;</span>
-          Quiz-App
+          Welcome to Quiz-App
           <span className="title-bracket">/&gt;</span>
         </h1>
         <p className="login-subtitle">
