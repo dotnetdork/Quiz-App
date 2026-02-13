@@ -13,6 +13,9 @@ import Dashboard from './pages/Dashboard';
 import Quiz from './pages/Quiz';
 import Leaderboard from './pages/Leaderboard';
 import Admin from './pages/Admin';
+import Sandbox from './pages/Sandbox';
+import Learn from './pages/Learn';
+import Glossary from './pages/Glossary';
 
 /**
  * App Logo Component
@@ -66,6 +69,15 @@ function Navigation() {
           <Link to="/dashboard">Dashboard</Link>
         </li>
         <li>
+          <Link to="/learn">Learn</Link>
+        </li>
+        <li>
+          <Link to="/glossary">Glossary</Link>
+        </li>
+        <li>
+          <Link to="/sandbox">Sandbox</Link>
+        </li>
+        <li>
           <Link to="/leaderboard">Leaderboard</Link>
         </li>
       </ul>
@@ -113,8 +125,17 @@ function App() {
           {/* Quiz page - take a specific quiz */}
           <Route path="/quiz/:quizId" element={<Quiz />} />
           
-          {/* Leaderboard - all scores */}
+          {/* Leaderboard - top scores */}
           <Route path="/leaderboard" element={<Leaderboard />} />
+          
+          {/* Sandbox - interactive code editor */}
+          <Route path="/sandbox" element={<Sandbox />} />
+          
+          {/* Learn - comprehensive learning hub with mini-courses */}
+          <Route path="/learn" element={<Learn />} />
+          
+          {/* Glossary - IT dictionary and reference */}
+          <Route path="/glossary" element={<Glossary />} />
           
           {/* Admin page - teacher only */}
           <Route path="/admin" element={<Admin />} />

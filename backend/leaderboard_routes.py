@@ -23,36 +23,34 @@ router = APIRouter()
 @router.get("/")
 def get_leaderboard(db: Session = Depends(get_db)):
     """
-    Get all user scores with their roles.
+    Get the top 10 high scores.
     
     Returns a list of:
-    - rank (1-N)
+    - rank (1-10)
     - username (GitHub username)
-    - role (Student, Developer, Teacher)
     - total_points (sum of all quiz scores)
     
-    Note: We only show username and role, not GitHub ID or other private data.
+    Note: We only show username, not GitHub ID or other private data.
     """
-    # Query to get total scores per user with their role
+    # Query to get total scores per user
     results = (
         db.query(
             User.username,
-            User.role,
             func.sum(Score.score).label("total_points")
         )
         .join(Score, User.id == Score.user_id)
         .group_by(User.id)
         .order_by(func.sum(Score.score).desc())
+        .limit(10)
         .all()
     )
     
     # Format results with ranks
     leaderboard = []
-    for rank, (username, role, points) in enumerate(results, start=1):
+    for rank, (username, points) in enumerate(results, start=1):
         leaderboard.append({
             "rank": rank,
             "username": username,
-            "role": role,
             "total_points": points or 0
         })
     

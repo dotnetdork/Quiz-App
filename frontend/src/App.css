@@ -489,23 +489,3 @@
 .footer a:hover {
   text-decoration: underline;
 }
-
-/* -----------------------------------------
-   Role Badge
-   ----------------------------------------- */
-.role-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background-color: var(--color-primary);
-  color: white;
-  border-radius: var(--radius-sm);
-  font-size: var(--font-small);
-  font-weight: 600;
-}
-
-/* -----------------------------------------
-   Highlight Row (for current user)
-   ----------------------------------------- */
-.highlight-row {
-  background-color: rgba(239, 108, 0, 0.1);
-}

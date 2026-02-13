@@ -73,7 +73,7 @@ function Leaderboard() {
       <div className="card text-center mb-lg">
         <h1>🏆 Leaderboard</h1>
         <p className="text-secondary">
-          All quiz champions ranked by total points
+          Top 10 quiz champions by total points
         </p>
       </div>
 
@@ -88,7 +88,6 @@ function Leaderboard() {
             <tr>
               <th style={{ width: '80px' }}>Rank</th>
               <th>Player</th>
-              <th style={{ width: '150px' }}>Role</th>
               <th style={{ width: '150px' }}>Total Points</th>
             </tr>
           </thead>
@@ -102,9 +101,6 @@ function Leaderboard() {
                 </td>
                 <td>
                   <strong>{entry.username}</strong>
-                </td>
-                <td>
-                  <span className="role-badge">{entry.role}</span>
                 </td>
                 <td>
                   <strong>{entry.total_points}</strong> pts
