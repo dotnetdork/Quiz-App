@@ -47,6 +47,12 @@ const SHOOTING_STAR_COLORS = {
   white: { r: 255, g: 255, b: 255 }
 };
 
+// Animation speed multipliers for different elements
+const ASTEROID_Z_SPEED_MULTIPLIER = 0.75;
+const ASTEROID_DISTANCE_SPEED_MULTIPLIER = 0.15;
+const CODE_Z_SPEED_MULTIPLIER = 0.5;
+const CODE_DISTANCE_SPEED_MULTIPLIER = 0.2;
+
 // Space background with stars, floating code, and tech elements
 function SpaceBackground() {
   const canvasRef = useRef(null);
@@ -633,7 +639,7 @@ function SpaceBackground() {
         const twinkle = Math.sin(time * star.twinkleSpeed * 100) * 0.3 + 0.7;
         
         // Calculate depth-based scaling (closer = larger)
-        star.z -= star.speed * 1;
+        star.z -= star.speed;
         if (star.z <= 1) {
           star.z = 1000;
           star.angle = Math.random() * Math.PI * 2;
@@ -659,7 +665,7 @@ function SpaceBackground() {
 
       // Draw and animate asteroids (gravitating towards screen)
       asteroids.forEach(asteroid => {
-        asteroid.z -= asteroid.speed * 0.75;
+        asteroid.z -= asteroid.speed * ASTEROID_Z_SPEED_MULTIPLIER;
         asteroid.rotation += asteroid.rotationSpeed;
         
         if (asteroid.z <= 50) {
@@ -671,7 +677,7 @@ function SpaceBackground() {
         const scale = 800 / asteroid.z;
         asteroid.x = centerX + Math.cos(asteroid.angle) * asteroid.distance * scale;
         asteroid.y = centerY + Math.sin(asteroid.angle) * asteroid.distance * scale;
-        asteroid.distance += asteroid.speed * 0.15;
+        asteroid.distance += asteroid.speed * ASTEROID_DISTANCE_SPEED_MULTIPLIER;
         
         if (asteroid.x >= -50 && asteroid.x <= canvas.width + 50 &&
             asteroid.y >= -50 && asteroid.y <= canvas.height + 50) {
@@ -681,7 +687,7 @@ function SpaceBackground() {
 
       // Draw floating code snippets (gravitating towards screen)
       codeElements.forEach(code => {
-        code.z -= code.speed * 0.5;
+        code.z -= code.speed * CODE_Z_SPEED_MULTIPLIER;
         
         if (code.z <= 50) {
           code.z = 800;
@@ -694,7 +700,7 @@ function SpaceBackground() {
         const scale = 600 / code.z;
         const projectedX = centerX + Math.cos(code.angle) * code.distance * scale;
         const projectedY = centerY + Math.sin(code.angle) * code.distance * scale;
-        code.distance += code.speed * 0.2;
+        code.distance += code.speed * CODE_DISTANCE_SPEED_MULTIPLIER;
         
         if (projectedX >= -100 && projectedX <= canvas.width + 100 &&
             projectedY >= -50 && projectedY <= canvas.height + 50) {
