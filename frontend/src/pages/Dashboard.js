@@ -119,15 +119,92 @@ function Dashboard() {
     ? quizzes.filter(quiz => quiz.category === selectedCategory)
     : [];
 
+  // Calculate skills from quiz history
+  const calculateSkills = () => {
+    // Ensure both scores and quizzes are loaded
+    if (!scores.length || !quizzes.length) {
+      return {};
+    }
+    
+    const skillCounts = {};
+    scores.forEach(score => {
+      // Extract category from quiz_id (e.g., "python-basics" -> "python")
+      const quiz = quizzes.find(q => q.id === score.quiz_id);
+      if (quiz && quiz.category) {
+        const category = quiz.category;
+        skillCounts[category] = (skillCounts[category] || 0) + 1;
+      }
+    });
+    return skillCounts;
+  };
+
+  const skills = calculateSkills();
+  const totalQuizzes = Object.values(skills).reduce((sum, count) => sum + count, 0);
+  
+  // Skill labels with proper capitalization
+  const skillLabels = {
+    'python': 'Python',
+    'java': 'Java',
+    'technology': 'Technology'
+  };
+
   return (
     <div className="dashboard-container">
-      {/* Header */}
-      <div className="dashboard-header">
-        <div>
-          <h1>Welcome, <span className="username-highlight">{user.username}</span>!</h1>
-          <p className="text-secondary">Role: {user.role}</p>
+      {/* Welcome Header */}
+      <div className="dashboard-welcome">
+        <h1>Welcome, <span className="username-highlight">{user.username}</span>!</h1>
+      </div>
+
+      {/* User Profile Card */}
+      <div className="user-profile-card">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            <img 
+              src={`https://github.com/${user.username}.png`} 
+              alt={`${user.username}'s avatar`}
+              onError={(e) => {
+                e.target.src = '/images/clearRobot3Color1.png';
+              }}
+            />
+          </div>
+          <div className="profile-info">
+            <h2>{user.username}</h2>
+            <div className="role-badge">{user.role}</div>
+          </div>
+          <a href={`${API_URL}/auth/logout`} className="btn-logout">Logout</a>
         </div>
-        <a href={`${API_URL}/auth/logout`} className="btn-secondary">Logout</a>
+
+        {/* Skills Chart */}
+        <div className="skills-section">
+          <h3>Skills Profile</h3>
+          {totalQuizzes > 0 ? (
+            <div className="skills-chart">
+              {Object.entries(skills).map(([skill, count]) => {
+                const percentage = (count / totalQuizzes) * 100;
+                const categoryData = CATEGORIES.find(c => c.id === skill);
+                return (
+                  <div key={skill} className="skill-bar-container">
+                    <div className="skill-label">
+                      <span>{skillLabels[skill] || skill}</span>
+                      <span className="skill-count">{count} quiz{count !== 1 ? 'zes' : ''}</span>
+                    </div>
+                    <div className="skill-bar">
+                      <div 
+                        className="skill-bar-fill" 
+                        style={{ 
+                          width: `${percentage}%`,
+                          backgroundColor: categoryData?.color || '#607d8b'
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-secondary">Complete quizzes to build your skills profile!</p>
+          )}
+        </div>
       </div>
 
       {/* Stats Cards */}

@@ -11,32 +11,25 @@ function Login() {
     <div className="login-page-fullscreen">
       <div className="login-container">
         <div className="login-logo">
-          <svg 
-            width={120} 
-            height={120} 
-            viewBox="0 0 40 40" 
-            fill="none" 
-            xmlns="http://www.w3.org/2000/svg"
-            aria-label="Quiz-App Logo"
-          >
-            {/* Orange square background */}
-            <rect width="40" height="40" rx="4" fill="#ef6c00"/>
-            {/* Zap/Lightning bolt symbol */}
-            <path 
-              d="M22 6L10 22H18L16 34L30 18H22L24 6H22Z" 
-              fill="white" 
-              stroke="white" 
-              strokeWidth="1" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img 
+            src="/images/logo_JTL_horiz.png" 
+            alt="The League of Amazing Programmers Logo"
+            className="league-logo"
+          />
         </div>
         
         <h1>Welcome to Quiz-App</h1>
         <p className="login-subtitle">
           Test your programming knowledge with interactive quizzes
         </p>
+
+        <div className="login-decorative-images">
+          <img 
+            src="/images/clearRobot3Color1.png" 
+            alt="Robot mascot"
+            className="robot-decoration"
+          />
+        </div>
         
         <a href={`${API_URL}/auth/login`} className="github-login-btn">
           {/* GitHub Icon SVG */}

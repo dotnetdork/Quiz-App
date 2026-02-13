@@ -10,8 +10,8 @@ import './App.css';
 // Import page components
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Leaderboard from './pages/Leaderboard';
 import Quiz from './pages/Quiz';
+import ProtectedRoute from './components/ProtectedRoute';
 
 /**
  * App Logo Component
@@ -60,9 +60,6 @@ function Navigation() {
       <ul className="nav-links">
         <li>
           <Link to="/dashboard">Dashboard</Link>
-        </li>
-        <li>
-          <Link to="/leaderboard">Leaderboard</Link>
         </li>
       </ul>
     </nav>
@@ -118,13 +115,18 @@ function AppContent() {
           <Route path="/" element={<Login />} />
           
           {/* Dashboard - user's quiz history and quiz browsing */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          
-          {/* Leaderboard - personal stats and top scores */}
-          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
           
           {/* Quiz page - take a specific quiz */}
-          <Route path="/quiz/:quizId" element={<Quiz />} />
+          <Route path="/quiz/:quizId" element={
+            <ProtectedRoute>
+              <Quiz />
+            </ProtectedRoute>
+          } />
         </Routes>
       </main>
       
