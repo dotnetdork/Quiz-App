@@ -1,18 +1,19 @@
 /**
  * Login Page Component
  * 
- * Simple centered login page shown when user is not authenticated.
+ * Full-screen login page shown when user is not authenticated.
+ * No navbar or footer, just centered login with background.
  */
 import { API_URL } from '../api';
 
 function Login() {
   return (
-    <div className="login-page">
+    <div className="login-page-fullscreen">
       <div className="login-container">
         <div className="login-logo">
           <svg 
-            width={80} 
-            height={80} 
+            width={120} 
+            height={120} 
             viewBox="0 0 40 40" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"

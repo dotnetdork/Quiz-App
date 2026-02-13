@@ -1,20 +1,17 @@
 /**
- * Dashboard Page Component
+ * Enhanced Dashboard Component
  * 
- * Shows the user's quiz history, scores, and available quizzes.
- * Combines the old Dashboard with quiz browsing from Home.
- * Requires authentication.
+ * Dynamic tabbed interface with:
+ * - Quizzes tab (browse and take quizzes)
+ * - History tab (user's quiz attempts)
+ * - Leaderboard tab (global rankings and personal stats)
  */
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
 
-/**
- * Category Card Icons - SVG components for each category
- */
-
-// Python Icon - Snake-like design
-function PythonIcon({ size = 80 }) {
+// Category Icons
+function PythonIcon({ size = 60 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="100" height="100" rx="12" fill="#3776ab"/>
@@ -24,8 +21,7 @@ function PythonIcon({ size = 80 }) {
   );
 }
 
-// Java Icon - Coffee cup design
-function JavaIcon({ size = 80 }) {
+function JavaIcon({ size = 60 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="100" height="100" rx="12" fill="#f89820"/>
@@ -38,25 +34,20 @@ function JavaIcon({ size = 80 }) {
   );
 }
 
-// Technology Icon - Gear/circuit design
-function TechnologyIcon({ size = 80 }) {
+function TechnologyIcon({ size = 60 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="100" height="100" rx="12" fill="#607d8b"/>
-      {/* Circuit board pattern */}
       <circle cx="50" cy="50" r="15" stroke="white" strokeWidth="3" fill="none"/>
       <circle cx="50" cy="50" r="6" fill="#4caf50"/>
-      {/* Connection lines */}
       <line x1="50" y1="20" x2="50" y2="35" stroke="white" strokeWidth="3"/>
       <line x1="50" y1="65" x2="50" y2="80" stroke="white" strokeWidth="3"/>
       <line x1="20" y1="50" x2="35" y2="50" stroke="white" strokeWidth="3"/>
       <line x1="65" y1="50" x2="80" y2="50" stroke="white" strokeWidth="3"/>
-      {/* Corner nodes */}
       <circle cx="25" cy="25" r="5" fill="#4caf50"/>
       <circle cx="75" cy="25" r="5" fill="#4caf50"/>
       <circle cx="25" cy="75" r="5" fill="#4caf50"/>
       <circle cx="75" cy="75" r="5" fill="#4caf50"/>
-      {/* Diagonal lines */}
       <line x1="30" y1="30" x2="40" y2="40" stroke="white" strokeWidth="2"/>
       <line x1="70" y1="30" x2="60" y2="40" stroke="white" strokeWidth="2"/>
       <line x1="30" y1="70" x2="40" y2="60" stroke="white" strokeWidth="2"/>
@@ -65,57 +56,38 @@ function TechnologyIcon({ size = 80 }) {
   );
 }
 
-/**
- * Category definitions
- */
 const CATEGORIES = [
-  {
-    id: 'python',
-    name: 'Python',
-    description: 'Python programming quizzes',
-    Icon: PythonIcon,
-    color: '#3776ab'
-  },
-  {
-    id: 'java',
-    name: 'Java',
-    description: 'Java programming quizzes',
-    Icon: JavaIcon,
-    color: '#f89820'
-  },
-  {
-    id: 'technology',
-    name: 'Technology',
-    description: 'Robotics, AI, and other technical concepts',
-    Icon: TechnologyIcon,
-    color: '#607d8b'
-  }
+  { id: 'python', name: 'Python', Icon: PythonIcon, color: '#3776ab' },
+  { id: 'java', name: 'Java', Icon: JavaIcon, color: '#f89820' },
+  { id: 'technology', name: 'Technology', Icon: TechnologyIcon, color: '#607d8b' }
 ];
 
 function Dashboard() {
-  // State for user, scores, and quizzes
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('quizzes');
   const [user, setUser] = useState(null);
   const [scores, setScores] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // Load user data and quizzes on mount
   useEffect(() => {
     async function loadData() {
       try {
-        // Get current user
         const userData = await apiCall('/auth/me');
         setUser(userData);
         
-        // Get user's scores
-        const scoreData = await apiCall(`/api/leaderboard/user/${userData.username}`);
-        setScores(scoreData.scores || []);
+        const [scoreData, quizData, leaderData] = await Promise.all([
+          apiCall(`/api/leaderboard/user/${userData.username}`),
+          apiCall('/api/quiz/questions'),
+          apiCall('/api/leaderboard/')
+        ]);
         
-        // Get quizzes
-        const quizData = await apiCall('/api/quiz/questions');
+        setScores(scoreData.scores || []);
         setQuizzes(quizData.quizzes || []);
+        setLeaderboard(leaderData.leaderboard || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -126,179 +98,209 @@ function Dashboard() {
     loadData();
   }, []);
 
-  // Filter quizzes by selected category
-  const filteredQuizzes = selectedCategory
-    ? quizzes.filter(quiz => quiz.category === selectedCategory)
-    : [];
-
-  // Get quiz count for each category
-  const getCategoryQuizCount = (categoryId) => {
-    return quizzes.filter(quiz => quiz.category === categoryId).length;
-  };
-
-  // Show loading state
   if (loading) {
-    return (
-      <div className="loading">
-        <p>Loading dashboard...</p>
-      </div>
-    );
+    return <div className="loading-spinner"><p>Loading dashboard...</p></div>;
   }
 
-  // Show login prompt if not authenticated
   if (error || !user) {
     return (
-      <div className="text-center mt-lg">
+      <div className="card text-center mt-lg">
         <h2>Please Log In</h2>
         <p>You need to log in to view your dashboard.</p>
-        <a href={`${API_URL}/auth/login`} className="github-login mt-md" style={{ display: 'inline-flex' }}>
-          <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
+        <a href={`${API_URL}/auth/login`} className="btn-primary" style={{ display: 'inline-block', marginTop: '1rem' }}>
           Login with GitHub
         </a>
       </div>
     );
   }
 
-  // Calculate total points
   const totalPoints = scores.reduce((sum, s) => sum + s.score, 0);
+  const userRank = leaderboard.findIndex(entry => entry.username === user.username) + 1;
+  const filteredQuizzes = selectedCategory
+    ? quizzes.filter(quiz => quiz.category === selectedCategory)
+    : [];
 
   return (
-    <div>
-      {/* User Info Header */}
-      <div className="card text-center">
-        <h1>
-          Hello there, <span className="dashboard-username">{user.username}</span>!
-        </h1>
-        <p className="text-secondary">
-          Role: <strong>{user.role}</strong>
-        </p>
-        <div className="dashboard-actions mt-md">
-          <a href={`${API_URL}/auth/logout`} className="btn-secondary logout-link">
-            Logout
-          </a>
+    <div className="dashboard-container">
+      {/* Header */}
+      <div className="dashboard-header">
+        <div>
+          <h1>Welcome, <span className="username-highlight">{user.username}</span>!</h1>
+          <p className="text-secondary">Role: {user.role}</p>
         </div>
+        <a href={`${API_URL}/auth/logout`} className="btn-secondary">Logout</a>
       </div>
 
-      {/* Stats Summary */}
-      <div className="admin-stats mt-lg">
-        <div className="stat-card">
+      {/* Stats Cards */}
+      <div className="stats-grid">
+        <div className="stat-card-modern">
+          <div className="stat-icon">🏆</div>
           <div className="stat-value">{totalPoints}</div>
           <div className="stat-label">Total Points</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card-modern">
+          <div className="stat-icon">📝</div>
           <div className="stat-value">{scores.length}</div>
           <div className="stat-label">Quizzes Completed</div>
         </div>
+        <div className="stat-card-modern">
+          <div className="stat-icon">📊</div>
+          <div className="stat-value">{userRank > 0 ? `#${userRank}` : '-'}</div>
+          <div className="stat-label">Global Rank</div>
+        </div>
       </div>
 
-      {/* Quiz History */}
-      <section className="mt-lg">
-        <h2>Your Quiz History</h2>
-        
-        {scores.length === 0 ? (
-          <div className="card">
-            <p>You haven't taken any quizzes yet. Browse available quizzes below!</p>
-          </div>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Quiz</th>
-                <th>Score</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {scores.map((score, index) => (
-                <tr key={index}>
-                  <td>{score.quiz_id}</td>
-                  <td>{score.score}</td>
-                  <td>{new Date(score.timestamp).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      {/* Category Grid - Quiz Selection */}
-      <section className="mt-lg">
-        <h2>Browse Quizzes</h2>
-        <p className="text-secondary mb-md">Click on a category to see available quizzes</p>
-        
-        <div className="category-grid">
-          {CATEGORIES.map((category) => {
-            const Icon = category.Icon;
-            const quizCount = getCategoryQuizCount(category.id);
-            const isSelected = selectedCategory === category.id;
-            
-            return (
-              <div
-                key={category.id}
-                className={`category-card ${isSelected ? 'selected' : ''}`}
-                onClick={() => setSelectedCategory(isSelected ? null : category.id)}
-                style={{ '--category-color': category.color }}
-              >
-                <Icon size={80} />
-                <h3>{category.name}</h3>
-                <p>{category.description}</p>
-                <span className="quiz-count">{quizCount} quiz{quizCount !== 1 ? 'zes' : ''}</span>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Quiz List - Only show when a category is selected */}
-      {selectedCategory && (
-        <section className="mt-lg">
-          <div className="section-header">
-            <h2>{CATEGORIES.find(c => c.id === selectedCategory)?.name} Quizzes</h2>
-            <button 
-              className="btn-secondary"
-              onClick={() => setSelectedCategory(null)}
-              style={{ padding: '0.5rem 1rem' }}
-            >
-              ← Back to Categories
-            </button>
-          </div>
-          
-          {filteredQuizzes.length === 0 ? (
-            <div className="card">
-              <p>No quizzes available in this category yet.</p>
-            </div>
-          ) : (
-            filteredQuizzes.map((quiz) => (
-              <div key={quiz.id} className="quiz-card">
-                <h3>{quiz.title}</h3>
-                <p>{quiz.description}</p>
-                <p className="text-secondary">
-                  {quiz.questions?.length || 0} questions
-                </p>
-                <p className="text-secondary">
-                  Note: Quiz taking functionality coming soon!
-                </p>
-              </div>
-            ))
-          )}
-        </section>
-      )}
-
-      {/* Quick Links */}
-      <section className="mt-lg">
-        <h2>Quick Links</h2>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Link 
-            to="/leaderboard" 
-            className="btn-primary"
-            style={{ textDecoration: 'none' }}
+      {/* Tabs */}
+      <div className="tabs-container">
+        <div className="tabs-header">
+          <button 
+            className={`tab ${activeTab === 'quizzes' ? 'active' : ''}`}
+            onClick={() => setActiveTab('quizzes')}
           >
-            View Leaderboard
-          </Link>
+            📚 Quizzes
+          </button>
+          <button 
+            className={`tab ${activeTab === 'history' ? 'active' : ''}`}
+            onClick={() => setActiveTab('history')}
+          >
+            📋 History
+          </button>
+          <button 
+            className={`tab ${activeTab === 'leaderboard' ? 'active' : ''}`}
+            onClick={() => setActiveTab('leaderboard')}
+          >
+            🏅 Leaderboard
+          </button>
         </div>
-      </section>
+
+        <div className="tabs-content">
+          {activeTab === 'quizzes' && (
+            <div className="tab-panel">
+              <h2>Browse Quizzes</h2>
+              <p className="text-secondary mb-md">Select a category to view available quizzes</p>
+              
+              <div className="category-grid-modern">
+                {CATEGORIES.map((category) => {
+                  const Icon = category.Icon;
+                  const quizCount = quizzes.filter(q => q.category === category.id).length;
+                  const isSelected = selectedCategory === category.id;
+                  
+                  return (
+                    <div
+                      key={category.id}
+                      className={`category-card-modern ${isSelected ? 'selected' : ''}`}
+                      onClick={() => setSelectedCategory(isSelected ? null : category.id)}
+                      style={{ '--category-color': category.color }}
+                    >
+                      <Icon size={60} />
+                      <h3>{category.name}</h3>
+                      <span className="quiz-badge">{quizCount} quiz{quizCount !== 1 ? 'zes' : ''}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {selectedCategory && (
+                <div className="quiz-list mt-lg">
+                  <div className="section-header">
+                    <h3>{CATEGORIES.find(c => c.id === selectedCategory)?.name} Quizzes</h3>
+                    <button className="btn-link" onClick={() => setSelectedCategory(null)}>← Back</button>
+                  </div>
+                  
+                  {filteredQuizzes.length === 0 ? (
+                    <p>No quizzes available in this category.</p>
+                  ) : (
+                    <div className="quiz-grid">
+                      {filteredQuizzes.map((quiz) => (
+                        <div key={quiz.id} className="quiz-card-modern">
+                          <h4>{quiz.title}</h4>
+                          <p>{quiz.description}</p>
+                          <div className="quiz-meta">
+                            <span>📝 {quiz.questions?.length || 0} questions</span>
+                          </div>
+                          <Link to={`/quiz/${quiz.id}`} className="btn-primary btn-block">
+                            Start Quiz →
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'history' && (
+            <div className="tab-panel">
+              <h2>Quiz History</h2>
+              {scores.length === 0 ? (
+                <div className="empty-state">
+                  <p>📝 You haven't taken any quizzes yet.</p>
+                  <button className="btn-primary" onClick={() => setActiveTab('quizzes')}>
+                    Browse Quizzes
+                  </button>
+                </div>
+              ) : (
+                <table className="modern-table">
+                  <thead>
+                    <tr>
+                      <th>Quiz</th>
+                      <th>Score</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {scores.map((score, index) => (
+                      <tr key={index}>
+                        <td><strong>{score.quiz_id}</strong></td>
+                        <td><span className="score-badge">{score.score} pts</span></td>
+                        <td>{new Date(score.timestamp).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'leaderboard' && (
+            <div className="tab-panel">
+              <h2>🏆 Global Leaderboard</h2>
+              <p className="text-secondary mb-md">Top 10 quiz champions by total points</p>
+              
+              {leaderboard.length === 0 ? (
+                <p>No scores yet. Be the first!</p>
+              ) : (
+                <table className="leaderboard-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Player</th>
+                      <th>Points</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {leaderboard.map((entry) => (
+                      <tr key={entry.rank} className={entry.username === user.username ? 'highlight' : ''}>
+                        <td>
+                          <span className={`rank-badge ${entry.rank <= 3 ? `rank-${entry.rank}` : ''}`}>
+                            {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
+                          </span>
+                        </td>
+                        <td>
+                          <strong>{entry.username}</strong>
+                          {entry.username === user.username && <span className="you-badge">You</span>}
+                        </td>
+                        <td><strong>{entry.total_points}</strong> pts</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

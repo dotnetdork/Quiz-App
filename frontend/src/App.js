@@ -3,15 +3,15 @@
  * 
  * This is the root component for the Quiz App.
  * It sets up routing and provides the main layout.
- * Simplified to only include Login, Dashboard, and Leaderboard.
  */
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
 
 // Import page components
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Leaderboard from './pages/Leaderboard';
+import Quiz from './pages/Quiz';
 
 /**
  * App Logo Component
@@ -94,13 +94,27 @@ function Footer() {
 function App() {
   return (
     <BrowserRouter>
-      {/* Navigation bar */}
-      <Navigation />
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+/**
+ * AppContent - Handles conditional rendering of nav/footer based on route
+ */
+function AppContent() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/';
+
+  return (
+    <>
+      {/* Navigation bar - hide on login page */}
+      {!isLoginPage && <Navigation />}
       
       {/* Main content area */}
-      <main className="container">
+      <main className={isLoginPage ? '' : 'container'}>
         <Routes>
-          {/* Login page - centered login */}
+          {/* Login page - centered login with no nav/footer */}
           <Route path="/" element={<Login />} />
           
           {/* Dashboard - user's quiz history and quiz browsing */}
@@ -108,12 +122,15 @@ function App() {
           
           {/* Leaderboard - personal stats and top scores */}
           <Route path="/leaderboard" element={<Leaderboard />} />
+          
+          {/* Quiz page - take a specific quiz */}
+          <Route path="/quiz/:quizId" element={<Quiz />} />
         </Routes>
       </main>
       
-      {/* Footer */}
-      <Footer />
-    </BrowserRouter>
+      {/* Footer - hide on login page */}
+      {!isLoginPage && <Footer />}
+    </>
   );
 }
 
