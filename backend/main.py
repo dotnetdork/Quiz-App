@@ -25,6 +25,12 @@ from models import User, Score
 from auth import authorize_redirect, authorize_access_token, get_github_user
 
 # ----------------------------
+# Privileged Users Configuration
+# ----------------------------
+# Users who get automatic Developer role on login
+DEVELOPER_USERNAMES = os.getenv("DEVELOPER_USERNAMES", "dotnetdork").split(",")
+
+# ----------------------------
 # Determine static files path
 # ----------------------------
 # The frontend build directory (relative to this file)
@@ -154,12 +160,15 @@ async def auth_callback(request: Request, db: Session = Depends(get_db)):
         # Check if user exists
         user = db.query(User).filter(User.github_id == github_id).first()
         
+        # Check if user should have Developer role
+        is_developer = username in DEVELOPER_USERNAMES
+        
         if not user:
-            # Create new user as Student (TitleCase)
+            # Create new user with appropriate role
             user = User(
                 github_id=github_id,
                 username=username,
-                role="Student"
+                role="Developer" if is_developer else "Student"
             )
             db.add(user)
             db.commit()
@@ -168,6 +177,10 @@ async def auth_callback(request: Request, db: Session = Depends(get_db)):
             # Update username if changed
             if user.username != username:
                 user.username = username
+                db.commit()
+            # Ensure privileged users have Developer role
+            if is_developer and user.role != "Developer":
+                user.role = "Developer"
                 db.commit()
         
         # Store user ID in session
