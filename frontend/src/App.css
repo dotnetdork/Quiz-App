@@ -509,3 +509,41 @@
 .highlight-row {
   background-color: rgba(239, 108, 0, 0.1);
 }
+
+/* -----------------------------------------
+   Centered Login Container
+   ----------------------------------------- */
+.centered-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: var(--spacing-lg);
+}
+
+.centered-login-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.centered-login-card h1 {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-secondary);
+}
+
+.centered-login-card p {
+  font-size: var(--font-large);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.centered-login-card .github-login {
+  display: inline-flex;
+  margin-top: var(--spacing-md);
+}

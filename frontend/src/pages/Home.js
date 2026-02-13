@@ -98,6 +98,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [scores, setScores] = useState([]);
 
   // Load quizzes and check user on mount
   useEffect(() => {
@@ -111,9 +112,14 @@ function Home() {
         try {
           const userData = await apiCall('/auth/me');
           setUser(userData);
+          
+          // If logged in, also get their scores
+          const scoreData = await apiCall(`/api/leaderboard/user/${userData.username}`);
+          setScores(scoreData.scores || []);
         } catch {
           // Not logged in - that's okay
           setUser(null);
+          setScores([]);
         }
       } catch (err) {
         setError(err.message);
@@ -153,25 +159,16 @@ function Home() {
     );
   }
 
-  return (
-    <div>
-      {/* Hero Section */}
-      <section className="hero">
-        <h1>Welcome to Quiz-App!</h1>
-        <p>
-          Test your programming knowledge with interactive quizzes and 
-          Parsons Problems.
-        </p>
-        
-        {/* Login or Dashboard button */}
-        {user ? (
-          <div>
-            <p>Glad to have you back, <strong className="dashboard-username">{user.username}</strong>!</p>
-            <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
-              Go to Dashboard
-            </Link>
-          </div>
-        ) : (
+  // If not logged in, show centered login window
+  if (!user) {
+    return (
+      <div className="centered-login-container">
+        <div className="centered-login-card">
+          <h1>Welcome to Quiz-App!</h1>
+          <p>
+            Test your programming knowledge with interactive quizzes and 
+            Parsons Problems.
+          </p>
           <a href={`${API_URL}/auth/login`} className="github-login">
             {/* GitHub Icon SVG */}
             <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -179,8 +176,51 @@ function Home() {
             </svg>
             Login with GitHub
           </a>
-        )}
-      </section>
+        </div>
+      </div>
+    );
+  }
+
+  // Calculate total points for logged in user
+  const totalPoints = scores.reduce((sum, s) => sum + s.score, 0);
+
+  return (
+    <div>
+      {/* User Info Header - shown when logged in */}
+      <div className="card text-center">
+        <h1>
+          Hello there, <span className="dashboard-username">{user.username}</span>!
+        </h1>
+        <p className="text-secondary">
+          Role: <strong>{user.role}</strong>
+        </p>
+        <div className="dashboard-actions mt-md">
+          {((user.role === 'Teacher') || (user.role === 'Developer')) && (
+            <Link 
+              to="/admin" 
+              className="btn-secondary"
+              style={{ textDecoration: 'none', display: 'inline-block' }}
+            >
+              Go to Admin Dashboard
+            </Link>
+          )}
+          <a href={`${API_URL}/auth/logout`} className="btn-secondary logout-link">
+            Logout
+          </a>
+        </div>
+      </div>
+
+      {/* Stats Summary */}
+      <div className="admin-stats mt-lg">
+        <div className="stat-card">
+          <div className="stat-value">{totalPoints}</div>
+          <div className="stat-label">Total Points</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{scores.length}</div>
+          <div className="stat-label">Quizzes Completed</div>
+        </div>
+      </div>
 
       {/* Category Grid */}
       <section className="mt-lg">
