@@ -984,17 +984,18 @@
 .stat-card-modern {
   background: linear-gradient(135deg, #1a365d 0%, #0d1b2a 100%);
   color: white;
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-lg);
   border-radius: var(--radius-lg);
   text-align: center;
   box-shadow: 0 8px 32px rgba(26, 54, 93, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  height: 180px;
+  min-height: 220px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .stat-card-modern:hover {
@@ -1004,14 +1005,12 @@
 
 .stat-icon {
   font-size: 2.5rem;
-  margin-bottom: var(--spacing-sm);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .stat-card-modern .stat-value {
   font-size: 2.5rem;
   font-weight: 800;
-  margin-bottom: var(--spacing-xs);
   color: #ffffff;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   letter-spacing: -1px;
