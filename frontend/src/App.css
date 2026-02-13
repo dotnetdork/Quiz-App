@@ -605,6 +605,24 @@
   font-weight: 500;
 }
 
+.league-logo {
+  max-width: 300px;
+  height: auto;
+}
+
+.login-decorative-images {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-lg) 0;
+  opacity: 0.9;
+}
+
+.robot-decoration {
+  max-width: 120px;
+  height: auto;
+  animation: float 3s ease-in-out infinite;
+}
+
 /* -----------------------------------------
    Modern Dashboard Styles
    ----------------------------------------- */
@@ -631,6 +649,146 @@
 .username-highlight {
   color: var(--color-primary);
   font-weight: 700;
+}
+
+.dashboard-welcome {
+  margin-bottom: var(--spacing-lg);
+}
+
+.dashboard-welcome h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0;
+}
+
+/* User Profile Card */
+.user-profile-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: var(--spacing-xl);
+  border: 2px solid var(--bg-code);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--color-primary);
+  flex-shrink: 0;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.profile-info h2 {
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-xl);
+  color: var(--color-secondary);
+}
+
+.role-badge {
+  display: inline-block;
+  background: var(--color-secondary);
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 999px;
+  font-size: var(--font-small);
+  font-weight: 600;
+}
+
+.btn-logout {
+  background: var(--color-secondary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.btn-logout:hover {
+  background: #274a78;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 54, 93, 0.3);
+  color: white;
+}
+
+/* Skills Section */
+.skills-section {
+  border-top: 2px solid var(--bg-code);
+  padding-top: var(--spacing-lg);
+}
+
+.skills-section h3 {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-secondary);
+  font-size: var(--font-large);
+}
+
+.skills-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.skill-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.skill-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-base);
+}
+
+.skill-count {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.skill-bar {
+  height: 24px;
+  background: var(--bg-code);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.skill-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-md);
+  transition: width 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: var(--spacing-xs);
+  min-width: 30px;
 }
 
 .stats-grid {
