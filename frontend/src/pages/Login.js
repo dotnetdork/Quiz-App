@@ -769,11 +769,9 @@ function SpaceBackground() {
 
 function Login() {
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [buttonClicked, setButtonClicked] = useState(false);
 
   const handleLoginClick = (e) => {
     e.preventDefault();
-    setButtonClicked(true);
     setIsTransitioning(true);
     
     // Navigate after animation completes
@@ -797,7 +795,7 @@ function Login() {
         
         <a 
           href={`${API_URL}/auth/login`} 
-          className={`github-login-btn ${buttonClicked ? 'clicked' : ''}`}
+          className={`github-login-btn ${isTransitioning ? 'clicked' : ''}`}
           onClick={handleLoginClick}
         >
           <svg className="github-icon" viewBox="0 0 24 24" fill="currentColor">

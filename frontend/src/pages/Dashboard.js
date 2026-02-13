@@ -200,10 +200,6 @@ function Dashboard() {
     e.preventDefault();
     setIsLoggingOut(true);
     
-    // Add transition class to nav and footer
-    document.querySelector('.nav')?.classList.add('transitioning-out');
-    document.querySelector('.footer')?.classList.add('transitioning-out');
-    
     // Navigate after animation completes
     setTimeout(() => {
       window.location.href = `${API_URL}/auth/logout`;
