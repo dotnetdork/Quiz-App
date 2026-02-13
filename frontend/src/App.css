@@ -537,11 +537,11 @@
 
 .login-container {
   text-align: center;
-  max-width: 480px;
+  max-width: 640px;
   width: 100%;
   background: white;
   backdrop-filter: blur(20px);
-  padding: var(--spacing-xl) calc(var(--spacing-xl) + 0.5rem);
+  padding: calc(var(--spacing-xl) + 0.5rem) calc(var(--spacing-xl) + 2rem);
   border-radius: 20px;
   box-shadow: 
     0 25px 80px rgba(0, 0, 0, 0.5),
@@ -604,10 +604,11 @@
 .login-title {
   color: var(--color-secondary);
   margin-bottom: var(--spacing-md);
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-family: 'Courier New', 'Monaco', monospace;
   font-weight: 700;
   letter-spacing: -1px;
+  white-space: nowrap;
 }
 
 .title-bracket {
@@ -615,10 +616,10 @@
   font-weight: 400;
 }
 
-@media (min-width: 500px) {
+@media (min-width: 560px) {
   .login-container h1,
   .login-title {
-    white-space: nowrap;
+    font-size: 2.5rem;
   }
 }
 
@@ -627,7 +628,7 @@
   font-size: var(--font-base);
   margin-bottom: var(--spacing-lg);
   line-height: 1.7;
-  max-width: 320px;
+  max-width: 420px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -700,9 +701,15 @@
    Modern Dashboard Styles
    ----------------------------------------- */
 .dashboard-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+@media (max-width: 1200px) {
+  .dashboard-container {
+    padding: var(--spacing-lg);
+  }
 }
 
 .dashboard-header {
@@ -962,20 +969,32 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-xl);
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
 }
 
 .stat-card-modern {
   background: linear-gradient(135deg, #1a365d 0%, #0d1b2a 100%);
   color: white;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-md);
   border-radius: var(--radius-lg);
   text-align: center;
   box-shadow: 0 8px 32px rgba(26, 54, 93, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .stat-card-modern:hover {
@@ -990,7 +1009,7 @@
 }
 
 .stat-card-modern .stat-value {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: var(--spacing-xs);
   color: #ffffff;
@@ -999,10 +1018,10 @@
 }
 
 .stat-card-modern .stat-label {
-  font-size: var(--font-base);
+  font-size: var(--font-small);
   color: rgba(255, 255, 255, 0.95);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   font-weight: 600;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
@@ -1056,7 +1075,13 @@
 }
 
 .tabs-content {
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+  .tabs-content {
+    padding: var(--spacing-xl);
+  }
 }
 
 .tab-panel {
@@ -1077,20 +1102,32 @@
 /* Modern Category Cards */
 .category-grid-modern {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
   margin-top: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .category-grid-modern {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
 }
 
 .category-card-modern {
   background: white;
   border: 3px solid var(--bg-code);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-md);
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .category-card-modern:hover {
@@ -1134,9 +1171,8 @@
 /* Quiz Grid */
 .quiz-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-auto-rows: 1fr;
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-md);
   margin-top: var(--spacing-md);
 }
 
@@ -1150,6 +1186,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  min-height: 200px;
 }
 
 .quiz-card-modern:hover {
@@ -1181,16 +1218,19 @@
 .quiz-card-modern h4 {
   color: var(--color-secondary);
   margin-bottom: var(--spacing-sm);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: var(--spacing-xl);
 }
 
 .quiz-card-modern p {
   color: var(--text-secondary);
   margin-bottom: var(--spacing-md);
   font-size: var(--font-small);
+  line-height: 1.6;
+  flex: 1;
 }
 
 .quiz-meta {
@@ -1497,4 +1537,91 @@
 
 .score-badge.secondary {
   background: var(--text-secondary);
+}
+
+/* -----------------------------------------
+   Page Transition Animations
+   ----------------------------------------- */
+
+/* Login page exit animation */
+.login-page-fullscreen.transitioning-out {
+  animation: pageZoomFadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pageZoomFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+/* Dashboard entrance animation */
+.dashboard-container {
+  animation: dashboardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dashboardFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dashboard exit animation for logout */
+.dashboard-container.transitioning-out {
+  animation: dashboardFadeOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes dashboardFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.98);
+  }
+}
+
+/* Nav and footer fade out with dashboard */
+.nav.transitioning-out,
+.footer.transitioning-out {
+  animation: navFadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes navFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Login button click effect */
+.github-login-btn.clicked {
+  transform: scale(0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth page transitions for container */
+.container {
+  animation: containerFadeIn 0.4s ease;
+}
+
+@keyframes containerFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
