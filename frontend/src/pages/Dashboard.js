@@ -7,7 +7,7 @@
  * - Leaderboard tab (global rankings and personal stats)
  */
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
 
 // Category Icons
@@ -63,7 +63,6 @@ const CATEGORIES = [
 ];
 
 function Dashboard() {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('quizzes');
   const [user, setUser] = useState(null);
   const [scores, setScores] = useState([]);

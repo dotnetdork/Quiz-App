@@ -1,0 +1,153 @@
+id: python_basics_01
+title: Python Fundamentals
+description: Test your knowledge of basic Python concepts
+category: python
+questions:
+- id: q1
+  type: multiple_choice
+  prompt: Which keyword is used to create a function in Python?
+  options:
+  - func
+  - define
+  - def
+  - function
+  answer: def
+- id: q2
+  type: parsons
+  prompt: Reorder these blocks to create a valid 'for' loop that prints numbers 0-4.
+  blocks:
+  - 'for i in range(5):'
+  - '    print(i)'
+  answer:
+  - 0
+  - 1
+- id: q3
+  type: multiple_choice
+  prompt: 'What is the output of: print(type([]))'
+  options:
+  - <class 'tuple'>
+  - <class 'list'>
+  - <class 'dict'>
+  - <class 'set'>
+  answer: <class 'list'>
+- id: q4
+  type: multiple_choice
+  prompt: Which method adds an element to the end of a list?
+  options:
+  - add()
+  - insert()
+  - append()
+  - extend()
+  answer: append()
+- id: q5
+  type: parsons
+  prompt: Arrange these lines to create a function that returns the sum of two numbers.
+  blocks:
+  - 'def add_numbers(a, b):'
+  - '    result = a + b'
+  - '    return result'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: q6
+  type: multiple_choice
+  prompt: Which symbol is used for single-line comments in Python?
+  options:
+  - //
+  - /*
+  - '#'
+  - --
+  answer: '#'
+- id: q7
+  type: parsons
+  prompt: Arrange the code to ask the user for their name and print a greeting.
+  blocks:
+  - 'name = input(''Enter name: '')'
+  - print('Hello, ' + name)
+  answer:
+  - 0
+  - 1
+- id: q8
+  type: multiple_choice
+  prompt: What is the correct file extension for Python files?
+  options:
+  - .pt
+  - .pyt
+  - .py
+  - .python
+  answer: .py
+- id: q9
+  type: multiple_choice
+  prompt: Which operator is used for exponentiation (power) in Python?
+  options:
+  - ^
+  - '**'
+  - //
+  - pow
+  answer: '**'
+- id: q10
+  type: parsons
+  prompt: Reorder the blocks to create an 'if-else' statement checking if a score
+    is passing.
+  blocks:
+  - score = 75
+  - 'if score >= 60:'
+  - '    print(''Passed'')'
+  - 'else:'
+  - '    print(''Failed'')'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: q11
+  type: multiple_choice
+  prompt: 'What is the output of: print(10 // 3)?'
+  options:
+  - '3.33'
+  - '3'
+  - '4'
+  - '3.0'
+  answer: '3'
+- id: q12
+  type: multiple_choice
+  prompt: How do you cast the string '5' to an integer?
+  options:
+  - str(5)
+  - int('5')
+  - float('5')
+  - cast('5', int)
+  answer: int('5')
+- id: q13
+  type: parsons
+  prompt: Create a loop that counts down from 3 to 1.
+  blocks:
+  - count = 3
+  - 'while count > 0:'
+  - '    print(count)'
+  - '    count -= 1'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: q14
+  type: multiple_choice
+  prompt: Which boolean operator returns True only if both statements are true?
+  options:
+  - or
+  - not
+  - and
+  - xor
+  answer: and
+- id: q15
+  type: multiple_choice
+  prompt: What is the correct syntax to output 'Hello World' in Python?
+  options:
+  - echo 'Hello World'
+  - p('Hello World')
+  - print('Hello World')
+  - System.out.println('Hello World')
+  answer: print('Hello World')

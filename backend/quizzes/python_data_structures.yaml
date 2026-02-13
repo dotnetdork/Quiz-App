@@ -1,0 +1,148 @@
+id: python_data_structures
+title: Python Data Structures
+description: Learn about lists, dictionaries, tuples, and sets
+category: python
+questions:
+- id: ds_q1
+  type: multiple_choice
+  prompt: How do you access the value for key 'name' in a dictionary called 'person'?
+  options:
+  - person.name
+  - person['name']
+  - person(name)
+  - person->name
+  answer: person['name']
+- id: ds_q2
+  type: parsons
+  prompt: Arrange these lines to create a dictionary and print a value.
+  blocks:
+  - 'my_dict = {''color'': ''blue'', ''size'': ''large''}'
+  - print(my_dict['color'])
+  answer:
+  - 0
+  - 1
+- id: ds_q3
+  type: multiple_choice
+  prompt: Which data structure does NOT allow duplicate values?
+  options:
+  - list
+  - tuple
+  - set
+  - dictionary
+  answer: set
+- id: ds_q4
+  type: multiple_choice
+  prompt: Which data structure is immutable (cannot be changed after creation)?
+  options:
+  - List
+  - Dictionary
+  - Tuple
+  - Set
+  answer: Tuple
+- id: ds_q5
+  type: multiple_choice
+  prompt: What is the syntax to create an empty list?
+  options:
+  - '[]'
+  - '{}'
+  - ()
+  - List.new()
+  answer: '[]'
+- id: ds_q6
+  type: parsons
+  prompt: Arrange the code to iterate through a list of fruits.
+  blocks:
+  - fruits = ['apple', 'banana', 'cherry']
+  - 'for x in fruits:'
+  - '    print(x)'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: ds_q7
+  type: multiple_choice
+  prompt: What does the len() function return?
+  options:
+  - The last item in a list
+  - The first item in a list
+  - The number of items in an object
+  - The memory size of an object
+  answer: The number of items in an object
+- id: ds_q8
+  type: multiple_choice
+  prompt: 'In a dictionary, keys must be:'
+  options:
+  - Mutable
+  - Immutable
+  - Integers only
+  - Strings only
+  answer: Immutable
+- id: ds_q9
+  type: parsons
+  prompt: Reorder code to add 'Zelda' to a game inventory list.
+  blocks:
+  - inventory = ['Mario', 'Sonic']
+  - inventory.append('Zelda')
+  - print(inventory)
+  answer:
+  - 0
+  - 1
+  - 2
+- id: ds_q10
+  type: multiple_choice
+  prompt: How do you access the second item in a list named 'loot'?
+  options:
+  - loot[1]
+  - loot[2]
+  - loot(1)
+  - loot.second()
+  answer: loot[1]
+- id: ds_q11
+  type: multiple_choice
+  prompt: 'What is the result of slicing: my_list[1:3]?'
+  options:
+  - Items at index 1, 2, and 3
+  - Items at index 1 and 2
+  - Items at index 0, 1, and 2
+  - Items at index 2 and 3
+  answer: Items at index 1 and 2
+- id: ds_q12
+  type: parsons
+  prompt: Arrange code to verify if a key exists in a dictionary.
+  blocks:
+  - 'player = {''hp'': 100, ''mp'': 50}'
+  - 'if ''hp'' in player:'
+  - '    print(''Health found'')'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: ds_q13
+  type: multiple_choice
+  prompt: Which method removes the last item from a list?
+  options:
+  - delete()
+  - remove()
+  - pop()
+  - push()
+  answer: pop()
+- id: ds_q14
+  type: multiple_choice
+  prompt: Which syntax creates a tuple?
+  options:
+  - '{1, 2, 3}'
+  - '[1, 2, 3]'
+  - (1, 2, 3)
+  - <1, 2, 3>
+  answer: (1, 2, 3)
+- id: ds_q15
+  type: parsons
+  prompt: Create a nested list representing a 2D grid.
+  blocks:
+  - row1 = [1, 2]
+  - row2 = [3, 4]
+  - grid = [row1, row2]
+  answer:
+  - 0
+  - 1
+  - 2
