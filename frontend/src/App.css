@@ -1120,6 +1120,8 @@
   padding: var(--spacing-lg);
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .quiz-card-modern:hover {
@@ -1158,6 +1160,7 @@
   color: var(--text-secondary);
   margin-bottom: var(--spacing-md);
   font-size: var(--font-small);
+  flex-grow: 1;
 }
 
 .quiz-meta {
