@@ -67,6 +67,7 @@ def get_user_scores(username: str, db: Session = Depends(get_db)):
     if not user:
         return {"scores": [], "total_points": 0}
     
+    # Fetch scores ordered by timestamp
     scores = (
         db.query(Score)
         .filter(Score.user_id == user.id)
@@ -74,7 +75,8 @@ def get_user_scores(username: str, db: Session = Depends(get_db)):
         .all()
     )
     
-    total = sum(s.score for s in scores)
+    # Optimize: Use SQL aggregation for total instead of Python sum
+    total = db.query(func.sum(Score.score)).filter(Score.user_id == user.id).scalar() or 0
     
     return {
         "username": username,
