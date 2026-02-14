@@ -7,12 +7,16 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
+import { useAuth } from '../utils/useAuth';
 import MultipleChoice from '../components/MultipleChoice';
 import ParsonsProblem from '../components/ParsonsProblem';
 
 function Quiz() {
   // Get quiz ID from URL
   const { quizId } = useParams();
+  
+  // Use custom auth hook
+  const { user } = useAuth();
   
   // State
   const [quiz, setQuiz] = useState(null);
@@ -21,34 +25,25 @@ function Quiz() {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [results, setResults] = useState(null);
-  const [user, setUser] = useState(null);
   const [loginWarning, setLoginWarning] = useState(false);
 
   // Load quiz data on mount
   useEffect(() => {
     async function loadQuiz() {
       try {
-        // Check if user is logged in
-        try {
-          const userData = await apiCall('/auth/me');
-          setUser(userData);
-        } catch {
-          setUser(null);
-        }
-        
         // Load quiz
         const quizData = await apiCall(`/api/quiz/quiz/${quizId}`);
         setQuiz(quizData);
         
         // Initialize answers
         const initialAnswers = {};
-        quizData.questions.forEach((q) => {
-          if (q.type === 'parsons') {
+        quizData.questions.forEach((question) => {
+          if (question.type === 'parsons') {
             // For Parsons, store the block indices in shuffled order
-            const indices = q.blocks.map((_, i) => i);
-            initialAnswers[q.id] = shuffleArray([...indices]);
+            const indices = question.blocks.map((_, index) => index);
+            initialAnswers[question.id] = shuffleArray([...indices]);
           } else {
-            initialAnswers[q.id] = null;
+            initialAnswers[question.id] = null;
           }
         });
         setAnswers(initialAnswers);
