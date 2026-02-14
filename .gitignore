@@ -3,6 +3,7 @@ node_modules/
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 venv/
 .venv/
 
@@ -14,6 +15,13 @@ uv.lock
 build/
 dist/
 *.egg-info/
+*.egg
+.eggs/
+
+# Python package management
+pip-log.txt
+pip-delete-this-directory.txt
+.python-version
 
 # Database files (local SQLite)
 *.db
@@ -33,10 +41,20 @@ student_progress.txt
 .vscode/
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
+*.iml
+.project
+.classpath
+.settings/
 
 # OS files
 .DS_Store
 Thumbs.db
+Thumbs.db:encryptable
+Desktop.ini
+ehthumbs.db
+ehthumbs_vista.db
 
 # Logs
 *.log
@@ -48,8 +66,37 @@ yarn-error.log*
 coverage/
 .coverage
 htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+test-results/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.pyre/
+
+# Linter/Formatter caches
+.ruff_cache/
+.eslintcache
 
 # Temporary files
 tmp/
 temp/
 *.tmp
+
+# Backup and merge files
+*.bak
+*.backup
+*.orig
+*.rej
+
+# Docker
+docker-compose.override.yml
+
+# Frontend build tools
+.next/
+.cache/
+.parcel-cache/
