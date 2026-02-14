@@ -188,7 +188,6 @@ The frontend uses **React 19** with React Router for navigation. Key technologie
 
 - **React Router** - Client-side routing
 - **@dnd-kit** - Drag and drop for Parsons problems
-- **Mermaid** - Diagram rendering
 
 Hot reload is enabled for development:
 

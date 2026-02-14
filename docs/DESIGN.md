@@ -103,7 +103,6 @@ The application follows a **client-server architecture** with:
 | React | 19.2.4 | UI framework |
 | React Router | 7.13.0 | Client-side routing |
 | @dnd-kit | 6.3.1+ | Drag-and-drop for Parsons problems |
-| Mermaid | 11.12.2 | Diagram rendering |
 
 ### Backend
 
