@@ -237,9 +237,12 @@ function Dashboard() {
       return {};
     }
     
+    // Optimize: Create quiz lookup map for O(1) access instead of O(n) find
+    const quizMap = Object.fromEntries(quizzes.map(q => [q.id, q]));
+    
     const skillCounts = {};
     scores.forEach(score => {
-      const quiz = quizzes.find(q => q.id === score.quiz_id);
+      const quiz = quizMap[score.quiz_id];
       if (quiz && quiz.category) {
         const category = quiz.category;
         skillCounts[category] = (skillCounts[category] || 0) + 1;

@@ -239,13 +239,12 @@ def submit_quiz(
     results = []
     current_correct_questions = []
     
+    # Optimize: Create dictionary for O(1) answer lookup instead of O(n) nested loop
+    answers_dict = {ans.question_id: ans.answer for ans in submission.answers}
+    
     for question in quiz["questions"]:
-        # Find the submitted answer
-        submitted = None
-        for ans in submission.answers:
-            if ans.question_id == question["id"]:
-                submitted = ans.answer
-                break
+        # Find the submitted answer using dictionary lookup (O(1) instead of O(n))
+        submitted = answers_dict.get(question["id"])
         
         # Check if answer is correct
         correct = False
