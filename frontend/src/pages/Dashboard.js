@@ -184,10 +184,12 @@ function Dashboard() {
         setQuizzes(quizData.quizzes || []);
         setLeaderboard(leaderData.leaderboard || []);
         
-        // Trigger profile animation after data loads
-        setTimeout(() => setShowProfileAnimation(true), 100);
+        // Clear authentication flag and trigger profile animation
+        sessionStorage.removeItem('isAuthenticating');
+        setShowProfileAnimation(true);
       } catch (err) {
         setError(err.message);
+        sessionStorage.removeItem('isAuthenticating');
       } finally {
         setLoading(false);
       }
@@ -207,7 +209,30 @@ function Dashboard() {
   };
 
   if (loading) {
-    return <div className="loading-spinner"><p>Loading dashboard...</p></div>;
+    // Check if we're coming from OAuth flow
+    const isAuthenticating = sessionStorage.getItem('isAuthenticating') === 'true';
+    
+    return (
+      <div className="dashboard-skeleton">
+        <div className="skeleton-profile-card">
+          <div className="skeleton-avatar"></div>
+          <div className="skeleton-text"></div>
+          <div className="skeleton-text short"></div>
+        </div>
+        <div className="skeleton-stats">
+          <div className="skeleton-stat-card"></div>
+          <div className="skeleton-stat-card"></div>
+          <div className="skeleton-stat-card"></div>
+        </div>
+        {isAuthenticating && (
+          <div className="loading-bar-overlay">
+            <div className="loading-bar">
+              <div className="loading-bar-fill"></div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   }
 
   if (error || !user) {
