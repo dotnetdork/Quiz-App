@@ -783,6 +783,9 @@ function Login() {
     e.preventDefault();
     setIsTransitioning(true);
     
+    // Set flag to indicate OAuth flow is in progress
+    sessionStorage.setItem('isAuthenticating', 'true');
+    
     // Show loading bar after card transforms
     setTimeout(() => {
       setShowLoadingBar(true);

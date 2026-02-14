@@ -6,33 +6,36 @@
  */
 import { useState, useEffect } from 'react';
 import { apiCall, API_URL } from '../api';
+import { getRankEmoji, getRankClass, calculateTotalPoints } from '../utils/rankUtils';
+import { useAuth } from '../utils/useAuth';
 
 function Leaderboard() {
   // State
   const [leaderboard, setLeaderboard] = useState([]);
-  const [user, setUser] = useState(null);
   const [userScores, setUserScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Use custom auth hook
+  const { user } = useAuth();
 
   // Load leaderboard and user data on mount
   useEffect(() => {
     async function loadData() {
       try {
-        // Get global leaderboard
-        const data = await apiCall('/api/leaderboard/');
-        setLeaderboard(data.leaderboard || []);
+        // Parallel data loading
+        const promises = [apiCall('/api/leaderboard/')];
         
-        // Try to get current user and their scores
-        try {
-          const userData = await apiCall('/auth/me');
-          setUser(userData);
-          
-          const scoreData = await apiCall(`/api/leaderboard/user/${userData.username}`);
-          setUserScores(scoreData.scores || []);
-        } catch {
-          // Not logged in - that's okay
-          setUser(null);
+        // If user is authenticated, also fetch their scores
+        if (user) {
+          promises.push(apiCall(`/api/leaderboard/user/${user.username}`));
+        }
+        
+        const results = await Promise.all(promises);
+        setLeaderboard(results[0].leaderboard || []);
+        
+        if (user && results[1]) {
+          setUserScores(results[1].scores || []);
         }
       } catch (err) {
         setError(err.message);
@@ -41,8 +44,11 @@ function Leaderboard() {
       }
     }
     
-    loadData();
-  }, []);
+    // Only load data once user auth check is complete
+    if (user !== undefined) {
+      loadData();
+    }
+  }, [user]);
 
   // Show loading state
   if (loading) {
@@ -62,28 +68,8 @@ function Leaderboard() {
     );
   }
 
-  /**
-   * Get the CSS class for rank badge
-   */
-  function getRankClass(rank) {
-    if (rank === 1) return 'rank-badge rank-1';
-    if (rank === 2) return 'rank-badge rank-2';
-    if (rank === 3) return 'rank-badge rank-3';
-    return 'rank-badge';
-  }
-
-  /**
-   * Get emoji for top 3 ranks
-   */
-  function getRankEmoji(rank) {
-    if (rank === 1) return '🥇';
-    if (rank === 2) return '🥈';
-    if (rank === 3) return '🥉';
-    return rank;
-  }
-
-  // Calculate user's total points and rank
-  const userTotalPoints = userScores.reduce((sum, s) => sum + s.score, 0);
+  // Calculate user's total points and rank using utilities
+  const userTotalPoints = calculateTotalPoints(userScores);
   const userRank = user ? leaderboard.findIndex(entry => entry.username === user.username) + 1 : 0;
 
   return (
@@ -158,7 +144,7 @@ function Leaderboard() {
             {leaderboard.map((entry) => (
               <tr key={entry.rank}>
                 <td>
-                  <span className={getRankClass(entry.rank)}>
+                  <span className={`rank-badge ${getRankClass(entry.rank)}`}>
                     {getRankEmoji(entry.rank)}
                   </span>
                 </td>

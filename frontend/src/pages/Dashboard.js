@@ -9,6 +9,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
+import { getRankEmoji, calculateTotalPoints } from '../utils/rankUtils';
 
 // Category Icons
 function PythonIcon({ size = 60 }) {
@@ -184,10 +185,12 @@ function Dashboard() {
         setQuizzes(quizData.quizzes || []);
         setLeaderboard(leaderData.leaderboard || []);
         
-        // Trigger profile animation after data loads
-        setTimeout(() => setShowProfileAnimation(true), 100);
+        // Clear authentication flag and trigger profile animation
+        sessionStorage.removeItem('isAuthenticating');
+        setShowProfileAnimation(true);
       } catch (err) {
         setError(err.message);
+        sessionStorage.removeItem('isAuthenticating');
       } finally {
         setLoading(false);
       }
@@ -207,7 +210,30 @@ function Dashboard() {
   };
 
   if (loading) {
-    return <div className="loading-spinner"><p>Loading dashboard...</p></div>;
+    // Check if we're coming from OAuth flow
+    const isAuthenticating = sessionStorage.getItem('isAuthenticating') === 'true';
+    
+    return (
+      <div className="dashboard-skeleton">
+        <div className="skeleton-profile-card">
+          <div className="skeleton-avatar"></div>
+          <div className="skeleton-text"></div>
+          <div className="skeleton-text short"></div>
+        </div>
+        <div className="skeleton-stats">
+          <div className="skeleton-stat-card"></div>
+          <div className="skeleton-stat-card"></div>
+          <div className="skeleton-stat-card"></div>
+        </div>
+        {isAuthenticating && (
+          <div className="loading-bar-overlay">
+            <div className="loading-bar">
+              <div className="loading-bar-fill"></div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   }
 
   if (error || !user) {
@@ -222,14 +248,14 @@ function Dashboard() {
     );
   }
 
-  const totalPoints = scores.reduce((sum, s) => sum + s.score, 0);
+  const totalPoints = calculateTotalPoints(scores);
   const userRank = leaderboard.findIndex(entry => entry.username === user.username) + 1;
   const filteredQuizzes = selectedCategory
     ? quizzes.filter(quiz => quiz.category === selectedCategory)
     : [];
 
   // Get set of completed quiz IDs
-  const completedQuizIds = new Set(scores.map(s => s.quiz_id));
+  const completedQuizIds = new Set(scores.map(score => score.quiz_id));
 
   // Calculate skills from quiz history
   const calculateSkills = () => {
@@ -238,7 +264,7 @@ function Dashboard() {
     }
     
     // Optimize: Create quiz lookup map for O(1) access instead of O(n) find
-    const quizMap = Object.fromEntries(quizzes.map(q => [q.id, q]));
+    const quizMap = Object.fromEntries(quizzes.map(quiz => [quiz.id, quiz]));
     
     const skillCounts = {};
     scores.forEach(score => {
@@ -272,10 +298,10 @@ function Dashboard() {
     return groups;
   };
 
-  // Get quiz title by ID
+  // Get quiz title by ID - optimized to use O(1) lookup
+  const quizMap = Object.fromEntries(quizzes.map(quiz => [quiz.id, quiz]));
   const getQuizTitle = (quizId) => {
-    const quiz = quizzes.find(q => q.id === quizId);
-    return quiz ? quiz.title : quizId;
+    return quizMap[quizId]?.title || quizId;
   };
 
   const historyGroups = groupedHistory();
@@ -484,7 +510,7 @@ function Dashboard() {
                       <tr key={entry.rank} className={entry.username === user.username ? 'highlight' : ''}>
                         <td>
                           <span className={`rank-badge ${entry.rank <= 3 ? `rank-${entry.rank}` : ''}`}>
-                            {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
+                            {getRankEmoji(entry.rank)}
                           </span>
                         </td>
                         <td>

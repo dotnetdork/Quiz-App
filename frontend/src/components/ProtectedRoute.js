@@ -32,6 +32,27 @@ function ProtectedRoute({ children }) {
   }, []);
 
   if (loading) {
+    // Check if we're coming from OAuth flow to show consistent loading bar
+    const isAuthenticating = sessionStorage.getItem('isAuthenticating') === 'true';
+    
+    if (isAuthenticating) {
+      // Show loading bar during authentication check
+      return (
+        <div className="loading-bar-container" style={{ 
+          position: 'fixed', 
+          top: '50%', 
+          left: '50%', 
+          transform: 'translate(-50%, -50%)',
+          width: '400px',
+          maxWidth: '80%'
+        }}>
+          <div className="loading-bar">
+            <div className="loading-bar-fill"></div>
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div className="loading-spinner">
         <p>Loading...</p>

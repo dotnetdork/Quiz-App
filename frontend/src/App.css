@@ -1768,3 +1768,98 @@
     opacity: 1;
   }
 }
+
+/* ========================================
+   Dashboard Skeleton Loader Styles
+   ======================================== */
+
+.dashboard-skeleton {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.skeleton-profile-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.skeleton-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 auto 1rem;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-text {
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  margin: 1rem auto;
+  max-width: 300px;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-text.short {
+  max-width: 150px;
+}
+
+.skeleton-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.skeleton-stat-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  height: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Loading bar overlay for skeleton */
+.loading-bar-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 80%;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-bar-overlay .loading-bar {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.loading-bar-overlay .loading-bar::before {
+  content: "Preparing your dashboard...";
+  display: block;
+  text-align: center;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
