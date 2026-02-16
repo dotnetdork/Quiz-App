@@ -2,8 +2,6 @@
 
 A modern, interactive quiz platform built with React and FastAPI. Test your knowledge in Python, Java, and Technology with engaging quizzes featuring multiple-choice questions and Parsons problems (code ordering challenges).
 
-![Quiz-App Banner](Images/screenshot.png)
-
 ## ✨ Features
 
 - 🔐 **GitHub OAuth Authentication** - Secure login with your GitHub account
