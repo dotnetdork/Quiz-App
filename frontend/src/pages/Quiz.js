@@ -15,8 +15,22 @@ import DebuggingQuestion from '../components/DebuggingQuestion';
 import FillInTheBlank from '../components/FillInTheBlank';
 import FreeResponse from '../components/FreeResponse';
 import FadedParsons from '../components/FadedParsons';
+import AnimatedBackground from '../components/AnimatedBackground';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+// Map quiz IDs to animation themes
+const QUIZ_THEMES = {
+  'types_and_logic_01': 'geometric',
+  'loops_module_01': 'spiral',
+  'turtles_module_01': 'ocean',
+  'data_structures_func_01': 'network',
+  'java_basics_01': 'coffee',
+  'java_oop_01': 'blocks',
+  'tech_concepts_01': 'circuit',
+  'cybersecurity_01': 'matrix',
+  'robotics_01': 'gears'
+};
 
 function Quiz() {
   // Get quiz ID from URL
@@ -143,8 +157,11 @@ function Quiz() {
   // Show loading state
   if (loading) {
     return (
-      <div className="loading">
-        <p>Loading quiz...</p>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div className="loading" style={{ position: 'relative', zIndex: 1 }}>
+          <p>Loading quiz...</p>
+        </div>
       </div>
     );
   }
@@ -152,11 +169,14 @@ function Quiz() {
   // Show error state
   if (error) {
     return (
-      <div className="error-message">
-        <p>Error: {error}</p>
-        <Link to="/" className="btn-secondary mt-md">
-          Back to Home
-        </Link>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div className="error-message" style={{ position: 'relative', zIndex: 1 }}>
+          <p>Error: {error}</p>
+          <Link to="/" className="btn-secondary mt-md">
+            Back to Home
+          </Link>
+        </div>
       </div>
     );
   }
@@ -164,30 +184,32 @@ function Quiz() {
   // Show results after submission
   if (results) {
     return (
-      <div>
-        <div className="results-summary">
-          <h1>Quiz Complete!</h1>
-          <div className="score-display">
-            {results.score} / {results.total}
-          </div>
-          <div className="score-label">
-            {results.percentage}% Correct
-          </div>
-          
-          {/* Show points awarded info for retakes */}
-          {results.is_retake && (
-            <div className="points-awarded-info">
-              <p>
-                <strong>Points Awarded:</strong> +{results.points_awarded} pts
-                {results.points_awarded < results.score && (
-                  <span className="points-note">
-                    (Only new correct answers earn points on retakes)
-                  </span>
-                )}
-              </p>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="results-summary">
+            <h1>Quiz Complete!</h1>
+            <div className="score-display">
+              {results.score} / {results.total}
             </div>
-          )}
-        </div>
+            <div className="score-label">
+              {results.percentage}% Correct
+            </div>
+            
+            {/* Show points awarded info for retakes */}
+            {results.is_retake && (
+              <div className="points-awarded-info">
+                <p>
+                  <strong>Points Awarded:</strong> +{results.points_awarded} pts
+                  {results.points_awarded < results.score && (
+                    <span className="points-note">
+                      (Only new correct answers earn points on retakes)
+                    </span>
+                  )}
+                </p>
+              </div>
+            )}
+          </div>
 
         {/* Show individual results with expandable details */}
         <h2 className="mt-lg">Your Answers</h2>
@@ -313,11 +335,12 @@ function Quiz() {
           );
         })}
 
-        {/* Navigation buttons */}
-        <div className="mt-lg" style={{ display: 'flex', gap: '1rem' }}>
-          <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none' }}>
-            Back to Dashboard
-          </Link>
+          {/* Navigation buttons */}
+          <div className="mt-lg" style={{ display: 'flex', gap: '1rem' }}>
+            <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none' }}>
+              Back to Dashboard
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -326,38 +349,49 @@ function Quiz() {
   // Show error if quiz hasn't loaded for some reason
   if (!quiz) {
     return (
-      <div className="error-message">
-        <p>Error: Quiz not found or failed to load</p>
-        <Link to="/dashboard" className="btn-secondary mt-md">
-          Back to Dashboard
-        </Link>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div className="error-message" style={{ position: 'relative', zIndex: 1 }}>
+          <p>Error: Quiz not found or failed to load</p>
+          <Link to="/dashboard" className="btn-secondary mt-md">
+            Back to Dashboard
+          </Link>
+        </div>
       </div>
     );
   }
 
+  // Get theme for this quiz
+  const theme = QUIZ_THEMES[quizId] || 'default';
+
   return (
-    <div>
-      {/* Quiz Header */}
-      <div className="card mb-lg">
-        <h1>{quiz.title}</h1>
-        <p>{quiz.description}</p>
-        {!user && (
-          <div className="error-message">
-            <p>
-              <strong>Note:</strong> You need to{' '}
-              <a href={`${API_URL}/auth/login`}>log in</a>{' '}
-              to submit your answers and save your score.
-            </p>
-          </div>
-        )}
-        {loginWarning && (
-          <div className="error-message" role="alert">
-            <p>
-              <strong>Cannot submit:</strong> Please log in first to submit your quiz answers.
-            </p>
-          </div>
-        )}
-      </div>
+    <div style={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Animated Background */}
+      <AnimatedBackground theme={theme} />
+      
+      {/* Quiz Content - positioned above background */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Quiz Header */}
+        <div className="card mb-lg">
+          <h1>{quiz.title}</h1>
+          <p>{quiz.description}</p>
+          {!user && (
+            <div className="error-message">
+              <p>
+                <strong>Note:</strong> You need to{' '}
+                <a href={`${API_URL}/auth/login`}>log in</a>{' '}
+                to submit your answers and save your score.
+              </p>
+            </div>
+          )}
+          {loginWarning && (
+            <div className="error-message" role="alert">
+              <p>
+                <strong>Cannot submit:</strong> Please log in first to submit your quiz answers.
+              </p>
+            </div>
+          )}
+        </div>
 
       {/* Questions */}
       {quiz.questions.map((question, index) => (
@@ -421,16 +455,17 @@ function Quiz() {
         </div>
       ))}
 
-      {/* Submit Button */}
-      <div className="mt-lg text-center">
-        <button 
-          className="btn-success" 
-          onClick={handleSubmit}
-          disabled={submitting}
-          style={{ padding: '1rem 2rem', fontSize: '1.2rem' }}
-        >
-          {submitting ? 'Submitting...' : 'Submit Quiz'}
-        </button>
+        {/* Submit Button */}
+        <div className="mt-lg text-center">
+          <button 
+            className="btn-success" 
+            onClick={handleSubmit}
+            disabled={submitting}
+            style={{ padding: '1rem 2rem', fontSize: '1.2rem' }}
+          >
+            {submitting ? 'Submitting...' : 'Submit Quiz'}
+          </button>
+        </div>
       </div>
     </div>
   );
