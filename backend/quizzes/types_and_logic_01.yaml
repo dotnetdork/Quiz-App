@@ -1,0 +1,527 @@
+id: types_and_logic_01
+title: Python Types and Logic - Module 20
+description: Test your knowledge of Python data types, operators, string operations, and conditional logic
+category: python
+questions:
+- id: types_q1
+  type: multiple_choice
+  prompt: Which of these is an integer in Python?
+  options:
+  - '3.0'
+  - '3'
+  - '''3'''
+  - 'True'
+  answer: '3'
+- id: types_q2
+  type: multiple_choice
+  prompt: What type is the value True?
+  options:
+  - int
+  - str
+  - bool
+  - float
+  answer: bool
+- id: types_q3
+  type: output_prediction
+  prompt: What is the type of the result?
+  code: |
+    result = 10 / 2
+    print(type(result))
+  options:
+  - <class 'int'>
+  - <class 'float'>
+  - <class 'str'>
+  - <class 'bool'>
+  answer: <class 'float'>
+- id: types_q4
+  type: free_response
+  prompt: What function returns the type of a variable?
+  answer: type
+  case_sensitive: false
+- id: types_q5
+  type: multiple_choice
+  prompt: Which operator performs floor division?
+  options:
+  - /
+  - //
+  - '%'
+  - div
+  answer: //
+- id: types_q6
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    print(17 // 5)
+  options:
+  - '3.4'
+  - '3'
+  - '2'
+  - '4'
+  answer: '3'
+- id: types_q7
+  type: output_prediction
+  prompt: What is the result of this modulo operation?
+  code: |
+    print(17 % 5)
+  options:
+  - '2'
+  - '3'
+  - '4'
+  - '5'
+  answer: '2'
+- id: types_q8
+  type: multiple_choice
+  prompt: What does the ** operator do?
+  options:
+  - Multiplication
+  - Exponentiation (power)
+  - Floor division
+  - String repetition
+  answer: Exponentiation (power)
+- id: types_q9
+  type: fill_in_blank
+  prompt: Fill in the blank to calculate 2 to the power of 8.
+  code: |
+    result = 2 ___ 8
+  options:
+  - ^
+  - '**'
+  - pow
+  - exp
+  answer: '**'
+- id: types_q10
+  type: parsons
+  prompt: Arrange these lines to convert a string to an integer and add 5.
+  blocks:
+  - num_str = '10'
+  - num = int(num_str)
+  - result = num + 5
+  - print(result)
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: types_q11
+  type: debugging
+  prompt: What is wrong with this code?
+  code: |
+    age = '25'
+    next_year = age + 1
+  options:
+  - Cannot add integer to string; need int(age) + 1
+  - age should be a float
+  - Should use += instead of +
+  - next_year is not defined
+  answer: Cannot add integer to string; need int(age) + 1
+- id: types_q12
+  type: multiple_choice
+  prompt: What prefix indicates a binary number in Python?
+  options:
+  - 0b
+  - 0x
+  - 0o
+  - 0d
+  answer: 0b
+- id: types_q13
+  type: multiple_choice
+  prompt: What does 0x10 represent in decimal?
+  options:
+  - '10'
+  - '16'
+  - '8'
+  - '100'
+  answer: '16'
+- id: types_q14
+  type: output_prediction
+  prompt: What will this print?
+  code: |
+    print(bin(10))
+  options:
+  - '10'
+  - 0b1010
+  - '1010'
+  - 0x10
+  answer: 0b1010
+- id: types_q15
+  type: free_response
+  prompt: What function converts a decimal number to hexadecimal?
+  answer: hex
+  case_sensitive: false
+- id: types_q16
+  type: multiple_choice
+  prompt: What does the + operator do with strings?
+  options:
+  - Adds their numeric values
+  - Concatenates them
+  - Compares them
+  - Creates a list
+  answer: Concatenates them
+- id: types_q17
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    print('Hello' + ' ' + 'World')
+  options:
+  - Hello World
+  - HelloWorld
+  - Hello + World
+  - error
+  answer: Hello World
+- id: types_q18
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    print('Ha' * 3)
+  options:
+  - Ha3
+  - HaHaHa
+  - Ha Ha Ha
+  - error
+  answer: HaHaHa
+- id: types_q19
+  type: fill_in_blank
+  prompt: Fill in the blank to get the length of a string.
+  code: |
+    text = 'Python'
+    length = ___(text)
+  options:
+  - length
+  - size
+  - len
+  - count
+  answer: len
+- id: types_q20
+  type: multiple_choice
+  prompt: What does 'Python'[0] return?
+  options:
+  - P
+  - y
+  - Python
+  - 0
+  answer: P
+- id: types_q21
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    text = 'Python'
+    print(text[-1])
+  options:
+  - P
+  - n
+  - o
+  - error
+  answer: n
+- id: types_q22
+  type: multiple_choice
+  prompt: What does 'Python'[1:4] return?
+  options:
+  - Pyt
+  - yth
+  - ytho
+  - Pyth
+  answer: yth
+- id: types_q23
+  type: parsons
+  prompt: Arrange these lines to convert a string to uppercase.
+  blocks:
+  - text = 'hello'
+  - upper_text = text.upper()
+  - print(upper_text)
+  answer:
+  - 0
+  - 1
+  - 2
+- id: types_q24
+  type: free_response
+  prompt: What string method converts text to lowercase?
+  answer: lower
+  case_sensitive: false
+- id: types_q25
+  type: multiple_choice
+  prompt: What does the .replace() method do?
+  options:
+  - Replaces the entire string
+  - Replaces all occurrences of a substring
+  - Replaces the first character
+  - Removes spaces
+  answer: Replaces all occurrences of a substring
+- id: types_q26
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    text = 'Hello World'
+    print(text.replace('World', 'Python'))
+  options:
+  - Hello World
+  - Hello Python
+  - World Python
+  - error
+  answer: Hello Python
+- id: types_q27
+  type: debugging
+  prompt: What is wrong with this code?
+  code: |
+    name = 'alice'
+    name.upper()
+    print(name)
+  options:
+  - Strings are immutable; need name = name.upper()
+  - upper() doesn't exist
+  - name is a reserved keyword
+  - print should be Print
+  answer: Strings are immutable; need name = name.upper()
+- id: types_q28
+  type: fill_in_blank
+  prompt: Fill in the blank to split a string by spaces.
+  code: |
+    text = 'Hello World Python'
+    words = text.___()
+  options:
+  - divide
+  - separate
+  - split
+  - break
+  answer: split
+- id: types_q29
+  type: multiple_choice
+  prompt: What does the in operator do with strings?
+  options:
+  - Checks if a character is in the string
+  - Adds a character to the string
+  - Removes a character from the string
+  - Counts occurrences
+  answer: Checks if a character is in the string
+- id: types_q30
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    print('P' in 'Python')
+  options:
+  - 'True'
+  - 'False'
+  - '0'
+  - '1'
+  answer: 'True'
+- id: types_q31
+  type: faded_parsons
+  prompt: Complete the f-string to display a name and age. The variables are defined.
+  blocks:
+  - name = 'Alice'
+  - age = 25
+  - message = f'{name} is {age} years old'
+  - print(message)
+  fixed_indices:
+  - 0
+  - 1
+  answer:
+  - 2
+  - 3
+- id: types_q32
+  type: multiple_choice
+  prompt: What does the == operator do?
+  options:
+  - Assigns a value
+  - Checks for equality
+  - Adds two values
+  - Compares types
+  answer: Checks for equality
+- id: types_q33
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    print(10 == 10)
+  options:
+  - '10'
+  - '20'
+  - 'True'
+  - 'False'
+  answer: 'True'
+- id: types_q34
+  type: multiple_choice
+  prompt: Which operator checks if two values are NOT equal?
+  options:
+  - <>
+  - '!='
+  - ==
+  - not
+  answer: '!='
+- id: types_q35
+  type: free_response
+  prompt: What operator checks if one value is greater than or equal to another?
+  answer: '>='
+  case_sensitive: true
+- id: types_q36
+  type: multiple_choice
+  prompt: What does the and operator do?
+  options:
+  - Returns True if both conditions are True
+  - Returns True if either condition is True
+  - Returns True if neither condition is True
+  - Adds two booleans
+  answer: Returns True if both conditions are True
+- id: types_q37
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    print(True and False)
+  options:
+  - 'True'
+  - 'False'
+  - 'None'
+  - error
+  answer: 'False'
+- id: types_q38
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    print(True or False)
+  options:
+  - 'True'
+  - 'False'
+  - 'None'
+  - error
+  answer: 'True'
+- id: types_q39
+  type: parsons
+  prompt: Arrange these lines to check if a number is positive.
+  blocks:
+  - num = 10
+  - if num > 0:
+  - '    print("Positive")'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: types_q40
+  type: fill_in_blank
+  prompt: Fill in the blank to create an if-else statement.
+  code: |
+    if age >= 18:
+        print('Adult')
+    ___:
+        print('Minor')
+  options:
+  - elif
+  - else
+  - otherwise
+  - then
+  answer: else
+- id: types_q41
+  type: debugging
+  prompt: What is wrong with this code?
+  code: |
+    age = 15
+    if age >= 18
+        print('Adult')
+  options:
+  - Missing colon after condition
+  - age should be a string
+  - '>= should be >'
+  - print should be indented more
+  answer: Missing colon after condition
+- id: types_q42
+  type: multiple_choice
+  prompt: What is the purpose of elif?
+  options:
+  - Ends an if statement
+  - Provides an alternative condition to check
+  - Defines a function
+  - Creates a loop
+  answer: Provides an alternative condition to check
+- id: types_q43
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    score = 85
+    if score >= 90:
+        print('A')
+    elif score >= 80:
+        print('B')
+    else:
+        print('C')
+  options:
+  - A
+  - B
+  - C
+  - error
+  answer: B
+- id: types_q44
+  type: faded_parsons
+  prompt: Complete the age categorization code. The input is already provided.
+  blocks:
+  - age = 15
+  - if age < 13:
+  - '    print("Child")'
+  - elif age < 20:
+  - '    print("Teen")'
+  - else:
+  - '    print("Adult")'
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+- id: types_q45
+  type: multiple_choice
+  prompt: What does int('101', 2) do?
+  options:
+  - Converts string '101' to integer 101
+  - Converts binary string '101' to decimal 5
+  - Creates a binary number
+  - Returns an error
+  answer: Converts binary string '101' to decimal 5
+- id: types_q46
+  type: free_response
+  prompt: What method converts a string to title case (first letter of each word capitalized)?
+  answer: title
+  case_sensitive: false
+- id: types_q47
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    text = 'hello world'
+    print(text.title())
+  options:
+  - hello world
+  - Hello world
+  - Hello World
+  - HELLO WORLD
+  answer: Hello World
+- id: types_q48
+  type: multiple_choice
+  prompt: What does the .strip() method do?
+  options:
+  - Removes all spaces
+  - Removes leading and trailing whitespace
+  - Removes all vowels
+  - Converts to lowercase
+  answer: Removes leading and trailing whitespace
+- id: types_q49
+  type: parsons
+  prompt: Arrange these lines to check if a string starts with 'Py'.
+  blocks:
+  - text = 'Python'
+  - if text.startswith('Py'):
+  - '    print("Starts with Py")'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: types_q50
+  type: debugging
+  prompt: What is wrong with this comparison?
+  code: |
+    x = 5
+    if x = 10:
+        print('Equal')
+  options:
+  - Should use == for comparison, not =
+  - x should be a string
+  - print should not be indented
+  - if should be uppercase
+  answer: Should use == for comparison, not =

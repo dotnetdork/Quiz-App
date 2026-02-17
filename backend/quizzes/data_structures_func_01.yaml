@@ -1,0 +1,537 @@
+id: data_structures_func_01
+title: Python Data Structures & Functions - Module 40
+description: Test your knowledge of functions, exception handling, lists, tuples, sets, dictionaries, and advanced concepts
+category: python
+questions:
+- id: func_q1
+  type: multiple_choice
+  prompt: What keyword is used to define a function?
+  options:
+  - function
+  - def
+  - define
+  - func
+  answer: def
+- id: func_q2
+  type: parsons
+  prompt: Arrange these lines to define a simple function.
+  blocks:
+  - def greet(name):
+  - '    message = f"Hello, {name}"'
+  - '    return message'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: func_q3
+  type: output_prediction
+  prompt: What will this function return?
+  code: |
+    def add(a, b):
+        return a + b
+    
+    result = add(5, 3)
+  options:
+  - '5'
+  - '3'
+  - '8'
+  - 'None'
+  answer: '8'
+- id: func_q4
+  type: free_response
+  prompt: What statement is used to return a value from a function?
+  answer: return
+  case_sensitive: false
+- id: func_q5
+  type: multiple_choice
+  prompt: What is the default return value of a function without an explicit return?
+  options:
+  - '0'
+  - empty string
+  - 'None'
+  - error
+  answer: 'None'
+- id: func_q6
+  type: fill_in_blank
+  prompt: Fill in the blank to call a function with arguments.
+  code: |
+    def multiply(x, y):
+        return x * y
+    
+    result = ___(4, 5)
+  options:
+  - call multiply
+  - multiply
+  - function multiply
+  - run multiply
+  answer: multiply
+- id: func_q7
+  type: debugging
+  prompt: What is wrong with this function call?
+  code: |
+    def calculate(a, b, c):
+        return a + b + c
+    
+    result = calculate(1, 2)
+  options:
+  - Missing required argument c
+  - Too many arguments
+  - Function name is wrong
+  - return should be print
+  answer: Missing required argument c
+- id: func_q8
+  type: multiple_choice
+  prompt: What is a parameter in a function?
+  options:
+  - A value passed to the function
+  - A variable in the function definition
+  - The return value
+  - A function call
+  answer: A variable in the function definition
+- id: func_q9
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    def square(n):
+        return n * n
+    
+    print(square(4))
+  options:
+  - '4'
+  - '8'
+  - '16'
+  - 'None'
+  answer: '16'
+- id: func_q10
+  type: faded_parsons
+  prompt: Complete the function to calculate the average. The function signature is in place.
+  blocks:
+  - def average(a, b, c):
+  - '    total = a + b + c'
+  - '    return total / 3'
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+- id: func_q11
+  type: multiple_choice
+  prompt: What exception is raised when dividing by zero?
+  options:
+  - ValueError
+  - TypeError
+  - ZeroDivisionError
+  - DivisionError
+  answer: ZeroDivisionError
+- id: func_q12
+  type: multiple_choice
+  prompt: What is the purpose of a try-except block?
+  options:
+  - To define functions
+  - To handle errors gracefully
+  - To repeat code
+  - To compare values
+  answer: To handle errors gracefully
+- id: func_q13
+  type: parsons
+  prompt: Arrange these lines to handle a ValueError.
+  blocks:
+  - try:
+  - '    num = int(input("Enter number: "))'
+  - except ValueError:
+  - '    print("Invalid number")'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: func_q14
+  type: free_response
+  prompt: What exception is raised when converting 'abc' to an integer?
+  answer: ValueError
+  case_sensitive: false
+- id: func_q15
+  type: debugging
+  prompt: What is wrong with this error handling?
+  code: |
+    try:
+        result = 10 / 0
+    except ValueError:
+        print("Error")
+  options:
+  - Should catch ZeroDivisionError, not ValueError
+  - try should be Try
+  - except should be catch
+  - Missing finally block
+  answer: Should catch ZeroDivisionError, not ValueError
+- id: func_q16
+  type: multiple_choice
+  prompt: What does an IndexError indicate?
+  options:
+  - Invalid index for a sequence
+  - Wrong data type
+  - Division by zero
+  - Missing variable
+  answer: Invalid index for a sequence
+- id: func_q17
+  type: output_prediction
+  prompt: What will happen when this code runs?
+  code: |
+    my_list = [1, 2, 3]
+    try:
+        print(my_list[5])
+    except IndexError:
+        print("Index out of range")
+  options:
+  - Prints 5
+  - Prints None
+  - Prints 'Index out of range'
+  - Crashes
+  answer: Prints 'Index out of range'
+- id: func_q18
+  type: fill_in_blank
+  prompt: Fill in the blank to catch an exception.
+  code: |
+    try:
+        x = int('abc')
+    ___ ValueError:
+        print('Error')
+  options:
+  - catch
+  - except
+  - error
+  - handle
+  answer: except
+- id: func_q19
+  type: multiple_choice
+  prompt: How do you create an empty list?
+  options:
+  - list = {}
+  - list = ()
+  - list = []
+  - list = <>
+  answer: list = []
+- id: func_q20
+  type: free_response
+  prompt: What method adds an element to the end of a list?
+  answer: append
+  case_sensitive: false
+- id: func_q21
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    my_list = [1, 2, 3]
+    my_list.append(4)
+    print(my_list)
+  options:
+  - '[1, 2, 3]'
+  - '[1, 2, 3, 4]'
+  - '[4, 1, 2, 3]'
+  - error
+  answer: '[1, 2, 3, 4]'
+- id: func_q22
+  type: multiple_choice
+  prompt: What does my_list.insert(1, 'x') do?
+  options:
+  - Inserts 'x' at the end
+  - Inserts 'x' at index 1
+  - Replaces index 1 with 'x'
+  - Removes index 1
+  answer: Inserts 'x' at index 1
+- id: func_q23
+  type: parsons
+  prompt: Arrange these lines to remove an item from a list.
+  blocks:
+  - fruits = ['apple', 'banana', 'cherry']
+  - fruits.remove('banana')
+  - print(fruits)
+  answer:
+  - 0
+  - 1
+  - 2
+- id: func_q24
+  type: debugging
+  prompt: What is wrong with this code?
+  code: |
+    my_tuple = (1, 2, 3)
+    my_tuple.append(4)
+  options:
+  - Tuples are immutable and have no append method
+  - append should be add
+  - my_tuple should be my_list
+  - Need to use +=
+  answer: Tuples are immutable and have no append method
+- id: func_q25
+  type: multiple_choice
+  prompt: What is a set in Python?
+  options:
+  - An ordered collection
+  - An unordered collection with unique values
+  - A key-value mapping
+  - An immutable sequence
+  answer: An unordered collection with unique values
+- id: func_q26
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    my_set = {1, 2, 2, 3, 3, 3}
+    print(len(my_set))
+  options:
+  - '3'
+  - '6'
+  - '4'
+  - error
+  answer: '3'
+- id: func_q27
+  type: fill_in_blank
+  prompt: Fill in the blank to add an item to a set.
+  code: |
+    my_set = {1, 2, 3}
+    my_set.___(4)
+  options:
+  - append
+  - insert
+  - add
+  - push
+  answer: add
+- id: func_q28
+  type: free_response
+  prompt: What data structure uses curly braces and stores key-value pairs?
+  answer: dictionary
+  case_sensitive: false
+- id: func_q29
+  type: multiple_choice
+  prompt: How do you create a dictionary?
+  options:
+  - my_dict = []
+  - my_dict = ()
+  - my_dict = {}
+  - my_dict = <>
+  answer: my_dict = {}
+- id: func_q30
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    person = {'name': 'Alice', 'age': 25}
+    print(person['name'])
+  options:
+  - Alice
+  - name
+  - "{'name': 'Alice'}"
+  - error
+  answer: Alice
+- id: func_q31
+  type: parsons
+  prompt: Arrange these lines to create and access a dictionary.
+  blocks:
+  - "student = {'name': 'Bob', 'grade': 'A'}"
+  - "print(student['grade'])"
+  answer:
+  - 0
+  - 1
+- id: func_q32
+  type: multiple_choice
+  prompt: What happens if you add a key that already exists in a dictionary?
+  options:
+  - Creates a duplicate entry
+  - Raises a KeyError
+  - Updates the value for that key
+  - Does nothing
+  answer: Updates the value for that key
+- id: func_q33
+  type: fill_in_blank
+  prompt: Fill in the blank to get all keys from a dictionary.
+  code: |
+    my_dict = {'a': 1, 'b': 2}
+    keys = my_dict.___()
+  options:
+  - getKeys
+  - allKeys
+  - keys
+  - keyList
+  answer: keys
+- id: func_q34
+  type: debugging
+  prompt: What is wrong with this dictionary access?
+  code: |
+    my_dict = {'name': 'Alice'}
+    print(my_dict['age'])
+  options:
+  - KeyError - 'age' doesn't exist in dictionary
+  - Should use my_dict.age
+  - Dictionary is empty
+  - Need to use get() method
+  answer: KeyError - 'age' doesn't exist in dictionary
+- id: func_q35
+  type: multiple_choice
+  prompt: What does my_dict.get('key', 'default') do?
+  options:
+  - Returns value if key exists, else returns 'default'
+  - Always returns 'default'
+  - Raises error if key doesn't exist
+  - Sets the key to 'default'
+  answer: Returns value if key exists, else returns 'default'
+- id: func_q36
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    my_dict = {'x': 10, 'y': 20}
+    for key in my_dict:
+        print(key, end=' ')
+  options:
+  - 10 20
+  - x y
+  - x 10 y 20
+  - error
+  answer: x y
+- id: func_q37
+  type: faded_parsons
+  prompt: Complete the code to iterate over dictionary items. The dictionary is defined.
+  blocks:
+  - "scores = {'Alice': 90, 'Bob': 85}"
+  - 'for name, score in scores.items():'
+  - '    print(f"{name}: {score}")'
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+- id: func_q38
+  type: free_response
+  prompt: What method returns both keys and values from a dictionary?
+  answer: items
+  case_sensitive: false
+- id: func_q39
+  type: multiple_choice
+  prompt: What is list comprehension?
+  options:
+  - A way to compress lists
+  - A concise way to create lists
+  - A list method
+  - A type of loop
+  answer: A concise way to create lists
+- id: func_q40
+  type: output_prediction
+  prompt: What will this comprehension create?
+  code: |
+    squares = [x**2 for x in range(5)]
+    print(squares)
+  options:
+  - '[0, 1, 2, 3, 4]'
+  - '[1, 4, 9, 16, 25]'
+  - '[0, 1, 4, 9, 16]'
+  - error
+  answer: '[0, 1, 4, 9, 16]'
+- id: func_q41
+  type: parsons
+  prompt: Arrange these lines to create a list comprehension.
+  blocks:
+  - numbers = [1, 2, 3, 4, 5]
+  - evens = [n for n in numbers if n % 2 == 0]
+  - print(evens)
+  answer:
+  - 0
+  - 1
+  - 2
+- id: func_q42
+  type: fill_in_blank
+  prompt: Fill in the blank to convert a list to a set.
+  code: |
+    my_list = [1, 2, 2, 3]
+    my_set = ___(my_list)
+  options:
+  - list
+  - tuple
+  - set
+  - dict
+  answer: set
+- id: func_q43
+  type: multiple_choice
+  prompt: What does the * operator do with lists?
+  options:
+  - Multiplies all elements
+  - Repeats the list
+  - Unpacks the list
+  - Sorts the list
+  answer: Repeats the list
+- id: func_q44
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    my_list = [1, 2, 3]
+    print(my_list * 2)
+  options:
+  - '[2, 4, 6]'
+  - '[1, 2, 3, 1, 2, 3]'
+  - '[1, 2, 3, 2]'
+  - error
+  answer: '[1, 2, 3, 1, 2, 3]'
+- id: func_q45
+  type: debugging
+  prompt: What is wrong with this 2D array access?
+  code: |
+    board = [[1, 2], [3, 4], [5, 6]]
+    print(board[1, 1])
+  options:
+  - Should use board[1][1] not board[1, 1]
+  - Index out of range
+  - board is not defined
+  - 2D arrays don't exist in Python
+  answer: Should use board[1][1] not board[1, 1]
+- id: func_q46
+  type: multiple_choice
+  prompt: What does zip() do?
+  options:
+  - Compresses data
+  - Combines multiple iterables element-wise
+  - Sorts lists
+  - Creates tuples
+  answer: Combines multiple iterables element-wise
+- id: func_q47
+  type: output_prediction
+  prompt: What will this code create?
+  code: |
+    list1 = [1, 2, 3]
+    list2 = ['a', 'b', 'c']
+    result = list(zip(list1, list2))
+  options:
+  - '[1, 2, 3, a, b, c]'
+  - '[(1, a), (2, b), (3, c)]'
+  - '[(1, 2, 3), (a, b, c)]'
+  - error
+  answer: '[(1, a), (2, b), (3, c)]'
+- id: func_q48
+  type: faded_parsons
+  prompt: Complete the function to find the maximum in a list. The function signature is in place.
+  blocks:
+  - def find_max(numbers):
+  - '    max_val = numbers[0]'
+  - '    for num in numbers:'
+  - '        if num > max_val:'
+  - '            max_val = num'
+  - '    return max_val'
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: func_q49
+  type: free_response
+  prompt: What function checks if all elements in an iterable are True?
+  answer: all
+  case_sensitive: false
+- id: func_q50
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    values = [True, True, False]
+    print(all(values))
+  options:
+  - 'True'
+  - 'False'
+  - '3'
+  - error
+  answer: 'False'
