@@ -275,32 +275,17 @@ def submit_quiz(
                 submitted_cleaned = submitted_cleaned.lower()
                 answer_cleaned = answer_cleaned.lower()
             
-            # Check for exact match first
-            correct = submitted_cleaned == answer_cleaned
+            # Generate variations: method, method(), .method, .method()
+            variations = set()
+            variations.add(answer_cleaned)
+            variations.add(answer_cleaned.rstrip('()'))
+            variations.add(f".{answer_cleaned}")
+            variations.add(f".{answer_cleaned.rstrip('()')}")
+            variations.add(f"{answer_cleaned}()")
+            variations.add(f".{answer_cleaned}()")
             
-            # If not exact match, check for common variations
-            if not correct and not case_sensitive:
-                # Generate variations: method, method(), .method, .method()
-                variations = set()
-                variations.add(answer_cleaned)
-                variations.add(answer_cleaned.rstrip('()'))
-                variations.add(f".{answer_cleaned}")
-                variations.add(f".{answer_cleaned.rstrip('()')}")
-                variations.add(f"{answer_cleaned}()")
-                variations.add(f".{answer_cleaned}()")
-                
-                # Also check submitted against variations
-                variations.add(submitted_cleaned.rstrip('()'))
-                variations.add(submitted_cleaned.lstrip('.'))
-                variations.add(submitted_cleaned.lstrip('.').rstrip('()'))
-                
-                correct = (
-                    submitted_cleaned in variations or
-                    submitted_cleaned == answer_cleaned or
-                    submitted_cleaned.rstrip('()') == answer_cleaned.rstrip('()') or
-                    submitted_cleaned.lstrip('.') == answer_cleaned.lstrip('.') or
-                    submitted_cleaned.lstrip('.').rstrip('()') == answer_cleaned.lstrip('.').rstrip('()')
-                )
+            # Check if submitted answer matches any variation
+            correct = submitted_cleaned in variations
         elif question["type"] == "faded_parsons":
             # Faded Parsons - compare movable block order
             correct = submitted == question["answer"]

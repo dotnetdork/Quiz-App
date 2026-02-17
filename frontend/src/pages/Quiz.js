@@ -207,8 +207,9 @@ function Quiz() {
               onClick={() => toggleResultExpanded(result.question_id)}
               role="button"
               tabIndex={0}
-              onKeyPress={(e) => {
+              onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
                   toggleResultExpanded(result.question_id);
                 }
               }}
