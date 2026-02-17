@@ -75,7 +75,7 @@ const AnimatedBackground = ({ theme = 'default' }) => {
           rotationSpeed: (Math.random() - 0.5) * 0.01,
           shape: ['triangle', 'circle', 'square', 'pentagon'][Math.floor(Math.random() * 4)],
           color: ['#ef6c00', '#1a365d', '#4caf50', '#ff9800'][Math.floor(Math.random() * 4)],
-          opacity: Math.random() * 0.15 + 0.05
+          opacity: Math.random() * 0.20 + 0.10  // Increased from 0.15+0.05 to 0.20+0.10
         });
       }
     };

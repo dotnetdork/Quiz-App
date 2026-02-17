@@ -159,7 +159,7 @@ function Quiz() {
     return (
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
-        <div className="loading" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="container loading" style={{ position: 'relative', zIndex: 1 }}>
           <p>Loading quiz...</p>
         </div>
       </div>
@@ -171,7 +171,7 @@ function Quiz() {
     return (
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
-        <div className="error-message" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="container error-message" style={{ position: 'relative', zIndex: 1 }}>
           <p>Error: {error}</p>
           <Link to="/" className="btn-secondary mt-md">
             Back to Home
@@ -186,7 +186,7 @@ function Quiz() {
     return (
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
           <div className="results-summary">
             <h1>Quiz Complete!</h1>
             <div className="score-display">
@@ -351,7 +351,7 @@ function Quiz() {
     return (
       <div style={{ position: 'relative', minHeight: '100vh' }}>
         <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
-        <div className="error-message" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="container error-message" style={{ position: 'relative', zIndex: 1 }}>
           <p>Error: Quiz not found or failed to load</p>
           <Link to="/dashboard" className="btn-secondary mt-md">
             Back to Dashboard
@@ -370,7 +370,7 @@ function Quiz() {
       <AnimatedBackground theme={theme} />
       
       {/* Quiz Content - positioned above background */}
-      <div style={{ position: 'relative', zIndex: 1 }}>
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* Quiz Header */}
         <div className="card mb-lg">
           <h1>{quiz.title}</h1>
