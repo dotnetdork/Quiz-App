@@ -231,9 +231,16 @@ tr:nth-child(even) {
    Utility Classes
    ----------------------------------------- */
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: var(--spacing-sm);
+  }
 }
 
 .text-center { text-align: center; }

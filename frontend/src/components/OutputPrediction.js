@@ -4,6 +4,8 @@
  * Shows code and asks users to predict its output.
  * Users select from multiple choice options showing different outputs.
  */
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 /**
  * @param {Object} props
@@ -17,17 +19,30 @@ function OutputPrediction({ code, options, selectedAnswer, onSelect }) {
 
   return (
     <div className="output-prediction">
-      {/* Code block display */}
+      {/* Code block display with syntax highlighting */}
       <div className="code-display" style={{ 
         backgroundColor: 'var(--color-background-alt, #f5f5f5)',
-        padding: '1rem',
         borderRadius: '8px',
         marginBottom: '1rem',
-        fontFamily: 'monospace',
-        whiteSpace: 'pre-wrap',
         overflow: 'auto'
       }}>
-        <code>{code}</code>
+        <SyntaxHighlighter
+          language="python"
+          style={tomorrow}
+          customStyle={{
+            margin: 0,
+            padding: '1rem',
+            borderRadius: '8px',
+            fontSize: 'var(--font-base)',
+          }}
+          codeTagProps={{
+            style: {
+              fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
+            }
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
       </div>
 
       {/* Instructions */}

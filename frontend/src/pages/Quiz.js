@@ -15,6 +15,8 @@ import DebuggingQuestion from '../components/DebuggingQuestion';
 import FillInTheBlank from '../components/FillInTheBlank';
 import FreeResponse from '../components/FreeResponse';
 import FadedParsons from '../components/FadedParsons';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function Quiz() {
   // Get quiz ID from URL
@@ -31,6 +33,7 @@ function Quiz() {
   const [submitting, setSubmitting] = useState(false);
   const [results, setResults] = useState(null);
   const [loginWarning, setLoginWarning] = useState(false);
+  const [expandedResults, setExpandedResults] = useState({});
 
   // Load quiz data on mount
   useEffect(() => {
@@ -127,6 +130,16 @@ function Quiz() {
     }
   }
 
+  /**
+   * Toggle expanded state for a result
+   */
+  function toggleResultExpanded(questionId) {
+    setExpandedResults(prev => ({
+      ...prev,
+      [questionId]: !prev[questionId]
+    }));
+  }
+
   // Show loading state
   if (loading) {
     return (
@@ -176,22 +189,128 @@ function Quiz() {
           )}
         </div>
 
-        {/* Show individual results */}
+        {/* Show individual results with expandable details */}
         <h2 className="mt-lg">Your Answers</h2>
-        {results.results.map((result, index) => (
-          <div 
-            key={result.question_id} 
-            className={`card ${result.correct ? 'text-success' : 'text-error'}`}
-            style={{ 
-              borderLeft: `5px solid ${result.correct ? 'var(--color-accent)' : 'var(--color-error)'}` 
-            }}
-          >
-            <p>
-              <strong>Question {index + 1}:</strong>{' '}
-              {result.correct ? '✓ Correct!' : '✗ Incorrect'}
-            </p>
-          </div>
-        ))}
+        <p className="text-secondary mb-md">Click on any question to see details</p>
+        {results.results.map((result, index) => {
+          const isExpanded = expandedResults[result.question_id];
+          
+          return (
+            <div 
+              key={result.question_id} 
+              className={`card ${result.correct ? 'text-success' : 'text-error'}`}
+              style={{ 
+                borderLeft: `5px solid ${result.correct ? 'var(--color-accent)' : 'var(--color-error)'}}`,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onClick={() => toggleResultExpanded(result.question_id)}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  toggleResultExpanded(result.question_id);
+                }
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <p style={{ margin: 0 }}>
+                  <strong>Question {index + 1}:</strong>{' '}
+                  {result.correct ? '✓ Correct!' : '✗ Incorrect'}
+                </p>
+                <span style={{ fontSize: '1.5rem', color: 'var(--text-secondary)' }}>
+                  {isExpanded ? '▼' : '▶'}
+                </span>
+              </div>
+              
+              {/* Expanded details */}
+              {isExpanded && (
+                <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e0e0e0' }}>
+                  {/* Question prompt */}
+                  <div style={{ marginBottom: '1rem' }}>
+                    <strong>Question:</strong>
+                    <p style={{ marginTop: '0.5rem' }}>{result.prompt}</p>
+                  </div>
+                  
+                  {/* Show code if present */}
+                  {result.code && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      <strong>Code:</strong>
+                      <div style={{ marginTop: '0.5rem' }}>
+                        <SyntaxHighlighter
+                          language="python"
+                          style={tomorrow}
+                          customStyle={{
+                            margin: 0,
+                            padding: '1rem',
+                            borderRadius: '8px',
+                            fontSize: 'var(--font-base)',
+                          }}
+                        >
+                          {result.code}
+                        </SyntaxHighlighter>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Show blocks for Parsons problems */}
+                  {result.blocks && result.blocks.length > 0 && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      <strong>Code blocks:</strong>
+                      <div style={{ marginTop: '0.5rem' }}>
+                        {result.blocks.map((block, idx) => (
+                          <div key={idx} style={{ 
+                            backgroundColor: '#f5f5f5', 
+                            padding: '0.5rem', 
+                            marginBottom: '0.25rem',
+                            borderRadius: '4px',
+                            fontFamily: 'monospace'
+                          }}>
+                            {idx + 1}. {block}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Your answer */}
+                  <div style={{ marginBottom: '1rem' }}>
+                    <strong>Your Answer:</strong>
+                    <div style={{ 
+                      marginTop: '0.5rem',
+                      padding: '0.5rem',
+                      backgroundColor: result.correct ? '#e8f5e9' : '#ffebee',
+                      borderRadius: '4px'
+                    }}>
+                      {result.question_type === 'parsons' || result.question_type === 'faded_parsons' ? (
+                        <div>Order: [{result.submitted ? result.submitted.join(', ') : 'Not answered'}]</div>
+                      ) : (
+                        <div>{result.submitted || 'Not answered'}</div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Correct answer */}
+                  <div>
+                    <strong>Correct Answer:</strong>
+                    <div style={{ 
+                      marginTop: '0.5rem',
+                      padding: '0.5rem',
+                      backgroundColor: '#e8f5e9',
+                      borderRadius: '4px'
+                    }}>
+                      {result.question_type === 'parsons' || result.question_type === 'faded_parsons' ? (
+                        <div>Order: [{result.correct_answer ? result.correct_answer.join(', ') : 'N/A'}]</div>
+                      ) : (
+                        <div>{result.correct_answer || 'N/A'}</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
 
         {/* Navigation buttons */}
         <div className="mt-lg" style={{ display: 'flex', gap: '1rem' }}>

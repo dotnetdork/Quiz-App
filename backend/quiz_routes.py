@@ -266,11 +266,41 @@ def submit_quiz(
             correct = submitted == question["answer"]
         elif question["type"] == "free_response":
             # Free response - check exact match or case insensitive
+            # Also accept common variations like method(), method, .method()
             case_sensitive = question.get("case_sensitive", False)
-            if case_sensitive:
-                correct = submitted == question["answer"]
-            else:
-                correct = (submitted or "").strip().lower() == question["answer"].strip().lower()
+            submitted_cleaned = (submitted or "").strip()
+            answer_cleaned = question["answer"].strip()
+            
+            if not case_sensitive:
+                submitted_cleaned = submitted_cleaned.lower()
+                answer_cleaned = answer_cleaned.lower()
+            
+            # Check for exact match first
+            correct = submitted_cleaned == answer_cleaned
+            
+            # If not exact match, check for common variations
+            if not correct and not case_sensitive:
+                # Generate variations: method, method(), .method, .method()
+                variations = set()
+                variations.add(answer_cleaned)
+                variations.add(answer_cleaned.rstrip('()'))
+                variations.add(f".{answer_cleaned}")
+                variations.add(f".{answer_cleaned.rstrip('()')}")
+                variations.add(f"{answer_cleaned}()")
+                variations.add(f".{answer_cleaned}()")
+                
+                # Also check submitted against variations
+                variations.add(submitted_cleaned.rstrip('()'))
+                variations.add(submitted_cleaned.lstrip('.'))
+                variations.add(submitted_cleaned.lstrip('.').rstrip('()'))
+                
+                correct = (
+                    submitted_cleaned in variations or
+                    submitted_cleaned == answer_cleaned or
+                    submitted_cleaned.rstrip('()') == answer_cleaned.rstrip('()') or
+                    submitted_cleaned.lstrip('.') == answer_cleaned.lstrip('.') or
+                    submitted_cleaned.lstrip('.').rstrip('()') == answer_cleaned.lstrip('.').rstrip('()')
+                )
         elif question["type"] == "faded_parsons":
             # Faded Parsons - compare movable block order
             correct = submitted == question["answer"]
@@ -285,8 +315,14 @@ def submit_quiz(
         
         results.append({
             "question_id": question["id"],
+            "question_type": question["type"],
+            "prompt": question.get("prompt", ""),
             "submitted": submitted,
-            "correct": correct
+            "correct": correct,
+            "correct_answer": question.get("answer"),
+            "options": question.get("options", []),
+            "code": question.get("code", ""),
+            "blocks": question.get("blocks", [])
         })
     
     # Save score to database (only new points awarded)

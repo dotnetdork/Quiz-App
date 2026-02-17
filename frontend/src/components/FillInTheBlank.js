@@ -4,6 +4,8 @@
  * Shows code with blanks (___) and asks users to fill them in.
  * Users select from multiple choice options for each blank.
  */
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 /**
  * @param {Object} props
@@ -17,17 +19,30 @@ function FillInTheBlank({ code, options, selectedAnswer, onSelect }) {
 
   return (
     <div className="fill-in-blank">
-      {/* Code block with blanks */}
+      {/* Code block with blanks and syntax highlighting */}
       <div className="code-display" style={{ 
         backgroundColor: 'var(--color-background-alt, #f5f5f5)',
-        padding: '1rem',
         borderRadius: '8px',
         marginBottom: '1rem',
-        fontFamily: 'monospace',
-        whiteSpace: 'pre-wrap',
         overflow: 'auto'
       }}>
-        <code>{code}</code>
+        <SyntaxHighlighter
+          language="python"
+          style={tomorrow}
+          customStyle={{
+            margin: 0,
+            padding: '1rem',
+            borderRadius: '8px',
+            fontSize: 'var(--font-base)',
+          }}
+          codeTagProps={{
+            style: {
+              fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
+            }
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
       </div>
 
       {/* Instructions */}
