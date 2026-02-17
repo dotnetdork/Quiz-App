@@ -167,8 +167,8 @@ questions:
   options:
   - '0000 (0)'
   - '1111 (15)'
-  - '0000 (0)'
   - '1010 (10)'
+  - '0101 (5)'
   answer: '0000 (0)'
 - id: tech_q17
   type: debugging

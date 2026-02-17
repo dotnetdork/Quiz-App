@@ -179,15 +179,15 @@ questions:
   answer: Missing semicolon after "Hello"
 - id: java_q18
   type: fill_in_blank
-  prompt: Fill in the blank to create a new array.
+  prompt: Fill in the blank to initialize an array.
   code: |
     int[] numbers = ___ 1, 2, 3, 4, 5 ___;
   options:
-  - '() ()'
-  - '[] []'
-  - 'new int[] {}'
-  - '<> <>'
-  answer: 'new int[] {}'
+  - '( and )'
+  - '[ and ]'
+  - 'new int[]{ and }'
+  - '< and >'
+  answer: 'new int[]{ and }'
 - id: java_q19
   type: free_response
   prompt: What is the entry point method name for a Java application?

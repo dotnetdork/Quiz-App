@@ -182,11 +182,11 @@ questions:
   code: |
     my_dict = ___ 'name': 'Alice', 'age': 25 ___
   options:
-  - '() ()'
-  - '[] []'
-  - '{} {}'
-  - '<> <>'
-  answer: '{} {}'
+  - '( and )'
+  - '[ and ]'
+  - '{ and }'
+  - '< and >'
+  answer: '{ and }'
 - id: q19
   type: free_response
   prompt: What keyword is used to define a function in Python?
