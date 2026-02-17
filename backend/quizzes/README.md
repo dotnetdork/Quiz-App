@@ -39,19 +39,22 @@ questions:
 ## Available Quizzes
 
 ### Python (`python/`)
-- `data_structures_func_01.yaml` - Data Structures and Functions
-- `loops_module_01.yaml` - Loops Module
-- `turtles_module_01.yaml` - Turtles Module
-- `types_and_logic_01.yaml` - Types and Logic
+- `functions_collections.yaml` - Functions and Collections
+- `loops_iteration.yaml` - Loops and Iteration
+- `turtle_graphics.yaml` - Turtle Graphics
+- `types_logic.yaml` - Types and Logic
 
 ### Java (`java/`)
 - `java_basics_01.yaml` - Java Fundamentals
 - `java_oop_01.yaml` - Java Object-Oriented Programming
+- `java_collections_01.yaml` - Java Collections Framework
+- `java_advanced_01.yaml` - Java Advanced Programming
 
 ### Technology (`technology/`)
 - `tech_concepts_01.yaml` - Technology Concepts
 - `robotics_01.yaml` - Robotics Fundamentals
 - `cybersecurity_01.yaml` - Cybersecurity Fundamentals
+- `ai_fundamentals_01.yaml` - Artificial Intelligence Fundamentals
 
 ## Adding a New Quiz
 

@@ -1,6 +1,6 @@
 id: java_oop_01
-title: Java OOP & Logic
-description: Object-Oriented Programming concepts and logic
+title: OOP & Logic
+description: Dive into object-oriented programming with classes, objects, inheritance, encapsulation, and polymorphism
 category: java
 questions:
 - id: java_oop_q1
@@ -167,3 +167,411 @@ questions:
   - '0'
   - 'false'
   answer: 'true'
+- id: java_oop_q16
+  type: multiple_choice
+  prompt: What is encapsulation?
+  options:
+  - Hiding implementation details and exposing only necessary parts
+  - Creating multiple classes
+  - Using loops in methods
+  - Importing packages
+  answer: Hiding implementation details and exposing only necessary parts
+- id: java_oop_q17
+  type: multiple_choice
+  prompt: What are getter methods used for?
+  options:
+  - To retrieve the value of private variables
+  - To set the value of variables
+  - To delete variables
+  - To create new objects
+  answer: To retrieve the value of private variables
+- id: java_oop_q18
+  type: parsons
+  prompt: Arrange the code to create a simple class with encapsulation.
+  blocks:
+  - public class Person {
+  - '    private String name;'
+  - '    public String getName() {'
+  - '        return name;'
+  - '    }'
+  - '    public void setName(String n) {'
+  - '        name = n;'
+  - '    }'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+- id: java_oop_q19
+  type: multiple_choice
+  prompt: What is polymorphism?
+  options:
+  - Many forms of a single entity
+  - Creating multiple objects
+  - Using multiple loops
+  - Importing multiple packages
+  answer: Many forms of a single entity
+- id: java_oop_q20
+  type: multiple_choice
+  prompt: What is method overriding?
+  options:
+  - Using the same method name in different classes with inheritance
+  - Creating two methods with different names
+  - Deleting a method
+  - Making a method private
+  answer: Using the same method name in different classes with inheritance
+- id: java_oop_q21
+  type: output_prediction
+  prompt: What will this overridden method print?
+  code: |
+    class Animal {
+        void sound() { System.out.println("Animal sound"); }
+    }
+    class Dog extends Animal {
+        void sound() { System.out.println("Bark"); }
+    }
+    Dog d = new Dog();
+    d.sound();
+  options:
+  - Animal sound
+  - Bark
+  - Both
+  - error
+  answer: Bark
+- id: java_oop_q22
+  type: multiple_choice
+  prompt: Which annotation indicates a method is being overridden?
+  options:
+  - '@Override'
+  - '@Overridden'
+  - '@Super'
+  - '@Parent'
+  answer: '@Override'
+- id: java_oop_q23
+  type: multiple_choice
+  prompt: What keyword calls the parent class constructor?
+  options:
+  - this
+  - super
+  - parent
+  - base
+  answer: super
+- id: java_oop_q24
+  type: parsons
+  prompt: Arrange the code to call super class constructor.
+  blocks:
+  - class Animal {
+  - '    Animal(String name) { System.out.println(name); }'
+  - '}'
+  - class Dog extends Animal {
+  - '    Dog(String name) {'
+  - '        super(name);'
+  - '    }'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+- id: java_oop_q25
+  type: multiple_choice
+  prompt: What is an abstract class?
+  options:
+  - A class that cannot be instantiated directly
+  - A class with only private methods
+  - A class without variables
+  - A class from java.lang
+  answer: A class that cannot be instantiated directly
+- id: java_oop_q26
+  type: multiple_choice
+  prompt: Which keyword defines an abstract class?
+  options:
+  - interface
+  - abstract
+  - virtual
+  - incomplete
+  answer: abstract
+- id: java_oop_q27
+  type: debugging
+  prompt: What is wrong with this code?
+  code: |
+    abstract class Shape {
+        abstract void draw();
+    }
+    Shape s = new Shape();
+  options:
+  - Cannot instantiate an abstract class
+  - draw() method is missing body
+  - Shape should be lowercase
+  - Missing semicolon
+  answer: Cannot instantiate an abstract class
+- id: java_oop_q28
+  type: multiple_choice
+  prompt: How do you implement an interface?
+  options:
+  - extends
+  - implements
+  - uses
+  - includes
+  answer: implements
+- id: java_oop_q29
+  type: parsons
+  prompt: Arrange the code to implement an interface.
+  blocks:
+  - interface Animal {
+  - '    void sound();'
+  - '}'
+  - class Dog implements Animal {
+  - '    public void sound() {'
+  - '        System.out.println("Bark");'
+  - '    }'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+- id: java_oop_q30
+  type: multiple_choice
+  prompt: Can a class implement multiple interfaces?
+  options:
+  - 'Yes'
+  - 'No'
+  - Only in Java 8+
+  - Only if they are abstract
+  answer: 'Yes'
+- id: java_oop_q31
+  type: multiple_choice
+  prompt: What is the default access modifier for interface methods in Java 8+?
+  options:
+  - private
+  - protected
+  - public
+  - default
+  answer: public
+- id: java_oop_q32
+  type: fill_in_blank
+  prompt: Fill in the blank to check if an object is an instance of a class.
+  code: |
+    Dog d = new Dog();
+    if (d ___ Animal) {
+        System.out.println("Is animal");
+    }
+  options:
+  - is
+  - instanceof
+  - typeof
+  - isInstance
+  answer: instanceof
+- id: java_oop_q33
+  type: multiple_choice
+  prompt: What does the final keyword do when applied to a class?
+  options:
+  - Prevents the class from being extended
+  - Makes all methods static
+  - Makes the class abstract
+  - Prevents the class from being imported
+  answer: Prevents the class from being extended
+- id: java_oop_q34
+  type: multiple_choice
+  prompt: What does the final keyword do when applied to a method?
+  options:
+  - Prevents the method from being overridden
+  - Makes the method private
+  - Deletes the method
+  - Makes the method static
+  answer: Prevents the method from being overridden
+- id: java_oop_q35
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    final int MAX = 100;
+    MAX = 200;
+    System.out.println(MAX);
+  options:
+  - '100'
+  - '200'
+  - error (cannot reassign final variable)
+  - '300'
+  answer: error (cannot reassign final variable)
+- id: java_oop_q36
+  type: multiple_choice
+  prompt: What is composition in OOP?
+  options:
+  - One class contains objects of other classes
+  - Multiple inheritance
+  - Using interfaces
+  - Creating abstract classes
+  answer: One class contains objects of other classes
+- id: java_oop_q37
+  type: multiple_choice
+  prompt: What exception is thrown when dividing by zero?
+  options:
+  - DivideByZeroException
+  - ArithmeticException
+  - MathException
+  - NumberException
+  answer: ArithmeticException
+- id: java_oop_q38
+  type: parsons
+  prompt: Arrange the code to throw a custom exception.
+  blocks:
+  - public void checkAge(int age) throws Exception {
+  - '    if (age < 18) {'
+  - '        throw new Exception("Too young");'
+  - '    }'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: java_oop_q39
+  type: multiple_choice
+  prompt: What block always executes in exception handling?
+  options:
+  - try
+  - catch
+  - finally
+  - always
+  answer: finally
+- id: java_oop_q40
+  type: debugging
+  prompt: What is wrong with this exception handling?
+  code: |
+    try {
+        int[] arr = new int[5];
+        arr[10] = 50;
+    } catch (Exception e) {
+    }
+  options:
+  - Nothing wrong, will catch ArrayIndexOutOfBoundsException
+  - Missing finally block
+  - try should be Try
+  - Exception is too generic
+  answer: Nothing wrong, will catch ArrayIndexOutOfBoundsException
+- id: java_oop_q41
+  type: multiple_choice
+  prompt: What method is called when an object is garbage collected?
+  options:
+  - delete()
+  - finalize()
+  - destroy()
+  - clean()
+  answer: finalize()
+- id: java_oop_q42
+  type: multiple_choice
+  prompt: Which method returns a string representation of an object?
+  options:
+  - getString()
+  - toStr()
+  - toString()
+  - asString()
+  answer: toString()
+- id: java_oop_q43
+  type: faded_parsons
+  prompt: Complete the code to override toString(). The class declaration is fixed.
+  blocks:
+  - public class Person {
+  - '    String name;'
+  - '    public String toString() {'
+  - '        return "Person: " + name;'
+  - '    }'
+  - '}'
+  fixed_indices:
+  - 0
+  - 5
+  answer:
+  - 1
+  - 2
+  - 3
+  - 4
+- id: java_oop_q44
+  type: multiple_choice
+  prompt: What is a package in Java?
+  options:
+  - A group of related classes and interfaces
+  - A compressed file
+  - A method container
+  - A type of variable
+  answer: A group of related classes and interfaces
+- id: java_oop_q45
+  type: multiple_choice
+  prompt: Which keyword creates a package?
+  options:
+  - namespace
+  - package
+  - module
+  - group
+  answer: package
+- id: java_oop_q46
+  type: output_prediction
+  prompt: What access do protected members have?
+  code: |
+    // In package com.example
+    public class Parent {
+        protected int value = 10;
+    }
+  options:
+  - Only within Parent class
+  - Within package and subclasses
+  - Everywhere
+  - Only subclasses
+  answer: Within package and subclasses
+- id: java_oop_q47
+  type: multiple_choice
+  prompt: What is the difference between == and equals()?
+  options:
+  - == compares references, equals() compares content
+  - They are the same
+  - equals() compares references
+  - == is for strings only
+  answer: == compares references, equals() compares content
+- id: java_oop_q48
+  type: fill_in_blank
+  prompt: Fill in the blank to create an anonymous inner class.
+  code: |
+    Runnable r = new Runnable() {
+        ___ void run() {
+            System.out.println("Running");
+        }
+    };
+  options:
+  - override
+  - public
+  - static
+  - private
+  answer: public
+- id: java_oop_q49
+  type: multiple_choice
+  prompt: What is a static nested class?
+  options:
+  - A class defined inside another class with static keyword
+  - A class that cannot be instantiated
+  - A class with all static methods
+  - An abstract class
+  answer: A class defined inside another class with static keyword
+- id: java_oop_q50
+  type: multiple_choice
+  prompt: What is the parent class of all classes in Java?
+  options:
+  - Parent
+  - Base
+  - Object
+  - Super
+  answer: Object

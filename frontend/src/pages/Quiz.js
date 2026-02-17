@@ -21,15 +21,18 @@ import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 // Map quiz IDs to animation themes
 const QUIZ_THEMES = {
-  'types_and_logic_01': 'geometric',
-  'loops_module_01': 'spiral',
-  'turtles_module_01': 'ocean',
-  'data_structures_func_01': 'network',
+  'types_logic': 'geometric',
+  'loops_iteration': 'spiral',
+  'turtle_graphics': 'ocean',
+  'functions_collections': 'network',
   'java_basics_01': 'coffee',
   'java_oop_01': 'blocks',
+  'java_collections_01': 'dataflow',
+  'java_advanced_01': 'lambda',
   'tech_concepts_01': 'circuit',
   'cybersecurity_01': 'matrix',
-  'robotics_01': 'gears'
+  'robotics_01': 'gears',
+  'ai_fundamentals_01': 'neural'
 };
 
 function Quiz() {
@@ -368,8 +371,6 @@ function Quiz() {
     <div style={{ position: 'relative', minHeight: '100vh' }}>
       {/* Animated Background - themed */}
       <AnimatedBackground theme={theme} />
-      {/* Particle overlay for additional visual interest */}
-      <AnimatedBackground theme="particles" />
       
       {/* Quiz Content - positioned above background */}
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>

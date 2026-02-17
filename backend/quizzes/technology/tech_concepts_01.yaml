@@ -1,6 +1,6 @@
 id: tech_concepts_01
 title: Technology Concepts
-description: General technology and computer science concepts
+description: Explore fundamental computer science principles, technology trends, and core CS concepts
 category: technology
 questions:
 - id: tech_q1
@@ -211,3 +211,290 @@ questions:
   - 1
   - 2
   - 3
+- id: tech_q21
+  type: multiple_choice
+  prompt: What does 'Cloud Computing' refer to?
+  options:
+  - Computing in the sky
+  - Delivery of computing services over the internet
+  - Weather prediction software
+  - Wireless computing
+  answer: Delivery of computing services over the internet
+- id: tech_q22
+  type: multiple_choice
+  prompt: Which of the following is a cloud service provider?
+  options:
+  - AWS (Amazon Web Services)
+  - MySQL
+  - Python
+  - Chrome
+  answer: AWS (Amazon Web Services)
+- id: tech_q23
+  type: multiple_choice
+  prompt: What does 'API' stand for?
+  options:
+  - Application Programming Interface
+  - Advanced Program Integration
+  - Automated Processing Interface
+  - Application Process Indicator
+  answer: Application Programming Interface
+- id: tech_q24
+  type: multiple_choice
+  prompt: What type of database uses tables with rows and columns?
+  options:
+  - NoSQL database
+  - Relational database
+  - Graph database
+  - Document database
+  answer: Relational database
+- id: tech_q25
+  type: multiple_choice
+  prompt: Which language is primarily used for database queries?
+  options:
+  - HTML
+  - SQL
+  - CSS
+  - JavaScript
+  answer: SQL
+- id: tech_q26
+  type: output_prediction
+  prompt: In binary, what is 1 + 1?
+  code: |
+    1
+    + 1
+    ___
+  options:
+  - '10'
+  - '2'
+  - '11'
+  - '1'
+  answer: '10'
+- id: tech_q27
+  type: multiple_choice
+  prompt: What is an algorithm?
+  options:
+  - A step-by-step procedure for solving a problem
+  - A type of computer
+  - A programming language
+  - A web browser
+  answer: A step-by-step procedure for solving a problem
+- id: tech_q28
+  type: multiple_choice
+  prompt: Which data structure follows First-In-First-Out (FIFO)?
+  options:
+  - Stack
+  - Queue
+  - Tree
+  - Graph
+  answer: Queue
+- id: tech_q29
+  type: multiple_choice
+  prompt: Which data structure follows Last-In-First-Out (LIFO)?
+  options:
+  - Queue
+  - Stack
+  - Array
+  - Linked List
+  answer: Stack
+- id: tech_q30
+  type: parsons
+  prompt: Arrange the steps of the software development lifecycle.
+  blocks:
+  - Requirements Analysis
+  - Design
+  - Implementation
+  - Testing
+  - Deployment
+  - Maintenance
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: tech_q31
+  type: multiple_choice
+  prompt: What is the difference between front-end and back-end development?
+  options:
+  - Front-end deals with user interface, back-end deals with server-side logic
+  - They are the same
+  - Front-end is for mobile only
+  - Back-end is for design only
+  answer: Front-end deals with user interface, back-end deals with server-side logic
+- id: tech_q32
+  type: multiple_choice
+  prompt: Which of these is a front-end framework?
+  options:
+  - Django
+  - React
+  - Flask
+  - Node.js
+  answer: React
+- id: tech_q33
+  type: multiple_choice
+  prompt: What does 'IDE' stand for?
+  options:
+  - Integrated Development Environment
+  - Internet Development Environment
+  - Integrated Design Environment
+  - Interactive Development Editor
+  answer: Integrated Development Environment
+- id: tech_q34
+  type: debugging
+  prompt: What is wrong with this IP address?
+  code: |
+    192.168.0.300
+  options:
+  - Last octet exceeds 255
+  - Missing a number
+  - Has too many octets
+  - Should use letters
+  answer: Last octet exceeds 255
+- id: tech_q35
+  type: multiple_choice
+  prompt: What is open source software?
+  options:
+  - Software with freely available source code
+  - Software that is open to viruses
+  - Software without any code
+  - Software that costs money
+  answer: Software with freely available source code
+- id: tech_q36
+  type: multiple_choice
+  prompt: What is the purpose of a compiler?
+  options:
+  - To translate source code into machine code
+  - To run programs
+  - To debug code
+  - To store data
+  answer: To translate source code into machine code
+- id: tech_q37
+  type: multiple_choice
+  prompt: What is the difference between compiling and interpreting?
+  options:
+  - Compiling translates all at once, interpreting translates line-by-line
+  - They are the same
+  - Interpreting is faster
+  - Compiling is for web only
+  answer: Compiling translates all at once, interpreting translates line-by-line
+- id: tech_q38
+  type: fill_in_blank
+  prompt: Fill in the blank for a typical REST API HTTP method for retrieving data.
+  code: |
+    ___ /api/users
+  options:
+  - POST
+  - GET
+  - DELETE
+  - PUT
+  answer: GET
+- id: tech_q39
+  type: multiple_choice
+  prompt: What does 'REST' stand for in REST API?
+  options:
+  - Representational State Transfer
+  - Remote State Transfer
+  - Responsive State Transfer
+  - Real State Transmission
+  answer: Representational State Transfer
+- id: tech_q40
+  type: multiple_choice
+  prompt: What is 'Big O notation' used for?
+  options:
+  - Describing algorithm efficiency
+  - Identifying bugs
+  - Naming variables
+  - Creating databases
+  answer: Describing algorithm efficiency
+- id: tech_q41
+  type: output_prediction
+  prompt: What is the time complexity of accessing an element in an array by index?
+  code: |
+    int[] arr = {1, 2, 3, 4, 5};
+    int x = arr[2];
+  options:
+  - O(n)
+  - O(log n)
+  - O(1)
+  - O(n^2)
+  answer: O(1)
+- id: tech_q42
+  type: multiple_choice
+  prompt: What is Agile methodology?
+  options:
+  - An iterative approach to software development
+  - A programming language
+  - A type of database
+  - A design pattern
+  answer: An iterative approach to software development
+- id: tech_q43
+  type: multiple_choice
+  prompt: What does 'DevOps' combine?
+  options:
+  - Development and Operations
+  - Devices and Options
+  - Development and Optimization
+  - Design and Operations
+  answer: Development and Operations
+- id: tech_q44
+  type: multiple_choice
+  prompt: What is a 'repository' in version control?
+  options:
+  - A storage location for code and version history
+  - A database
+  - A programming framework
+  - A testing tool
+  answer: A storage location for code and version history
+- id: tech_q45
+  type: parsons
+  prompt: Arrange the typical Git workflow steps.
+  blocks:
+  - git add
+  - git commit
+  - git push
+  answer:
+  - 0
+  - 1
+  - 2
+- id: tech_q46
+  type: multiple_choice
+  prompt: What is 'encryption'?
+  options:
+  - Converting data into a coded format for security
+  - Deleting data
+  - Compressing data
+  - Copying data
+  answer: Converting data into a coded format for security
+- id: tech_q47
+  type: multiple_choice
+  prompt: What is the primary purpose of unit testing?
+  options:
+  - Testing individual components in isolation
+  - Testing the entire application
+  - Testing user interface
+  - Testing database connections
+  answer: Testing individual components in isolation
+- id: tech_q48
+  type: multiple_choice
+  prompt: Which port number is typically used for HTTP?
+  options:
+  - '21'
+  - '80'
+  - '443'
+  - '22'
+  answer: '80'
+- id: tech_q49
+  type: multiple_choice
+  prompt: Which port number is typically used for HTTPS?
+  options:
+  - '80'
+  - '443'
+  - '8080'
+  - '3000'
+  answer: '443'
+- id: tech_q50
+  type: free_response
+  prompt: What does 'IoT' stand for?
+  answer: Internet of Things
+  case_sensitive: false

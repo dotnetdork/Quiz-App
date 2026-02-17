@@ -1,0 +1,471 @@
+id: ai_fundamentals_01
+title: Artificial Intelligence Fundamentals
+description: Discover machine learning, neural networks, AI ethics, and the future of intelligent systems
+category: technology
+questions:
+- id: ai_q1
+  type: multiple_choice
+  prompt: What is Artificial Intelligence (AI)?
+  options:
+  - Machines that can perform tasks requiring human intelligence
+  - Only robots
+  - Computer games
+  - Internet of Things
+  answer: Machines that can perform tasks requiring human intelligence
+- id: ai_q2
+  type: multiple_choice
+  prompt: What is Machine Learning?
+  options:
+  - Subset of AI where machines learn from data without explicit programming
+  - Teaching computers manually
+  - Hardware manufacturing
+  - Web development
+  answer: Subset of AI where machines learn from data without explicit programming
+- id: ai_q3
+  type: multiple_choice
+  prompt: What are the three main types of machine learning?
+  options:
+  - Supervised, Unsupervised, Reinforcement
+  - Fast, Medium, Slow
+  - Big, Small, Medium
+  - Simple, Complex, Advanced
+  answer: Supervised, Unsupervised, Reinforcement
+- id: ai_q4
+  type: multiple_choice
+  prompt: What is supervised learning?
+  options:
+  - Learning from labeled data with input-output pairs
+  - Learning without any data
+  - Learning from unlabeled data
+  - Learning by trial and error
+  answer: Learning from labeled data with input-output pairs
+- id: ai_q5
+  type: multiple_choice
+  prompt: What is unsupervised learning?
+  options:
+  - Finding patterns in unlabeled data
+  - Learning from labeled data
+  - Learning with a teacher
+  - Manual programming
+  answer: Finding patterns in unlabeled data
+- id: ai_q6
+  type: multiple_choice
+  prompt: What is reinforcement learning?
+  options:
+  - Learning through rewards and punishments (trial and error)
+  - Learning from labeled data
+  - Pattern recognition
+  - Data clustering
+  answer: Learning through rewards and punishments (trial and error)
+- id: ai_q7
+  type: multiple_choice
+  prompt: Which is an example of supervised learning?
+  options:
+  - Email spam detection
+  - Customer segmentation
+  - Anomaly detection
+  - Game playing without rules
+  answer: Email spam detection
+- id: ai_q8
+  type: multiple_choice
+  prompt: Which is an example of unsupervised learning?
+  options:
+  - Customer segmentation (clustering)
+  - Image classification
+  - Speech recognition
+  - Predicting house prices
+  answer: Customer segmentation (clustering)
+- id: ai_q9
+  type: parsons
+  prompt: Arrange the steps of a typical machine learning workflow.
+  blocks:
+  - Collect and prepare data
+  - Choose a model
+  - Train the model on training data
+  - Evaluate the model on test data
+  - Deploy the model
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: ai_q10
+  type: multiple_choice
+  prompt: What is a dataset split into for machine learning?
+  options:
+  - Training set and test set (sometimes validation set)
+  - Input and output
+  - Features and labels
+  - Rows and columns
+  answer: Training set and test set (sometimes validation set)
+- id: ai_q11
+  type: multiple_choice
+  prompt: What is a feature in machine learning?
+  options:
+  - Input variable used to make predictions
+  - Output result
+  - Algorithm name
+  - Model type
+  answer: Input variable used to make predictions
+- id: ai_q12
+  type: multiple_choice
+  prompt: What is a label in machine learning?
+  options:
+  - Output or target variable to predict
+  - Input data
+  - Feature name
+  - Algorithm
+  answer: Output or target variable to predict
+- id: ai_q13
+  type: multiple_choice
+  prompt: What is a neural network?
+  options:
+  - Computing system inspired by biological neural networks
+  - Internet connection
+  - Database system
+  - Operating system
+  answer: Computing system inspired by biological neural networks
+- id: ai_q14
+  type: multiple_choice
+  prompt: What are the basic components of a neural network?
+  options:
+  - Input layer, hidden layers, output layer
+  - Database, server, client
+  - CPU, RAM, disk
+  - Router, switch, firewall
+  answer: Input layer, hidden layers, output layer
+- id: ai_q15
+  type: multiple_choice
+  prompt: What is a neuron (node) in a neural network?
+  options:
+  - Unit that receives inputs, applies weights, and produces output
+  - A computer
+  - A database
+  - A server
+  answer: Unit that receives inputs, applies weights, and produces output
+- id: ai_q16
+  type: multiple_choice
+  prompt: What is deep learning?
+  options:
+  - Machine learning using neural networks with many layers
+  - Learning underwater
+  - Basic machine learning
+  - Shallow networks
+  answer: Machine learning using neural networks with many layers
+- id: ai_q17
+  type: multiple_choice
+  prompt: What is the difference between ML and Deep Learning?
+  options:
+  - Deep learning uses multi-layer neural networks, ML includes broader algorithms
+  - They are the same
+  - ML is newer
+  - Deep learning doesn't use data
+  answer: Deep learning uses multi-layer neural networks, ML includes broader algorithms
+- id: ai_q18
+  type: multiple_choice
+  prompt: What is Natural Language Processing (NLP)?
+  options:
+  - AI field focused on understanding and generating human language
+  - Network programming
+  - Natural physics
+  - Language translation only
+  answer: AI field focused on understanding and generating human language
+- id: ai_q19
+  type: multiple_choice
+  prompt: Which is an application of NLP?
+  options:
+  - Chatbots, sentiment analysis, language translation
+  - Image recognition
+  - Self-driving cars
+  - Robotics
+  answer: Chatbots, sentiment analysis, language translation
+- id: ai_q20
+  type: multiple_choice
+  prompt: What is Computer Vision?
+  options:
+  - AI field enabling computers to interpret and understand visual information
+  - Screen display technology
+  - Video games
+  - Web design
+  answer: AI field enabling computers to interpret and understand visual information
+- id: ai_q21
+  type: multiple_choice
+  prompt: Which is an application of Computer Vision?
+  options:
+  - Facial recognition, object detection, self-driving cars
+  - Text analysis
+  - Speech recognition
+  - Music generation
+  answer: Facial recognition, object detection, self-driving cars
+- id: ai_q22
+  type: fill_in_blank
+  prompt: Fill in the blank for the popular Python library for machine learning.
+  code: |
+    import ___ as sklearn
+  options:
+  - scikit-learn
+  - tensorflow
+  - pytorch
+  - keras
+  answer: scikit-learn
+- id: ai_q23
+  type: multiple_choice
+  prompt: What is TensorFlow?
+  options:
+  - Open-source library for machine learning and deep learning
+  - Spreadsheet software
+  - Operating system
+  - Database
+  answer: Open-source library for machine learning and deep learning
+- id: ai_q24
+  type: multiple_choice
+  prompt: What is PyTorch?
+  options:
+  - Open-source deep learning framework
+  - Python interpreter
+  - Web framework
+  - Testing tool
+  answer: Open-source deep learning framework
+- id: ai_q25
+  type: parsons
+  prompt: Arrange the code to create a simple neural network layer in concept.
+  blocks:
+  - Receive inputs (x1, x2, x3)
+  - Multiply each input by a weight (w1, w2, w3)
+  - Sum the weighted inputs
+  - Apply activation function
+  - Produce output
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: ai_q26
+  type: multiple_choice
+  prompt: What is an activation function?
+  options:
+  - Function applied to neuron output to introduce non-linearity
+  - Starting the program
+  - Turning on the computer
+  - Input preprocessing
+  answer: Function applied to neuron output to introduce non-linearity
+- id: ai_q27
+  type: multiple_choice
+  prompt: What is overfitting in machine learning?
+  options:
+  - Model learns training data too well, performs poorly on new data
+  - Model is too simple
+  - Model is perfect
+  - Model runs too fast
+  answer: Model learns training data too well, performs poorly on new data
+- id: ai_q28
+  type: multiple_choice
+  prompt: What is underfitting in machine learning?
+  options:
+  - Model is too simple to capture patterns in data
+  - Model is too complex
+  - Model is perfect
+  - Model has too many layers
+  answer: Model is too simple to capture patterns in data
+- id: ai_q29
+  type: multiple_choice
+  prompt: What is a classification problem?
+  options:
+  - Predicting discrete categories or classes
+  - Predicting continuous numbers
+  - Sorting data
+  - Cleaning data
+  answer: Predicting discrete categories or classes
+- id: ai_q30
+  type: multiple_choice
+  prompt: What is a regression problem?
+  options:
+  - Predicting continuous numerical values
+  - Predicting categories
+  - Grouping data
+  - Pattern matching
+  answer: Predicting continuous numerical values
+- id: ai_q31
+  type: multiple_choice
+  prompt: What is clustering?
+  options:
+  - Grouping similar data points together
+  - Predicting values
+  - Classification
+  - Labeling data
+  answer: Grouping similar data points together
+- id: ai_q32
+  type: multiple_choice
+  prompt: What is the k-means algorithm used for?
+  options:
+  - Clustering data into k groups
+  - Classification
+  - Regression
+  - Image recognition
+  answer: Clustering data into k groups
+- id: ai_q33
+  type: multiple_choice
+  prompt: What is a decision tree?
+  options:
+  - Model that makes decisions using tree-like structure of rules
+  - Neural network
+  - Clustering algorithm
+  - Data structure
+  answer: Model that makes decisions using tree-like structure of rules
+- id: ai_q34
+  type: multiple_choice
+  prompt: What is a random forest?
+  options:
+  - Ensemble of many decision trees
+  - Single decision tree
+  - Neural network
+  - Clustering method
+  answer: Ensemble of many decision trees
+- id: ai_q35
+  type: multiple_choice
+  prompt: What is accuracy in machine learning evaluation?
+  options:
+  - Percentage of correct predictions
+  - Model speed
+  - Data size
+  - Number of features
+  answer: Percentage of correct predictions
+- id: ai_q36
+  type: multiple_choice
+  prompt: What is a confusion matrix?
+  options:
+  - Table showing true positives, false positives, true negatives, false negatives
+  - Matrix multiplication
+  - Neural network layer
+  - Data preprocessing tool
+  answer: Table showing true positives, false positives, true negatives, false negatives
+- id: ai_q37
+  type: multiple_choice
+  prompt: What is transfer learning?
+  options:
+  - Using pre-trained model as starting point for new task
+  - Moving data between databases
+  - Copying files
+  - Network transfer
+  answer: Using pre-trained model as starting point for new task
+- id: ai_q38
+  type: multiple_choice
+  prompt: What is a Convolutional Neural Network (CNN)?
+  options:
+  - Neural network specialized for processing images
+  - Network for text
+  - Network for time series
+  - Basic neural network
+  answer: Neural network specialized for processing images
+- id: ai_q39
+  type: multiple_choice
+  prompt: What is a Recurrent Neural Network (RNN)?
+  options:
+  - Neural network for sequential data (time series, text)
+  - Network for images
+  - Network for static data
+  - Clustering algorithm
+  answer: Neural network for sequential data (time series, text)
+- id: ai_q40
+  type: multiple_choice
+  prompt: What is bias in AI/ML context?
+  options:
+  - Systematic error or unfairness in model predictions
+  - Random error
+  - Model accuracy
+  - Data size
+  answer: Systematic error or unfairness in model predictions
+- id: ai_q41
+  type: multiple_choice
+  prompt: Why is AI ethics important?
+  options:
+  - To ensure AI is fair, transparent, and beneficial to society
+  - To make AI faster
+  - To reduce costs
+  - To increase profits
+  answer: To ensure AI is fair, transparent, and beneficial to society
+- id: ai_q42
+  type: multiple_choice
+  prompt: What is algorithmic bias?
+  options:
+  - When AI perpetuates or amplifies unfair treatment of groups
+  - Efficient algorithm
+  - Fast computation
+  - Accurate predictions
+  answer: When AI perpetuates or amplifies unfair treatment of groups
+- id: ai_q43
+  type: multiple_choice
+  prompt: What is a chatbot?
+  options:
+  - AI program that simulates conversation with users
+  - Database
+  - Web server
+  - Compiler
+  answer: AI program that simulates conversation with users
+- id: ai_q44
+  type: multiple_choice
+  prompt: What is GPT (Generative Pre-trained Transformer)?
+  options:
+  - Large language model for generating human-like text
+  - Image recognition model
+  - Clustering algorithm
+  - Database system
+  answer: Large language model for generating human-like text
+- id: ai_q45
+  type: multiple_choice
+  prompt: What is the difference between narrow AI and general AI?
+  options:
+  - Narrow AI performs specific tasks, general AI would match human intelligence
+  - They are the same
+  - Narrow AI is smarter
+  - General AI exists today
+  answer: Narrow AI performs specific tasks, general AI would match human intelligence
+- id: ai_q46
+  type: multiple_choice
+  prompt: Which AI application helps doctors detect diseases?
+  options:
+  - Medical image analysis with computer vision
+  - Chatbots
+  - Recommendation systems
+  - Autonomous vehicles
+  answer: Medical image analysis with computer vision
+- id: ai_q47
+  type: multiple_choice
+  prompt: What is a recommendation system?
+  options:
+  - AI that suggests products or content based on user behavior
+  - Search engine
+  - Operating system
+  - Database query
+  answer: AI that suggests products or content based on user behavior
+- id: ai_q48
+  type: multiple_choice
+  prompt: What technology enables self-driving cars?
+  options:
+  - Computer vision, sensors, deep learning, reinforcement learning
+  - GPS only
+  - Internet connection
+  - Manual programming
+  answer: Computer vision, sensors, deep learning, reinforcement learning
+- id: ai_q49
+  type: multiple_choice
+  prompt: What is sentiment analysis?
+  options:
+  - NLP technique to determine emotional tone of text
+  - Image classification
+  - Data clustering
+  - Network analysis
+  answer: NLP technique to determine emotional tone of text
+- id: ai_q50
+  type: fill_in_blank
+  prompt: Fill in the blank for the test proposed to evaluate machine intelligence.
+  code: |
+    The ___ Test evaluates if a machine can exhibit intelligent behavior indistinguishable from a human.
+  options:
+  - Turing
+  - Watson
+  - Einstein
+  - Newton
+  answer: Turing

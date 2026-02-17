@@ -1,0 +1,531 @@
+id: java_collections_01
+title: Collections Framework
+description: Master ArrayList, HashMap, Set, Queue, and the powerful Collections Framework
+category: java
+questions:
+- id: coll_q1
+  type: multiple_choice
+  prompt: What interface is the root of the Collections hierarchy?
+  options:
+  - List
+  - Set
+  - Collection
+  - Map
+  answer: Collection
+- id: coll_q2
+  type: multiple_choice
+  prompt: Which collection allows duplicate elements?
+  options:
+  - Set
+  - List
+  - TreeSet
+  - HashSet
+  answer: List
+- id: coll_q3
+  type: multiple_choice
+  prompt: Which collection does NOT allow duplicate elements?
+  options:
+  - ArrayList
+  - LinkedList
+  - Set
+  - Vector
+  answer: Set
+- id: coll_q4
+  type: multiple_choice
+  prompt: What is the key difference between ArrayList and LinkedList?
+  options:
+  - ArrayList uses dynamic array, LinkedList uses doubly-linked list
+  - They are the same
+  - ArrayList is slower
+  - LinkedList doesn't allow duplicates
+  answer: ArrayList uses dynamic array, LinkedList uses doubly-linked list
+- id: coll_q5
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    List<String> list = new ArrayList<>();
+    list.add("Hello");
+    list.add("World");
+    System.out.println(list.get(0));
+  options:
+  - World
+  - Hello
+  - Both
+  - error
+  answer: Hello
+- id: coll_q6
+  type: multiple_choice
+  prompt: Which operation is faster in ArrayList?
+  options:
+  - Random access by index
+  - Insertion in the middle
+  - Deletion from the middle
+  - Adding at the beginning
+  answer: Random access by index
+- id: coll_q7
+  type: multiple_choice
+  prompt: Which operation is faster in LinkedList?
+  options:
+  - Random access by index
+  - Insertion/deletion at beginning or end
+  - Sorting
+  - Searching
+  answer: Insertion/deletion at beginning or end
+- id: coll_q8
+  type: parsons
+  prompt: Arrange the code to create and add elements to an ArrayList.
+  blocks:
+  - List<Integer> numbers = new ArrayList<>();
+  - numbers.add(10);
+  - numbers.add(20);
+  - numbers.add(30);
+  - System.out.println(numbers);
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: coll_q9
+  type: multiple_choice
+  prompt: Which class implements both List and Deque interfaces?
+  options:
+  - ArrayList
+  - LinkedList
+  - HashSet
+  - TreeMap
+  answer: LinkedList
+- id: coll_q10
+  type: debugging
+  prompt: What exception will this code throw?
+  code: |
+    List<String> list = new ArrayList<>();
+    list.add("A");
+    System.out.println(list.get(5));
+  options:
+  - IndexOutOfBoundsException
+  - NullPointerException
+  - ArrayIndexOutOfBoundsException
+  - No exception
+  answer: IndexOutOfBoundsException
+- id: coll_q11
+  type: multiple_choice
+  prompt: What does Map store?
+  options:
+  - Key-value pairs
+  - Only keys
+  - Only values
+  - Ordered sequences
+  answer: Key-value pairs
+- id: coll_q12
+  type: multiple_choice
+  prompt: Which Map implementation does NOT allow null keys?
+  options:
+  - HashMap
+  - TreeMap
+  - LinkedHashMap
+  - Hashtable
+  answer: TreeMap
+- id: coll_q13
+  type: multiple_choice
+  prompt: Which Map maintains insertion order?
+  options:
+  - HashMap
+  - TreeMap
+  - LinkedHashMap
+  - ConcurrentHashMap
+  answer: LinkedHashMap
+- id: coll_q14
+  type: multiple_choice
+  prompt: Which Map sorts keys in natural order?
+  options:
+  - HashMap
+  - TreeMap
+  - LinkedHashMap
+  - WeakHashMap
+  answer: TreeMap
+- id: coll_q15
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    Map<String, Integer> map = new HashMap<>();
+    map.put("A", 1);
+    map.put("B", 2);
+    map.put("A", 3);
+    System.out.println(map.get("A"));
+  options:
+  - '1'
+  - '2'
+  - '3'
+  - error
+  answer: '3'
+- id: coll_q16
+  type: parsons
+  prompt: Arrange the code to iterate through a Map.
+  blocks:
+  - Map<String, Integer> map = new HashMap<>();
+  - map.put("X", 10);
+  - map.put("Y", 20);
+  - for (Map.Entry<String, Integer> entry : map.entrySet()) {
+  - '    System.out.println(entry.getKey() + "=" + entry.getValue());'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: coll_q17
+  type: multiple_choice
+  prompt: What method checks if a Map contains a specific key?
+  options:
+  - hasKey()
+  - contains()
+  - containsKey()
+  - keyExists()
+  answer: containsKey()
+- id: coll_q18
+  type: multiple_choice
+  prompt: Which Set implementation maintains no specific order?
+  options:
+  - TreeSet
+  - LinkedHashSet
+  - HashSet
+  - SortedSet
+  answer: HashSet
+- id: coll_q19
+  type: multiple_choice
+  prompt: Which Set implementation maintains sorted order?
+  options:
+  - HashSet
+  - TreeSet
+  - LinkedHashSet
+  - ConcurrentHashSet
+  answer: TreeSet
+- id: coll_q20
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    Set<Integer> set = new HashSet<>();
+    set.add(5);
+    set.add(3);
+    set.add(5);
+    System.out.println(set.size());
+  options:
+  - '1'
+  - '2'
+  - '3'
+  - '0'
+  answer: '2'
+- id: coll_q21
+  type: fill_in_blank
+  prompt: Fill in the blank to add all elements from one collection to another.
+  code: |
+    List<String> list1 = new ArrayList<>();
+    List<String> list2 = new ArrayList<>();
+    list1.___(list2);
+  options:
+  - addAll
+  - insertAll
+  - putAll
+  - addCollection
+  answer: addAll
+- id: coll_q22
+  type: multiple_choice
+  prompt: What interface does Queue extend?
+  options:
+  - List
+  - Collection
+  - Set
+  - Map
+  answer: Collection
+- id: coll_q23
+  type: multiple_choice
+  prompt: Which Queue method adds an element and throws exception if full?
+  options:
+  - add()
+  - offer()
+  - put()
+  - insert()
+  answer: add()
+- id: coll_q24
+  type: multiple_choice
+  prompt: Which Queue method adds an element and returns false if full?
+  options:
+  - add()
+  - offer()
+  - put()
+  - insert()
+  answer: offer()
+- id: coll_q25
+  type: parsons
+  prompt: Arrange the code to use a Queue (FIFO).
+  blocks:
+  - Queue<String> queue = new LinkedList<>();
+  - queue.offer("First");
+  - queue.offer("Second");
+  - System.out.println(queue.poll());
+  - System.out.println(queue.poll());
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: coll_q26
+  type: multiple_choice
+  prompt: What is a PriorityQueue?
+  options:
+  - Queue that orders elements by priority (natural or comparator)
+  - Queue that maintains insertion order
+  - Queue with highest priority at the end
+  - Random access queue
+  answer: Queue that orders elements by priority (natural or comparator)
+- id: coll_q27
+  type: multiple_choice
+  prompt: What data structure does Stack follow?
+  options:
+  - FIFO (First-In-First-Out)
+  - LIFO (Last-In-First-Out)
+  - Random access
+  - Sorted order
+  answer: LIFO (Last-In-First-Out)
+- id: coll_q28
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    Stack<Integer> stack = new Stack<>();
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    System.out.println(stack.pop());
+  options:
+  - '1'
+  - '2'
+  - '3'
+  - error
+  answer: '3'
+- id: coll_q29
+  type: multiple_choice
+  prompt: What does Collections.sort() do?
+  options:
+  - Sorts a list in natural order or using a comparator
+  - Reverses a list
+  - Shuffles a list
+  - Removes duplicates
+  answer: Sorts a list in natural order or using a comparator
+- id: coll_q30
+  type: multiple_choice
+  prompt: What does Collections.reverse() do?
+  options:
+  - Reverses the order of elements in a list
+  - Sorts in reverse order
+  - Deletes all elements
+  - Returns a reversed copy
+  answer: Reverses the order of elements in a list
+- id: coll_q31
+  type: parsons
+  prompt: Arrange the code to sort a list.
+  blocks:
+  - List<Integer> numbers = new ArrayList<>();
+  - numbers.add(3);
+  - numbers.add(1);
+  - numbers.add(2);
+  - Collections.sort(numbers);
+  - System.out.println(numbers);
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: coll_q32
+  type: multiple_choice
+  prompt: What interface is used to iterate through a collection?
+  options:
+  - Iterator
+  - Enumerator
+  - Traverser
+  - Walker
+  answer: Iterator
+- id: coll_q33
+  type: multiple_choice
+  prompt: Which method removes an element during iteration?
+  options:
+  - Iterator.remove()
+  - Iterator.delete()
+  - Collection.remove()
+  - Iterator.erase()
+  answer: Iterator.remove()
+- id: coll_q34
+  type: debugging
+  prompt: What exception will this code throw?
+  code: |
+    List<String> list = new ArrayList<>();
+    list.add("A");
+    for (String s : list) {
+        list.add("B");
+    }
+  options:
+  - ConcurrentModificationException
+  - IllegalStateException
+  - NullPointerException
+  - No exception
+  answer: ConcurrentModificationException
+- id: coll_q35
+  type: multiple_choice
+  prompt: What is the Comparable interface used for?
+  options:
+  - Defining natural ordering of objects
+  - Comparing two collections
+  - Checking equality
+  - Sorting strings only
+  answer: Defining natural ordering of objects
+- id: coll_q36
+  type: multiple_choice
+  prompt: What is the Comparator interface used for?
+  options:
+  - Defining custom ordering separate from natural ordering
+  - Comparing primitives
+  - Iterating collections
+  - Checking null values
+  answer: Defining custom ordering separate from natural ordering
+- id: coll_q37
+  type: multiple_choice
+  prompt: Which method must be implemented in Comparable?
+  options:
+  - compareTo()
+  - compare()
+  - equals()
+  - sort()
+  answer: compareTo()
+- id: coll_q38
+  type: multiple_choice
+  prompt: Which method must be implemented in Comparator?
+  options:
+  - compareTo()
+  - compare()
+  - sort()
+  - order()
+  answer: compare()
+- id: coll_q39
+  type: output_prediction
+  prompt: What does compareTo() return if objects are equal?
+  code: |
+    obj1.compareTo(obj2)
+  options:
+  - '-1'
+  - '0'
+  - '1'
+  - 'true'
+  answer: '0'
+- id: coll_q40
+  type: faded_parsons
+  prompt: Complete the Comparator to sort strings by length. The interface is fixed.
+  blocks:
+  - Comparator<String> byLength = new Comparator<String>() {
+  - '    public int compare(String s1, String s2) {'
+  - '        return s1.length() - s2.length();'
+  - '    }'
+  - '};'
+  fixed_indices:
+  - 0
+  - 4
+  answer:
+  - 1
+  - 2
+  - 3
+- id: coll_q41
+  type: multiple_choice
+  prompt: What does Collections.binarySearch() require?
+  options:
+  - A sorted list
+  - A map
+  - An unsorted list
+  - A set
+  answer: A sorted list
+- id: coll_q42
+  type: multiple_choice
+  prompt: What does Collections.frequency() return?
+  options:
+  - Number of times an element appears in a collection
+  - The most common element
+  - The collection size
+  - The element at given index
+  answer: Number of times an element appears in a collection
+- id: coll_q43
+  type: multiple_choice
+  prompt: What does Collections.shuffle() do?
+  options:
+  - Randomly reorders elements in a list
+  - Sorts randomly
+  - Removes elements
+  - Adds random elements
+  answer: Randomly reorders elements in a list
+- id: coll_q44
+  type: multiple_choice
+  prompt: What does Collections.unmodifiableList() return?
+  options:
+  - A read-only view of the list
+  - A sorted list
+  - A copy of the list
+  - An empty list
+  answer: A read-only view of the list
+- id: coll_q45
+  type: multiple_choice
+  prompt: What is the difference between remove() and clear()?
+  options:
+  - remove() deletes one element, clear() deletes all
+  - They are the same
+  - remove() is faster
+  - clear() requires an index
+  answer: remove() deletes one element, clear() deletes all
+- id: coll_q46
+  type: multiple_choice
+  prompt: Which collection is thread-safe?
+  options:
+  - ArrayList
+  - Vector
+  - HashMap
+  - HashSet
+  answer: Vector
+- id: coll_q47
+  type: multiple_choice
+  prompt: What is the modern thread-safe alternative to Vector?
+  options:
+  - ArrayList
+  - CopyOnWriteArrayList
+  - LinkedList
+  - Stack
+  answer: CopyOnWriteArrayList
+- id: coll_q48
+  type: fill_in_blank
+  prompt: Fill in the blank to create an immutable list.
+  code: |
+    List<String> list = List.___("A", "B", "C");
+  options:
+  - create
+  - of
+  - make
+  - from
+  answer: of
+- id: coll_q49
+  type: multiple_choice
+  prompt: What happens if you try to add to an immutable collection?
+  options:
+  - UnsupportedOperationException is thrown
+  - Element is added successfully
+  - Returns false
+  - Creates a new collection
+  answer: UnsupportedOperationException is thrown
+- id: coll_q50
+  type: multiple_choice
+  prompt: When should you use ArrayList vs LinkedList?
+  options:
+  - ArrayList for random access, LinkedList for frequent insertions/deletions
+  - LinkedList is always better
+  - ArrayList only for strings
+  - They perform exactly the same
+  answer: ArrayList for random access, LinkedList for frequent insertions/deletions

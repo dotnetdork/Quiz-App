@@ -1,6 +1,6 @@
-id: types_and_logic_01
+id: types_logic
 title: Types and Logic
-description: Test your knowledge of Python data types, operators, string operations, and conditional logic
+description: Explore Python's data types, operators, string manipulation, and conditional statements to build logical programs
 category: python
 questions:
 - id: types_q1

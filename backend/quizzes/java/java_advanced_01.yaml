@@ -1,0 +1,505 @@
+id: java_advanced_01
+title: Advanced Programming
+description: Explore lambdas, streams, file I/O, concurrency, and modern Java features
+category: java
+questions:
+- id: adv_q1
+  type: multiple_choice
+  prompt: What is a lambda expression?
+  options:
+  - Anonymous function with concise syntax
+  - A class
+  - A variable
+  - A loop
+  answer: Anonymous function with concise syntax
+- id: adv_q2
+  type: multiple_choice
+  prompt: What is a functional interface?
+  options:
+  - Interface with exactly one abstract method
+  - Interface with many methods
+  - Abstract class
+  - Concrete class
+  answer: Interface with exactly one abstract method
+- id: adv_q3
+  type: output_prediction
+  prompt: What will this lambda expression output?
+  code: |
+    Runnable r = () -> System.out.println("Hello");
+    r.run();
+  options:
+  - Hello
+  - error
+  - nothing
+  - null
+  answer: Hello
+- id: adv_q4
+  type: parsons
+  prompt: Arrange the code to create a lambda expression that adds two numbers.
+  blocks:
+  - interface Calculator {
+  - '    int add(int a, int b);'
+  - '}'
+  - Calculator calc = (a, b) -> a + b;
+  - System.out.println(calc.add(5, 3));
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: adv_q5
+  type: multiple_choice
+  prompt: Which annotation marks a functional interface?
+  options:
+  - '@FunctionalInterface'
+  - '@Lambda'
+  - '@Function'
+  - '@Interface'
+  answer: '@FunctionalInterface'
+- id: adv_q6
+  type: multiple_choice
+  prompt: What is the Streams API used for?
+  options:
+  - Functional-style operations on collections
+  - File I/O
+  - Network connections
+  - Threading
+  answer: Functional-style operations on collections
+- id: adv_q7
+  type: multiple_choice
+  prompt: Which method creates a stream from a collection?
+  options:
+  - stream()
+  - toStream()
+  - getStream()
+  - createStream()
+  answer: stream()
+- id: adv_q8
+  type: output_prediction
+  prompt: What will this stream operation output?
+  code: |
+    List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
+    long count = numbers.stream()
+                        .filter(n -> n > 2)
+                        .count();
+    System.out.println(count);
+  options:
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  answer: '2'
+- id: adv_q9
+  type: multiple_choice
+  prompt: What does the map() operation do in streams?
+  options:
+  - Transforms each element using a function
+  - Filters elements
+  - Sorts elements
+  - Counts elements
+  answer: Transforms each element using a function
+- id: adv_q10
+  type: multiple_choice
+  prompt: What does the filter() operation do in streams?
+  options:
+  - Keeps only elements that match a predicate
+  - Transforms elements
+  - Sorts elements
+  - Removes all elements
+  answer: Keeps only elements that match a predicate
+- id: adv_q11
+  type: parsons
+  prompt: Arrange the code to filter and print even numbers from a list using streams.
+  blocks:
+  - List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+  - numbers.stream()
+  - '       .filter(n -> n % 2 == 0)'
+  - '       .forEach(System.out::println);'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: adv_q12
+  type: multiple_choice
+  prompt: What is a terminal operation in streams?
+  options:
+  - Operation that produces a result or side-effect and closes the stream
+  - Operation that creates a stream
+  - Operation that transforms elements
+  - Operation that filters elements
+  answer: Operation that produces a result or side-effect and closes the stream
+- id: adv_q13
+  type: multiple_choice
+  prompt: Which is a terminal operation?
+  options:
+  - filter()
+  - map()
+  - collect()
+  - sorted()
+  answer: collect()
+- id: adv_q14
+  type: multiple_choice
+  prompt: What does collect() do in streams?
+  options:
+  - Accumulates stream elements into a collection or value
+  - Creates a stream
+  - Filters elements
+  - Sorts elements
+  answer: Accumulates stream elements into a collection or value
+- id: adv_q15
+  type: output_prediction
+  prompt: What will this stream operation output?
+  code: |
+    List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
+    List<String> result = names.stream()
+                               .map(String::toUpperCase)
+                               .collect(Collectors.toList());
+    System.out.println(result.get(0));
+  options:
+  - Alice
+  - ALICE
+  - alice
+  - error
+  answer: ALICE
+- id: adv_q16
+  type: multiple_choice
+  prompt: What is Optional used for?
+  options:
+  - Container that may or may not contain a value (prevents null)
+  - Required values
+  - Collections
+  - Streams
+  answer: Container that may or may not contain a value (prevents null)
+- id: adv_q17
+  type: multiple_choice
+  prompt: How do you create an empty Optional?
+  options:
+  - Optional.empty()
+  - Optional.null()
+  - new Optional()
+  - Optional.none()
+  answer: Optional.empty()
+- id: adv_q18
+  type: multiple_choice
+  prompt: How do you create an Optional with a value?
+  options:
+  - Optional.of(value)
+  - Optional.create(value)
+  - new Optional(value)
+  - Optional.make(value)
+  answer: Optional.of(value)
+- id: adv_q19
+  type: multiple_choice
+  prompt: What method checks if an Optional has a value?
+  options:
+  - isPresent()
+  - hasValue()
+  - exists()
+  - contains()
+  answer: isPresent()
+- id: adv_q20
+  type: debugging
+  prompt: What exception can this code throw?
+  code: |
+    Optional<String> opt = Optional.empty();
+    String value = opt.get();
+  options:
+  - NoSuchElementException
+  - NullPointerException
+  - IllegalStateException
+  - No exception
+  answer: NoSuchElementException
+- id: adv_q21
+  type: fill_in_blank
+  prompt: Fill in the blank to get Optional value or provide a default.
+  code: |
+    Optional<String> opt = Optional.empty();
+    String value = opt.___("default");
+  options:
+  - orElse
+  - getOrElse
+  - getDefault
+  - defaultValue
+  answer: orElse
+- id: adv_q22
+  type: multiple_choice
+  prompt: What package handles file I/O in modern Java?
+  options:
+  - java.io and java.nio
+  - java.file
+  - java.stream
+  - java.disk
+  answer: java.io and java.nio
+- id: adv_q23
+  type: multiple_choice
+  prompt: Which class is used to read text files line by line?
+  options:
+  - BufferedReader
+  - FileInputStream
+  - Scanner
+  - All of the above
+  answer: All of the above
+- id: adv_q24
+  type: parsons
+  prompt: Arrange the code to read a file using BufferedReader.
+  blocks:
+  - try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+  - '    String line;'
+  - '    while ((line = br.readLine()) != null) {'
+  - '        System.out.println(line);'
+  - '    }'
+  - '} catch (IOException e) { e.printStackTrace(); }'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: adv_q25
+  type: multiple_choice
+  prompt: What is try-with-resources?
+  options:
+  - Automatic resource management that closes resources after try block
+  - A way to catch multiple exceptions
+  - A method for file access
+  - A threading mechanism
+  answer: Automatic resource management that closes resources after try block
+- id: adv_q26
+  type: multiple_choice
+  prompt: What interface must a resource implement for try-with-resources?
+  options:
+  - AutoCloseable or Closeable
+  - Disposable
+  - Resource
+  - Managed
+  answer: AutoCloseable or Closeable
+- id: adv_q27
+  type: multiple_choice
+  prompt: What is serialization?
+  options:
+  - Converting object to byte stream for storage or transmission
+  - Converting string to integer
+  - Sorting objects
+  - Threading
+  answer: Converting object to byte stream for storage or transmission
+- id: adv_q28
+  type: multiple_choice
+  prompt: What interface must a class implement to be serializable?
+  options:
+  - Serializable
+  - Saveable
+  - Streamable
+  - Persistable
+  answer: Serializable
+- id: adv_q29
+  type: multiple_choice
+  prompt: What keyword prevents a field from being serialized?
+  options:
+  - transient
+  - volatile
+  - final
+  - static
+  answer: transient
+- id: adv_q30
+  type: multiple_choice
+  prompt: What is a thread?
+  options:
+  - Independent path of execution within a program
+  - A class
+  - A method
+  - A variable
+  answer: Independent path of execution within a program
+- id: adv_q31
+  type: multiple_choice
+  prompt: Which two ways can you create a thread in Java?
+  options:
+  - Extend Thread class or implement Runnable interface
+  - Extend Runnable or implement Thread
+  - Use new Thread() only
+  - Use ExecutorService only
+  answer: Extend Thread class or implement Runnable interface
+- id: adv_q32
+  type: parsons
+  prompt: Arrange the code to create and start a thread using Runnable.
+  blocks:
+  - Runnable task = () -> System.out.println("Running in thread");
+  - Thread thread = new Thread(task);
+  - thread.start();
+  answer:
+  - 0
+  - 1
+  - 2
+- id: adv_q33
+  type: multiple_choice
+  prompt: What method starts a thread?
+  options:
+  - start()
+  - run()
+  - begin()
+  - execute()
+  answer: start()
+- id: adv_q34
+  type: debugging
+  prompt: What happens if you call run() instead of start() on a thread?
+  code: |
+    Thread t = new Thread(() -> System.out.println("Thread"));
+    t.run();
+  options:
+  - Code executes in the current thread, not a new thread
+  - Creates a new thread
+  - Throws an exception
+  - Does nothing
+  answer: Code executes in the current thread, not a new thread
+- id: adv_q35
+  type: multiple_choice
+  prompt: What keyword makes a method thread-safe?
+  options:
+  - synchronized
+  - atomic
+  - safe
+  - locked
+  answer: synchronized
+- id: adv_q36
+  type: multiple_choice
+  prompt: What is a deadlock?
+  options:
+  - Two or more threads waiting for each other to release locks
+  - Thread that stops running
+  - Thread that runs too fast
+  - Normal thread completion
+  answer: Two or more threads waiting for each other to release locks
+- id: adv_q37
+  type: multiple_choice
+  prompt: What package provides high-level concurrency utilities?
+  options:
+  - java.util.concurrent
+  - java.thread
+  - java.concurrency
+  - java.parallel
+  answer: java.util.concurrent
+- id: adv_q38
+  type: multiple_choice
+  prompt: What is ExecutorService used for?
+  options:
+  - Managing thread pools and async tasks
+  - File I/O
+  - Serialization
+  - Networking
+  answer: Managing thread pools and async tasks
+- id: adv_q39
+  type: multiple_choice
+  prompt: What are annotations?
+  options:
+  - Metadata added to code elements
+  - Comments
+  - Variables
+  - Methods
+  answer: Metadata added to code elements
+- id: adv_q40
+  type: fill_in_blank
+  prompt: Fill in the blank for the annotation that marks a method as overriding a parent method.
+  code: |
+    ___
+    public void display() {
+    }
+  options:
+  - '@Override'
+  - '@Overridden'
+  - '@Inherit'
+  - '@Parent'
+  answer: '@Override'
+- id: adv_q41
+  type: multiple_choice
+  prompt: What annotation marks deprecated methods?
+  options:
+  - '@Deprecated'
+  - '@Old'
+  - '@Legacy'
+  - '@Obsolete'
+  answer: '@Deprecated'
+- id: adv_q42
+  type: multiple_choice
+  prompt: What annotation suppresses compiler warnings?
+  options:
+  - '@SuppressWarnings'
+  - '@Ignore'
+  - '@NoWarn'
+  - '@Silent'
+  answer: '@SuppressWarnings'
+- id: adv_q43
+  type: multiple_choice
+  prompt: What is reflection?
+  options:
+  - Ability to inspect and modify classes, methods, fields at runtime
+  - Thread synchronization
+  - File access
+  - Serialization
+  answer: Ability to inspect and modify classes, methods, fields at runtime
+- id: adv_q44
+  type: multiple_choice
+  prompt: What method gets a Class object for a class?
+  options:
+  - Class.forName("ClassName")
+  - getClass()
+  - ClassName.class
+  - All of the above
+  answer: All of the above
+- id: adv_q45
+  type: multiple_choice
+  prompt: What is a method reference?
+  options:
+  - Shorthand for lambda that calls an existing method
+  - Method pointer
+  - Method variable
+  - Method copy
+  answer: Shorthand for lambda that calls an existing method
+- id: adv_q46
+  type: output_prediction
+  prompt: What is this method reference equivalent to?
+  code: |
+    System.out::println
+  options:
+  - x -> System.out.println(x)
+  - System.out.println()
+  - println(System.out)
+  - error
+  answer: x -> System.out.println(x)
+- id: adv_q47
+  type: multiple_choice
+  prompt: What are default methods in interfaces?
+  options:
+  - Methods with implementation in interfaces (Java 8+)
+  - Abstract methods
+  - Static methods
+  - Private methods
+  answer: Methods with implementation in interfaces (Java 8+)
+- id: adv_q48
+  type: multiple_choice
+  prompt: What keyword defines a default method in an interface?
+  options:
+  - default
+  - public
+  - concrete
+  - implemented
+  answer: default
+- id: adv_q49
+  type: multiple_choice
+  prompt: What is the modern Java Date/Time API?
+  options:
+  - java.time (LocalDate, LocalTime, LocalDateTime, etc.)
+  - java.util.Date
+  - java.sql.Date
+  - java.calendar
+  answer: java.time (LocalDate, LocalTime, LocalDateTime, etc.)
+- id: adv_q50
+  type: multiple_choice
+  prompt: What is the benefit of LocalDateTime over Date?
+  options:
+  - Immutable, thread-safe, clearer API
+  - Faster
+  - Smaller memory footprint
+  - No difference
+  answer: Immutable, thread-safe, clearer API

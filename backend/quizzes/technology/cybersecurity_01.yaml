@@ -1,6 +1,6 @@
 id: cybersecurity_01
 title: Cybersecurity Fundamentals
-description: Learn about protecting systems, networks, and data
+description: Learn essential security practices to protect systems, networks, and data from cyber threats and vulnerabilities
 category: technology
 questions:
 - id: cyber_q1
@@ -153,3 +153,351 @@ questions:
   - Using a larger monitor
   - Sharing passwords
   answer: Regular Backups
+- id: cyber_q16
+  type: multiple_choice
+  prompt: What is a VPN?
+  options:
+  - Virtual Private Network
+  - Very Private Network
+  - Verified Personal Network
+  - Virtual Public Network
+  answer: Virtual Private Network
+- id: cyber_q17
+  type: multiple_choice
+  prompt: What does a VPN do?
+  options:
+  - Creates a secure encrypted connection over the internet
+  - Speeds up internet connection
+  - Blocks all malware
+  - Increases hard drive space
+  answer: Creates a secure encrypted connection over the internet
+- id: cyber_q18
+  type: multiple_choice
+  prompt: What is two-factor authentication (2FA)?
+  options:
+  - Requiring two forms of identification to verify identity
+  - Using two passwords
+  - Logging in twice
+  - Having two accounts
+  answer: Requiring two forms of identification to verify identity
+- id: cyber_q19
+  type: multiple_choice
+  prompt: Which is an example of two-factor authentication?
+  options:
+  - Password + fingerprint
+  - Two passwords
+  - Two usernames
+  - Two devices
+  answer: Password + fingerprint
+- id: cyber_q20
+  type: multiple_choice
+  prompt: What is social engineering?
+  options:
+  - Manipulating people to divulge confidential information
+  - Building social networks
+  - Engineering software
+  - Designing user interfaces
+  answer: Manipulating people to divulge confidential information
+- id: cyber_q21
+  type: multiple_choice
+  prompt: What is a Man-in-the-Middle (MITM) attack?
+  options:
+  - Intercepting communication between two parties
+  - Attacking the middle server
+  - Sending spam emails
+  - Blocking websites
+  answer: Intercepting communication between two parties
+- id: cyber_q22
+  type: parsons
+  prompt: Arrange these security practices from weakest to strongest.
+  blocks:
+  - Single password
+  - Strong password
+  - Strong password + 2FA
+  - Strong password + 2FA + Biometrics
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: cyber_q23
+  type: multiple_choice
+  prompt: What is a zero-day exploit?
+  options:
+  - An attack exploiting a vulnerability before it's patched
+  - An attack that takes zero days to execute
+  - A patch released immediately
+  - An outdated security threat
+  answer: An attack exploiting a vulnerability before it's patched
+- id: cyber_q24
+  type: multiple_choice
+  prompt: What is patch management?
+  options:
+  - Regularly updating software to fix vulnerabilities
+  - Fixing torn clothes
+  - Managing network cables
+  - Organizing files
+  answer: Regularly updating software to fix vulnerabilities
+- id: cyber_q25
+  type: debugging
+  prompt: What is wrong with this password policy?
+  code: |
+    Password must be:
+    - At least 4 characters
+    - No special characters required
+    - Never expires
+  options:
+  - Too weak (short length, no complexity, no rotation)
+  - Too strict
+  - Perfect policy
+  - Only the length is wrong
+  answer: Too weak (short length, no complexity, no rotation)
+- id: cyber_q26
+  type: multiple_choice
+  prompt: What is an Intrusion Detection System (IDS)?
+  options:
+  - Monitors network traffic for suspicious activity
+  - Prevents all intrusions automatically
+  - A type of antivirus
+  - A firewall replacement
+  answer: Monitors network traffic for suspicious activity
+- id: cyber_q27
+  type: multiple_choice
+  prompt: What is the principle of least privilege?
+  options:
+  - Users should have only the minimum access necessary
+  - All users should have admin access
+  - Privileges should be shared equally
+  - No privileges for anyone
+  answer: Users should have only the minimum access necessary
+- id: cyber_q28
+  type: multiple_choice
+  prompt: What is defense in depth?
+  options:
+  - Multiple layers of security controls
+  - A single strong firewall
+  - Deep packet inspection only
+  - Encrypting once
+  answer: Multiple layers of security controls
+- id: cyber_q29
+  type: parsons
+  prompt: Arrange the layers of defense in depth from outermost to innermost.
+  blocks:
+  - Firewall
+  - Intrusion Detection
+  - Antivirus/Endpoint Protection
+  - Data Encryption
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: cyber_q30
+  type: multiple_choice
+  prompt: What is penetration testing?
+  options:
+  - Authorized simulated cyberattack to find vulnerabilities
+  - Illegal hacking
+  - Installing antivirus
+  - Backing up data
+  answer: Authorized simulated cyberattack to find vulnerabilities
+- id: cyber_q31
+  type: multiple_choice
+  prompt: What is a vulnerability scan?
+  options:
+  - Automated checking for known security weaknesses
+  - Manual code review
+  - Network speed test
+  - Hard drive diagnostic
+  answer: Automated checking for known security weaknesses
+- id: cyber_q32
+  type: multiple_choice
+  prompt: What is hashing?
+  options:
+  - Converting data into a fixed-size unique string
+  - Encrypting with a key
+  - Compressing files
+  - Deleting data
+  answer: Converting data into a fixed-size unique string
+- id: cyber_q33
+  type: multiple_choice
+  prompt: What is salting in password security?
+  options:
+  - Adding random data before hashing
+  - Making passwords taste better
+  - Using special characters
+  - Encrypting passwords
+  answer: Adding random data before hashing
+- id: cyber_q34
+  type: output_prediction
+  prompt: If the same password is hashed with different salts, what happens?
+  code: |
+    password: "abc123"
+    hash1 = hash("abc123" + salt1)
+    hash2 = hash("abc123" + salt2)
+  options:
+  - hash1 equals hash2
+  - hash1 does not equal hash2
+  - Error occurs
+  - Both are "abc123"
+  answer: hash1 does not equal hash2
+- id: cyber_q35
+  type: multiple_choice
+  prompt: What is the difference between authentication and authorization?
+  options:
+  - Authentication verifies identity, authorization grants permissions
+  - They are the same
+  - Authorization comes first
+  - Authentication is for networks only
+  answer: Authentication verifies identity, authorization grants permissions
+- id: cyber_q36
+  type: multiple_choice
+  prompt: What is a digital certificate?
+  options:
+  - Electronic document proving identity or authenticity
+  - A type of password
+  - An antivirus program
+  - A backup file
+  answer: Electronic document proving identity or authenticity
+- id: cyber_q37
+  type: multiple_choice
+  prompt: What is Public Key Infrastructure (PKI)?
+  options:
+  - System for creating and managing digital certificates
+  - A type of firewall
+  - A programming language
+  - A network protocol
+  answer: System for creating and managing digital certificates
+- id: cyber_q38
+  type: fill_in_blank
+  prompt: Fill in the blank for the encryption type where the same key is used for encryption and decryption.
+  code: |
+    ___ encryption uses the same key
+  options:
+  - Asymmetric
+  - Symmetric
+  - Public
+  - Private
+  answer: Symmetric
+- id: cyber_q39
+  type: multiple_choice
+  prompt: What type of encryption uses public and private key pairs?
+  options:
+  - Asymmetric encryption
+  - Symmetric encryption
+  - Hash encryption
+  - No encryption
+  answer: Asymmetric encryption
+- id: cyber_q40
+  type: multiple_choice
+  prompt: What is HTTPS?
+  options:
+  - HTTP with encryption (SSL/TLS)
+  - A faster version of HTTP
+  - HTTP for images only
+  - A type of firewall
+  answer: HTTP with encryption (SSL/TLS)
+- id: cyber_q41
+  type: debugging
+  prompt: What security risk does this website connection have?
+  code: |
+    http://www.bank-login.com
+    (no lock icon in browser)
+  options:
+  - Unencrypted connection (data can be intercepted)
+  - Too slow
+  - Wrong domain
+  - Missing favicon
+  answer: Unencrypted connection (data can be intercepted)
+- id: cyber_q42
+  type: multiple_choice
+  prompt: What is a Security Information and Event Management (SIEM) system?
+  options:
+  - Collects and analyzes security data from multiple sources
+  - A type of firewall
+  - An antivirus program
+  - A backup system
+  answer: Collects and analyzes security data from multiple sources
+- id: cyber_q43
+  type: multiple_choice
+  prompt: What is an incident response plan?
+  options:
+  - Documented procedures for handling security breaches
+  - A firewall configuration
+  - A backup schedule
+  - A training program
+  answer: Documented procedures for handling security breaches
+- id: cyber_q44
+  type: parsons
+  prompt: Arrange the incident response phases in order.
+  blocks:
+  - Preparation
+  - Detection and Analysis
+  - Containment, Eradication, Recovery
+  - Post-Incident Activity
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: cyber_q45
+  type: multiple_choice
+  prompt: What is wireless security protocol WPA3?
+  options:
+  - Latest Wi-Fi security standard
+  - A web protocol
+  - A password manager
+  - A type of encryption
+  answer: Latest Wi-Fi security standard
+- id: cyber_q46
+  type: multiple_choice
+  prompt: What is a data breach?
+  options:
+  - Unauthorized access to confidential data
+  - Deleting files
+  - Slow internet
+  - Hardware failure
+  answer: Unauthorized access to confidential data
+- id: cyber_q47
+  type: multiple_choice
+  prompt: What does GDPR regulate?
+  options:
+  - Data protection and privacy in the EU
+  - Network speeds
+  - Software development
+  - Hardware manufacturing
+  answer: Data protection and privacy in the EU
+- id: cyber_q48
+  type: multiple_choice
+  prompt: What is security awareness training?
+  options:
+  - Educating employees about security threats and best practices
+  - Installing security software
+  - Monitoring networks
+  - Configuring firewalls
+  answer: Educating employees about security threats and best practices
+- id: cyber_q49
+  type: faded_parsons
+  prompt: Complete the secure password creation guidelines. The title is fixed.
+  blocks:
+  - 'Password Guidelines:'
+  - '- At least 12 characters long'
+  - '- Mix of uppercase, lowercase, numbers, symbols'
+  - '- No dictionary words or personal info'
+  - '- Unique for each account'
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+  - 3
+  - 4
+- id: cyber_q50
+  type: multiple_choice
+  prompt: What is the primary purpose of a honeypot in cybersecurity?
+  options:
+  - To attract and study attackers
+  - To sweeten passwords
+  - To slow down networks
+  - To store backups
+  answer: To attract and study attackers

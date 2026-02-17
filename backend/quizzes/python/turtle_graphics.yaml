@@ -1,6 +1,6 @@
-id: turtles_module_01
-title: Turtles
-description: Test your knowledge of Python turtle graphics, including basic commands, loops, functions, and creative patterns
+id: turtle_graphics
+title: Turtle Graphics
+description: Drawing commands, colors, loops, and functions for creating patterns with Python's turtle graphics module
 category: python
 questions:
 - id: turtle_q1

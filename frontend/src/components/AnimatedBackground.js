@@ -64,6 +64,15 @@ const AnimatedBackground = ({ theme = 'default' }) => {
         case 'particles':
           initParticles(count);
           break;
+        case 'dataflow':
+          initDataflow(count);
+          break;
+        case 'lambda':
+          initLambda(count);
+          break;
+        case 'neural':
+          initNeural(count);
+          break;
         default:
           initDefault(count);
       }
@@ -263,6 +272,59 @@ const AnimatedBackground = ({ theme = 'default' }) => {
       }
     };
 
+    // Theme: Data Flow - flowing data structures for Collections
+    const initDataflow = (count) => {
+      for (let i = 0; i < count; i++) {
+        const types = ['bracket', 'arrow', 'box'];
+        elements.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          type: types[Math.floor(Math.random() * types.length)],
+          symbol: Math.random() < 0.5 ? '{' : '}',
+          size: Math.random() * 20 + 15,
+          speed: (Math.random() * 0.15 + 0.05),
+          color: ['#2196f3', '#4caf50', '#ff9800'][Math.floor(Math.random() * 3)],
+          opacity: Math.random() * 0.12 + 0.05,
+          rotation: 0,
+          wobblePhase: Math.random() * Math.PI * 2
+        });
+      }
+    };
+
+    // Theme: Lambda Streams - flowing lambda symbols for Advanced Java
+    const initLambda = (count) => {
+      for (let i = 0; i < count; i++) {
+        elements.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 25 + 15,
+          speed: (Math.random() * 0.1 + 0.05),
+          color: ['#ff5722', '#ff7043', '#e64a19'][Math.floor(Math.random() * 3)],
+          opacity: Math.random() * 0.15 + 0.05,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.002
+        });
+      }
+    };
+
+    // Theme: Neural Network - nodes and connections for AI
+    const initNeural = (count) => {
+      const nodeCount = Math.min(count, 25);
+      
+      for (let i = 0; i < nodeCount; i++) {
+        elements.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 6 + 4,
+          color: ['#9c27b0', '#673ab7', '#3f51b5', '#2196f3'][Math.floor(Math.random() * 4)],
+          opacity: 0.2,
+          pulsePhase: Math.random() * Math.PI * 2,
+          speedX: (Math.random() - 0.5) * 0.15,
+          speedY: (Math.random() - 0.5) * 0.15
+        });
+      }
+    };
+
     // Default theme
     const initDefault = (count) => {
       for (let i = 0; i < count; i++) {
@@ -425,6 +487,15 @@ const AnimatedBackground = ({ theme = 'default' }) => {
           break;
         case 'particles':
           animateParticles();
+          break;
+        case 'dataflow':
+          animateDataflow();
+          break;
+        case 'lambda':
+          animateLambda();
+          break;
+        case 'neural':
+          animateNeural();
           break;
         default:
           animateDefault();
@@ -902,6 +973,115 @@ const AnimatedBackground = ({ theme = 'default' }) => {
       }
       ctx.closePath();
       ctx.fill();
+    };
+
+    // Animate Data Flow theme - subtle falling brackets and arrows
+    const animateDataflow = () => {
+      elements.forEach((el) => {
+        el.y += el.speed;
+        el.wobblePhase += 0.01;
+        
+        const wobbleX = Math.sin(el.wobblePhase) * 10;
+        
+        if (el.y > canvas.height + el.size) {
+          el.y = -el.size;
+          el.x = Math.random() * canvas.width;
+        }
+        
+        ctx.globalAlpha = el.opacity;
+        ctx.fillStyle = el.color;
+        ctx.strokeStyle = el.color;
+        ctx.lineWidth = 1.5;
+        
+        const x = el.x + wobbleX;
+        const y = el.y;
+        
+        if (el.type === 'bracket') {
+          ctx.font = `${el.size}px monospace`;
+          ctx.fillText(el.symbol, x, y);
+        } else if (el.type === 'arrow') {
+          ctx.beginPath();
+          ctx.moveTo(x - el.size/2, y);
+          ctx.lineTo(x + el.size/2, y);
+          ctx.moveTo(x + el.size/3, y - el.size/4);
+          ctx.lineTo(x + el.size/2, y);
+          ctx.lineTo(x + el.size/3, y + el.size/4);
+          ctx.stroke();
+        } else {
+          ctx.strokeRect(x - el.size/3, y - el.size/4, el.size/1.5, el.size/2);
+        }
+      });
+      ctx.globalAlpha = 1;
+    };
+
+    // Animate Lambda theme - gentle floating lambda symbols
+    const animateLambda = () => {
+      elements.forEach((el) => {
+        el.y += el.speed;
+        el.rotation += el.rotationSpeed;
+        
+        if (el.y > canvas.height + el.size) {
+          el.y = -el.size;
+          el.x = Math.random() * canvas.width;
+        }
+        
+        ctx.globalAlpha = el.opacity;
+        ctx.fillStyle = el.color;
+        ctx.font = `bold ${el.size}px serif`;
+        ctx.save();
+        ctx.translate(el.x, el.y);
+        ctx.rotate(el.rotation);
+        ctx.fillText('λ', -el.size/3, el.size/3);
+        ctx.restore();
+      });
+      ctx.globalAlpha = 1;
+    };
+
+    // Animate Neural theme - floating nodes with subtle connections
+    const animateNeural = () => {
+      // Move nodes slowly
+      elements.forEach((el) => {
+        el.x += el.speedX;
+        el.y += el.speedY;
+        el.pulsePhase += 0.02;
+        
+        // Bounce off edges
+        if (el.x < 0 || el.x > canvas.width) el.speedX *= -1;
+        if (el.y < 0 || el.y > canvas.height) el.speedY *= -1;
+      });
+      
+      // Draw connections between nearby nodes
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 0.5;
+      
+      for (let i = 0; i < elements.length; i++) {
+        for (let j = i + 1; j < elements.length; j++) {
+          const dx = elements[i].x - elements[j].x;
+          const dy = elements[i].y - elements[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 150) {
+            ctx.globalAlpha = (1 - dist / 150) * 0.15;
+            ctx.beginPath();
+            ctx.moveTo(elements[i].x, elements[i].y);
+            ctx.lineTo(elements[j].x, elements[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      
+      // Draw nodes
+      elements.forEach((el) => {
+        const pulse = Math.sin(el.pulsePhase) * 0.5 + 0.5;
+        
+        ctx.globalAlpha = el.opacity + pulse * 0.05;
+        ctx.fillStyle = el.color;
+        ctx.beginPath();
+        ctx.arc(el.x, el.y, el.size + pulse, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      
+      ctx.globalAlpha = 1;
     };
 
     const animateDefault = () => {

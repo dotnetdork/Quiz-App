@@ -1,6 +1,6 @@
 id: robotics_01
 title: Robotics Fundamentals
-description: Sensors, actuators, and control logic
+description: Discover how robots sense their environment and interact with the physical world through sensors and actuators
 category: technology
 questions:
 - id: robo_q1
@@ -160,3 +160,355 @@ questions:
   - Energy Saver
   - Engine Stall
   answer: Emergency Stop button
+- id: robo_q16
+  type: multiple_choice
+  prompt: What does PWM stand for?
+  options:
+  - Power Wave Modulation
+  - Pulse Width Modulation
+  - Program Wave Module
+  - Powered Wire Management
+  answer: Pulse Width Modulation
+- id: robo_q17
+  type: multiple_choice
+  prompt: What is PWM commonly used for in robotics?
+  options:
+  - Controlling motor speed and LED brightness
+  - Storing data
+  - Reading sensors
+  - Network communication
+  answer: Controlling motor speed and LED brightness
+- id: robo_q18
+  type: output_prediction
+  prompt: If a PWM signal has 50% duty cycle, what percentage of time is it ON?
+  code: |
+    Duty Cycle: 50%
+  options:
+  - 25%
+  - 50%
+  - 75%
+  - 100%
+  answer: 50%
+- id: robo_q19
+  type: multiple_choice
+  prompt: What is an encoder used for?
+  options:
+  - Measuring position or speed of rotation
+  - Providing power
+  - Processing data
+  - Wireless communication
+  answer: Measuring position or speed of rotation
+- id: robo_q20
+  type: multiple_choice
+  prompt: What is PID control?
+  options:
+  - Proportional-Integral-Derivative control algorithm
+  - Power Input Device
+  - Program Identification
+  - Process Integration Design
+  answer: Proportional-Integral-Derivative control algorithm
+- id: robo_q21
+  type: parsons
+  prompt: Arrange the PID components in order of their typical impact speed.
+  blocks:
+  - Proportional (P) - Immediate response
+  - Derivative (D) - Anticipates future error
+  - Integral (I) - Eliminates steady-state error
+  answer:
+  - 0
+  - 1
+  - 2
+- id: robo_q22
+  type: multiple_choice
+  prompt: What is a servo motor?
+  options:
+  - A motor with built-in position control
+  - A sensor
+  - A battery type
+  - A programming language
+  answer: A motor with built-in position control
+- id: robo_q23
+  type: multiple_choice
+  prompt: What is an end effector?
+  options:
+  - The tool or device at the end of a robotic arm
+  - The robot's power supply
+  - The main controller
+  - The base of the robot
+  answer: The tool or device at the end of a robotic arm
+- id: robo_q24
+  type: multiple_choice
+  prompt: What is kinematics in robotics?
+  options:
+  - The study of motion without considering forces
+  - The study of power systems
+  - The study of sensors
+  - The study of materials
+  answer: The study of motion without considering forces
+- id: robo_q25
+  type: multiple_choice
+  prompt: What are degrees of freedom (DOF) in robotics?
+  options:
+  - The number of independent ways a robot can move
+  - The temperature range
+  - The programming complexity
+  - The power levels
+  answer: The number of independent ways a robot can move
+- id: robo_q26
+  type: output_prediction
+  prompt: How many degrees of freedom does a standard 6-axis industrial robot arm have?
+  code: |
+    Typical industrial robot arm
+  options:
+  - '3'
+  - '4'
+  - '6'
+  - '8'
+  answer: '6'
+- id: robo_q27
+  type: multiple_choice
+  prompt: What is a collaborative robot (cobot)?
+  options:
+  - A robot designed to work safely alongside humans
+  - A robot that works only in isolation
+  - A robot controlled by multiple operators
+  - A robot for military use
+  answer: A robot designed to work safely alongside humans
+- id: robo_q28
+  type: multiple_choice
+  prompt: What is computer vision in robotics?
+  options:
+  - Enabling robots to interpret visual information
+  - Designing robot displays
+  - Programming robot controllers
+  - Building robot frames
+  answer: Enabling robots to interpret visual information
+- id: robo_q29
+  type: multiple_choice
+  prompt: What is LIDAR?
+  options:
+  - Light Detection and Ranging sensor
+  - A type of motor
+  - A programming framework
+  - A robot competition
+  answer: Light Detection and Ranging sensor
+- id: robo_q30
+  type: parsons
+  prompt: Arrange the steps for a robot to pick and place an object.
+  blocks:
+  - Detect object location (vision/sensors)
+  - Navigate to object
+  - Grasp object
+  - Navigate to destination
+  - Release object
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: robo_q31
+  type: multiple_choice
+  prompt: What is localization in robotics?
+  options:
+  - Determining the robot's position in its environment
+  - Programming the robot
+  - Powering the robot
+  - Designing the robot
+  answer: Determining the robot's position in its environment
+- id: robo_q32
+  type: multiple_choice
+  prompt: What does SLAM stand for?
+  options:
+  - Simultaneous Localization and Mapping
+  - Sensor Location and Management
+  - System Logic and Motion
+  - Speed Limit and Monitoring
+  answer: Simultaneous Localization and Mapping
+- id: robo_q33
+  type: multiple_choice
+  prompt: What is path planning?
+  options:
+  - Finding an optimal route for a robot to reach a goal
+  - Designing robot circuits
+  - Selecting robot materials
+  - Calibrating sensors
+  answer: Finding an optimal route for a robot to reach a goal
+- id: robo_q34
+  type: debugging
+  prompt: What could cause a robot to drift from its intended straight path?
+  code: |
+    Robot programmed to drive straight
+    but curves to the left
+  options:
+  - Wheel sizes are different or one motor is weaker
+  - Battery is fully charged
+  - Sensors are working correctly
+  - Program has no errors
+  answer: Wheel sizes are different or one motor is weaker
+- id: robo_q35
+  type: multiple_choice
+  prompt: What is an autonomous robot?
+  options:
+  - A robot that operates without human intervention
+  - A robot controlled by remote control
+  - A robot that requires constant supervision
+  - A robot without sensors
+  answer: A robot that operates without human intervention
+- id: robo_q36
+  type: multiple_choice
+  prompt: What is teleoperation?
+  options:
+  - Remote control of a robot by a human operator
+  - Automatic robot operation
+  - Robot-to-robot communication
+  - Battery charging
+  answer: Remote control of a robot by a human operator
+- id: robo_q37
+  type: multiple_choice
+  prompt: What is a gear ratio?
+  options:
+  - The relationship between input and output rotation speeds
+  - The size of the gears
+  - The material of the gears
+  - The color of the gears
+  answer: The relationship between input and output rotation speeds
+- id: robo_q38
+  type: output_prediction
+  prompt: If a gear ratio is 3:1, and the input rotates at 30 RPM, what is the output speed?
+  code: |
+    Gear Ratio: 3:1
+    Input Speed: 30 RPM
+  options:
+  - 10 RPM
+  - 30 RPM
+  - 90 RPM
+  - 120 RPM
+  answer: 10 RPM
+- id: robo_q39
+  type: multiple_choice
+  prompt: What does increasing gear ratio do to torque?
+  options:
+  - Increases torque, decreases speed
+  - Decreases torque, increases speed
+  - No effect
+  - Doubles both
+  answer: Increases torque, decreases speed
+- id: robo_q40
+  type: multiple_choice
+  prompt: What is ROS?
+  options:
+  - Robot Operating System (middleware framework)
+  - Remote Operating Software
+  - Robotic Output System
+  - Rotation Operating Sensor
+  answer: Robot Operating System (middleware framework)
+- id: robo_q41
+  type: fill_in_blank
+  prompt: Fill in the blank for the basic robot control loop.
+  code: |
+    while (true) {
+        ___ sensors
+        process data
+        ___ actuators
+    }
+  options:
+  - read, control
+  - write, read
+  - send, receive
+  - input, output
+  answer: read, control
+- id: robo_q42
+  type: multiple_choice
+  prompt: What is a mobile robot?
+  options:
+  - A robot capable of moving in its environment
+  - A robot with a phone
+  - A robot controlled by mobile app
+  - A small desktop robot
+  answer: A robot capable of moving in its environment
+- id: robo_q43
+  type: multiple_choice
+  prompt: What is a humanoid robot?
+  options:
+  - A robot with human-like appearance and movement
+  - A robot controlled by humans
+  - A robot for medical use
+  - A friendly robot
+  answer: A robot with human-like appearance and movement
+- id: robo_q44
+  type: multiple_choice
+  prompt: What is an industrial robot primarily used for?
+  options:
+  - Manufacturing and assembly tasks
+  - Entertainment
+  - Education only
+  - Space exploration
+  answer: Manufacturing and assembly tasks
+- id: robo_q45
+  type: faded_parsons
+  prompt: Complete the code to make a robot follow a line. The main loop is fixed.
+  blocks:
+  - while (true) {
+  - '    int lightValue = readLineSensor();'
+  - '    if (lightValue < THRESHOLD) {'
+  - '        turnLeft();'
+  - '    } else {'
+  - '        turnRight();'
+  - '    }'
+  - '}'
+  fixed_indices:
+  - 0
+  - 7
+  answer:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+- id: robo_q46
+  type: multiple_choice
+  prompt: What is obstacle avoidance?
+  options:
+  - Detecting and navigating around obstacles
+  - Ignoring obstacles
+  - Pushing through obstacles
+  - Stopping at all obstacles
+  answer: Detecting and navigating around obstacles
+- id: robo_q47
+  type: multiple_choice
+  prompt: What type of sensor is best for detecting nearby obstacles?
+  options:
+  - Ultrasonic or infrared proximity sensor
+  - Temperature sensor
+  - Light sensor
+  - Humidity sensor
+  answer: Ultrasonic or infrared proximity sensor
+- id: robo_q48
+  type: multiple_choice
+  prompt: What is artificial intelligence in robotics?
+  options:
+  - Enabling robots to make decisions and learn from experience
+  - Making robots look realistic
+  - Remote controlling robots
+  - Building plastic robot parts
+  answer: Enabling robots to make decisions and learn from experience
+- id: robo_q49
+  type: multiple_choice
+  prompt: What is the difference between open-loop and closed-loop control?
+  options:
+  - Closed-loop uses feedback, open-loop does not
+  - They are the same
+  - Open-loop is always better
+  - Closed-loop is only for motors
+  answer: Closed-loop uses feedback, open-loop does not
+- id: robo_q50
+  type: multiple_choice
+  prompt: What is a robot's workspace?
+  options:
+  - The physical area a robot can reach
+  - The robot's programming environment
+  - The robot's storage location
+  - The robot's power consumption
+  answer: The physical area a robot can reach

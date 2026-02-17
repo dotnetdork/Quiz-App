@@ -1,6 +1,6 @@
 id: java_basics_01
-title: Java Fundamentals
-description: Test your knowledge of basic Java concepts
+title: Fundamentals
+description: Build a strong foundation in Java syntax, variables, data types, and core programming concepts
 category: java
 questions:
 - id: java_q1
@@ -207,3 +207,342 @@ questions:
   answer:
   - 1
   - 2
+- id: java_q21
+  type: multiple_choice
+  prompt: What does the ++ operator do?
+  options:
+  - Decrements by 1
+  - Increments by 1
+  - Multiplies by 2
+  - Adds 10
+  answer: Increments by 1
+- id: java_q22
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    int x = 5;
+    System.out.println(++x);
+  options:
+  - '4'
+  - '5'
+  - '6'
+  - error
+  answer: '6'
+- id: java_q23
+  type: multiple_choice
+  prompt: Which keyword is used for selection between multiple cases?
+  options:
+  - if
+  - when
+  - switch
+  - select
+  answer: switch
+- id: java_q24
+  type: parsons
+  prompt: Arrange the code to create a switch statement.
+  blocks:
+  - int day = 2;
+  - switch (day) {
+  - '    case 1:'
+  - '        System.out.println("Monday");'
+  - '        break;'
+  - '    default:'
+  - '        System.out.println("Other");'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+- id: java_q25
+  type: multiple_choice
+  prompt: What keyword exits a loop early?
+  options:
+  - exit
+  - stop
+  - break
+  - return
+  answer: break
+- id: java_q26
+  type: multiple_choice
+  prompt: What keyword skips to the next iteration of a loop?
+  options:
+  - skip
+  - next
+  - continue
+  - pass
+  answer: continue
+- id: java_q27
+  type: output_prediction
+  prompt: What will this loop print last?
+  code: |
+    for (int i = 1; i <= 3; i++) {
+        System.out.println(i);
+    }
+  options:
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  answer: '3'
+- id: java_q28
+  type: multiple_choice
+  prompt: Which loop always executes at least once?
+  options:
+  - for loop
+  - while loop
+  - do-while loop
+  - if loop
+  answer: do-while loop
+- id: java_q29
+  type: parsons
+  prompt: Arrange the code for a while loop that counts from 1 to 3.
+  blocks:
+  - int i = 1;
+  - while (i <= 3) {
+  - '    System.out.println(i);'
+  - '    i++;'
+  - '}'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: java_q30
+  type: debugging
+  prompt: What is wrong with this while loop?
+  code: |
+    int x = 0;
+    while (x < 5) {
+        System.out.println(x);
+    }
+  options:
+  - x is never incremented (infinite loop)
+  - while should be While
+  - Missing semicolon
+  - Condition is wrong
+  answer: x is never incremented (infinite loop)
+- id: java_q31
+  type: multiple_choice
+  prompt: How do you get the length of a String?
+  options:
+  - str.size()
+  - str.length()
+  - str.len()
+  - str.count()
+  answer: str.length()
+- id: java_q32
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    String text = "Java";
+    System.out.println(text.toUpperCase());
+  options:
+  - java
+  - Java
+  - JAVA
+  - error
+  answer: JAVA
+- id: java_q33
+  type: multiple_choice
+  prompt: Which method compares two strings for equality?
+  options:
+  - ==
+  - equals()
+  - compare()
+  - isEqual()
+  answer: equals()
+- id: java_q34
+  type: fill_in_blank
+  prompt: Fill in the blank to concatenate two strings.
+  code: |
+    String first = "Hello";
+    String second = "World";
+    String result = first ___ second;
+  options:
+  - '&'
+  - +
+  - .
+  - concat
+  answer: +
+- id: java_q35
+  type: multiple_choice
+  prompt: What is the index of the first character in a String?
+  options:
+  - '0'
+  - '1'
+  - '-1'
+  - undefined
+  answer: '0'
+- id: java_q36
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    String word = "Hello";
+    System.out.println(word.charAt(0));
+  options:
+  - H
+  - e
+  - '0'
+  - error
+  answer: H
+- id: java_q37
+  type: multiple_choice
+  prompt: Which class is used to read user input from the console?
+  options:
+  - Input
+  - Scanner
+  - Reader
+  - Console
+  answer: Scanner
+- id: java_q38
+  type: parsons
+  prompt: Arrange the code to read an integer from the user.
+  blocks:
+  - import java.util.Scanner;
+  - Scanner sc = new Scanner(System.in);
+  - 'System.out.println("Enter a number:");'
+  - int num = sc.nextInt();
+  - 'System.out.println("You entered: " + num);'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+- id: java_q39
+  type: multiple_choice
+  prompt: What is type casting?
+  options:
+  - Creating new types
+  - Converting one data type to another
+  - Checking the type of a variable
+  - Deleting a type
+  answer: Converting one data type to another
+- id: java_q40
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    double d = 9.7;
+    int i = (int) d;
+    System.out.println(i);
+  options:
+  - '9.7'
+  - '9'
+  - '10'
+  - error
+  answer: '9'
+- id: java_q41
+  type: multiple_choice
+  prompt: Which package contains the Math class?
+  options:
+  - java.util
+  - java.lang
+  - java.math
+  - java.core
+  answer: java.lang
+- id: java_q42
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    System.out.println(Math.max(10, 20));
+  options:
+  - '10'
+  - '20'
+  - '30'
+  - error
+  answer: '20'
+- id: java_q43
+  type: multiple_choice
+  prompt: What does Math.pow(2, 3) return?
+  options:
+  - '5'
+  - '6'
+  - '8'
+  - '9'
+  answer: '8'
+- id: java_q44
+  type: multiple_choice
+  prompt: What are wrapper classes?
+  options:
+  - Classes that wrap objects
+  - Classes that convert primitives to objects
+  - Classes for wrapping text
+  - Parent classes
+  answer: Classes that convert primitives to objects
+- id: java_q45
+  type: fill_in_blank
+  prompt: Fill in the blank to convert a String to an integer.
+  code: |
+    String str = "100";
+    int num = ___(str);
+  options:
+  - Integer.parseInt
+  - String.toInt
+  - Int.parse
+  - Convert.toInt
+  answer: Integer.parseInt
+- id: java_q46
+  type: debugging
+  prompt: What is wrong with this array access?
+  code: |
+    int[] nums = {1, 2, 3};
+    System.out.println(nums[3]);
+  options:
+  - Array index out of bounds
+  - Array not initialized
+  - Wrong syntax for array
+  - Missing semicolon
+  answer: Array index out of bounds
+- id: java_q47
+  type: faded_parsons
+  prompt: Complete the code to find the sum of array elements. The array declaration is fixed.
+  blocks:
+  - int[] numbers = {5, 10, 15};
+  - int sum = 0;
+  - 'for (int num : numbers) {'
+  - '    sum += num;'
+  - '}'
+  - System.out.println(sum);
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: java_q48
+  type: multiple_choice
+  prompt: What does the 'static' keyword mean?
+  options:
+  - Variable cannot change
+  - Belongs to the class, not instances
+  - Variable is private
+  - Method cannot be overridden
+  answer: Belongs to the class, not instances
+- id: java_q49
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    System.out.println(10 % 3);
+  options:
+  - '0'
+  - '1'
+  - '3'
+  - '3.33'
+  answer: '1'
+- id: java_q50
+  type: multiple_choice
+  prompt: Which access modifier makes a member accessible only within its own class?
+  options:
+  - public
+  - private
+  - protected
+  - default
+  answer: private

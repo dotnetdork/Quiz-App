@@ -1,6 +1,6 @@
-id: loops_module_01
-title: Loops
-description: Test your knowledge of for loops, while loops, range, iterables, and loop control
+id: loops_iteration
+title: Loops and Iteration
+description: Learn to control program flow with for loops, while loops, and advanced iteration techniques like enumerate and zip
 category: python
 questions:
 - id: loop_q1

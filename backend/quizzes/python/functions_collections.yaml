@@ -1,6 +1,6 @@
-id: data_structures_func_01
-title: Data Structures & Functions
-description: Test your knowledge of functions, exception handling, lists, tuples, sets, dictionaries, and advanced concepts
+id: functions_collections
+title: Functions and Collections
+description: Master functions, exception handling, and Python's powerful collection types including lists, tuples, sets, and dictionaries
 category: python
 questions:
 - id: func_q1
