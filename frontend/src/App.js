@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Quiz from './pages/Quiz';
 import ProtectedRoute from './components/ProtectedRoute';
+import ClickParticles from './components/ClickParticles';
 
 /**
  * App Logo Component
@@ -105,6 +106,9 @@ function AppContent() {
 
   return (
     <>
+      {/* Global click particle effects - disabled on login page */}
+      {!isLoginPage && <ClickParticles />}
+      
       {/* Navigation bar - hide on login page */}
       {!isLoginPage && <Navigation />}
       

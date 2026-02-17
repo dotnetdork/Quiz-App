@@ -113,6 +113,13 @@ code {
   border-radius: var(--radius-sm);
 }
 
+/* Reset background for code inside syntax highlighted pre blocks */
+pre code,
+pre[class*="language-"] code {
+  background-color: transparent;
+  padding: 0;
+}
+
 pre {
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   font-size: var(--font-base);

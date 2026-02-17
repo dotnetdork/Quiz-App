@@ -21,7 +21,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 /**
  * SortableBlock - Individual draggable code block
@@ -30,8 +30,9 @@ import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
  * @param {string} props.id - Unique identifier for the block
  * @param {string} props.code - The code text to display
  * @param {number} props.position - Position number (1-based)
+ * @param {boolean} props.syntaxHighlight - Whether to apply syntax highlighting
  */
-function SortableBlock({ id, code, position }) {
+function SortableBlock({ id, code, position, syntaxHighlight = true }) {
   // Set up sortable behavior from dnd-kit
   const {
     attributes,
@@ -74,25 +75,34 @@ function SortableBlock({ id, code, position }) {
         {position}.
       </span>
       
-      {/* Code content with syntax highlighting */}
+      {/* Code content with optional syntax highlighting */}
       <div style={{ flexGrow: 1, minWidth: 0 }}>
-        <SyntaxHighlighter
-          language="python"
-          style={tomorrow}
-          customStyle={{
-            margin: 0,
-            padding: 0,
-            background: 'transparent',
+        {syntaxHighlight ? (
+          <SyntaxHighlighter
+            language="python"
+            style={oneLight}
+            customStyle={{
+              margin: 0,
+              padding: 0,
+              background: 'transparent',
+              fontSize: 'var(--font-base)',
+            }}
+            codeTagProps={{
+              style: {
+                fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
+              }
+            }}
+          >
+            {code}
+          </SyntaxHighlighter>
+        ) : (
+          <span style={{
+            fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
             fontSize: 'var(--font-base)',
-          }}
-          codeTagProps={{
-            style: {
-              fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
-            }
-          }}
-        >
-          {code}
-        </SyntaxHighlighter>
+          }}>
+            {code}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -105,8 +115,9 @@ function SortableBlock({ id, code, position }) {
  * @param {Array} props.blocks - Array of code strings
  * @param {Array} props.order - Current order of block indices
  * @param {Function} props.onOrderChange - Callback when order changes
+ * @param {boolean} props.syntaxHighlight - Whether to apply syntax highlighting (default: true)
  */
-function ParsonsProblem({ blocks, order, onOrderChange }) {
+function ParsonsProblem({ blocks, order, onOrderChange, syntaxHighlight = true }) {
   // Set up sensors for mouse/touch and keyboard drag
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -165,6 +176,7 @@ function ParsonsProblem({ blocks, order, onOrderChange }) {
               id={blockIndex.toString()}
               code={blocks[blockIndex]}
               position={position + 1}
+              syntaxHighlight={syntaxHighlight}
             />
           ))}
         </SortableContext>

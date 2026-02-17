@@ -366,8 +366,10 @@ function Quiz() {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Animated Background */}
+      {/* Animated Background - themed */}
       <AnimatedBackground theme={theme} />
+      {/* Particle overlay for additional visual interest */}
+      <AnimatedBackground theme="particles" />
       
       {/* Quiz Content - positioned above background */}
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
@@ -414,6 +416,7 @@ function Quiz() {
               blocks={question.blocks}
               order={answers[question.id] || []}
               onOrderChange={(newOrder) => handleAnswerChange(question.id, newOrder)}
+              syntaxHighlight={quiz.category !== 'technology'}
             />
           ) : question.type === 'output_prediction' ? (
             <OutputPrediction
@@ -448,6 +451,7 @@ function Quiz() {
               fixedIndices={question.fixed_indices || []}
               order={answers[question.id] || []}
               onOrderChange={(newOrder) => handleAnswerChange(question.id, newOrder)}
+              syntaxHighlight={quiz.category !== 'technology'}
             />
           ) : (
             <p>Unknown question type: {question.type}</p>

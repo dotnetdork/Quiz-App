@@ -10,6 +10,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
 import { getRankEmoji, calculateTotalPoints } from '../utils/rankUtils';
+import AnimatedBackground from '../components/AnimatedBackground';
 
 // Category Icons
 function PythonIcon({ size = 60 }) {
@@ -307,7 +308,9 @@ function Dashboard() {
   const historyGroups = groupedHistory();
 
   return (
-    <div className={`dashboard-container ${isLoggingOut ? 'transitioning-out' : ''}`}>
+    <>
+      <AnimatedBackground theme="dashboard" />
+      <div className={`dashboard-container ${isLoggingOut ? 'transitioning-out' : ''}`} style={{ position: 'relative', zIndex: 1 }}>
       {/* User Profile Card */}
       <div className={`user-profile-card ${showProfileAnimation ? 'loaded' : ''}`} ref={profileRef}>
         <div className="profile-header">
@@ -528,6 +531,7 @@ function Dashboard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

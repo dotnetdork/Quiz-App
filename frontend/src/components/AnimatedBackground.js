@@ -58,6 +58,12 @@ const AnimatedBackground = ({ theme = 'default' }) => {
         case 'gears':
           initGears(count);
           break;
+        case 'dashboard':
+          initDashboard(count);
+          break;
+        case 'particles':
+          initParticles(count);
+          break;
         default:
           initDefault(count);
       }
@@ -199,7 +205,7 @@ const AnimatedBackground = ({ theme = 'default' }) => {
           y: Math.random() * canvas.height,
           speed: (Math.random() * 0.5 + 0.3),
           chars: Array(20).fill(0).map(() => String.fromCharCode(0x30A0 + Math.random() * 96)),
-          opacity: Math.random() * 0.15 + 0.05
+          opacity: Math.random() * 0.3 + 0.2
         });
       }
     };
@@ -216,6 +222,43 @@ const AnimatedBackground = ({ theme = 'default' }) => {
           speed: (Math.random() - 0.5) * 0.01,
           color: ['#616161', '#757575', '#9e9e9e'][Math.floor(Math.random() * 3)],
           opacity: 0.15
+        });
+      }
+    };
+
+    // Theme: Dashboard - floating achievement/learning symbols
+    const initDashboard = (count) => {
+      const symbols = ['star', 'lightbulb', 'trophy', 'book', 'rocket', 'badge'];
+      const colors = ['#ef6c00', '#4caf50', '#ffd700', '#1a365d', '#ff9800', '#9c27b0'];
+      for (let i = 0; i < Math.floor(count * 0.7); i++) {
+        elements.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 20 + 15,
+          symbol: symbols[Math.floor(Math.random() * symbols.length)],
+          color: colors[Math.floor(Math.random() * colors.length)],
+          opacity: Math.random() * 0.08 + 0.04,
+          speedX: (Math.random() - 0.5) * 0.3,
+          speedY: (Math.random() - 0.5) * 0.3,
+          rotation: Math.random() * Math.PI * 2,
+          rotationSpeed: (Math.random() - 0.5) * 0.005,
+          pulsePhase: Math.random() * Math.PI * 2
+        });
+      }
+    };
+
+    // Theme: Particles - gentle floating particles with subtle connections
+    const initParticles = (count) => {
+      for (let i = 0; i < count; i++) {
+        elements.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 3 + 1,
+          speedX: (Math.random() - 0.5) * 0.5,
+          speedY: (Math.random() - 0.5) * 0.5,
+          opacity: Math.random() * 0.3 + 0.1,
+          color: ['#ef6c00', '#1a365d', '#4caf50', '#ff9800'][Math.floor(Math.random() * 4)],
+          pulsePhase: Math.random() * Math.PI * 2
         });
       }
     };
@@ -376,6 +419,12 @@ const AnimatedBackground = ({ theme = 'default' }) => {
           break;
         case 'gears':
           animateGears();
+          break;
+        case 'dashboard':
+          animateDashboard();
+          break;
+        case 'particles':
+          animateParticles();
           break;
         default:
           animateDefault();
@@ -674,6 +723,187 @@ const AnimatedBackground = ({ theme = 'default' }) => {
       ctx.globalAlpha = 1;
     };
 
+    const animateDashboard = () => {
+      elements.forEach((el) => {
+        // Update position with gentle drift
+        el.x += el.speedX;
+        el.y += el.speedY;
+        el.rotation += el.rotationSpeed;
+        
+        // Wrap around edges
+        if (el.x < -el.size) el.x = canvas.width + el.size;
+        if (el.x > canvas.width + el.size) el.x = -el.size;
+        if (el.y < -el.size) el.y = canvas.height + el.size;
+        if (el.y > canvas.height + el.size) el.y = -el.size;
+        
+        // Subtle pulse effect
+        const pulse = 1 + Math.sin(time * 2 + el.pulsePhase) * 0.1;
+        
+        ctx.globalAlpha = el.opacity * pulse;
+        ctx.fillStyle = el.color;
+        ctx.strokeStyle = el.color;
+        ctx.lineWidth = 2;
+        
+        ctx.save();
+        ctx.translate(el.x, el.y);
+        ctx.rotate(el.rotation);
+        
+        const size = el.size * pulse;
+        
+        switch (el.symbol) {
+          case 'star':
+            drawStar(ctx, 0, 0, size, 5);
+            break;
+          case 'lightbulb':
+            drawLightbulb(ctx, 0, 0, size);
+            break;
+          case 'trophy':
+            drawTrophy(ctx, 0, 0, size);
+            break;
+          case 'book':
+            drawBook(ctx, 0, 0, size);
+            break;
+          case 'rocket':
+            drawRocket(ctx, 0, 0, size);
+            break;
+          case 'badge':
+            drawBadge(ctx, 0, 0, size);
+            break;
+          default:
+            ctx.beginPath();
+            ctx.arc(0, 0, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        ctx.restore();
+      });
+      ctx.globalAlpha = 1;
+    };
+
+    const animateParticles = () => {
+      // Draw subtle connections between nearby particles
+      ctx.strokeStyle = '#1a365d';
+      ctx.lineWidth = 0.5;
+      
+      for (let i = 0; i < elements.length; i++) {
+        for (let j = i + 1; j < elements.length; j++) {
+          const dx = elements[i].x - elements[j].x;
+          const dy = elements[i].y - elements[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            ctx.globalAlpha = (1 - distance / 100) * 0.1;
+            ctx.beginPath();
+            ctx.moveTo(elements[i].x, elements[i].y);
+            ctx.lineTo(elements[j].x, elements[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      
+      // Animate particles
+      elements.forEach((el) => {
+        el.x += el.speedX;
+        el.y += el.speedY;
+        
+        // Bounce off edges gently
+        if (el.x < 0 || el.x > canvas.width) el.speedX *= -1;
+        if (el.y < 0 || el.y > canvas.height) el.speedY *= -1;
+        
+        // Subtle size pulse
+        const pulse = 1 + Math.sin(time * 3 + el.pulsePhase) * 0.2;
+        
+        ctx.globalAlpha = el.opacity;
+        ctx.fillStyle = el.color;
+        ctx.beginPath();
+        ctx.arc(el.x, el.y, el.size * pulse, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    };
+
+    // Dashboard symbol drawing functions
+    const drawStar = (ctx, x, y, size, points) => {
+      const outerRadius = size / 2;
+      const innerRadius = size / 4;
+      ctx.beginPath();
+      for (let i = 0; i < points * 2; i++) {
+        const radius = i % 2 === 0 ? outerRadius : innerRadius;
+        const angle = (i * Math.PI) / points - Math.PI / 2;
+        if (i === 0) ctx.moveTo(x + radius * Math.cos(angle), y + radius * Math.sin(angle));
+        else ctx.lineTo(x + radius * Math.cos(angle), y + radius * Math.sin(angle));
+      }
+      ctx.closePath();
+      ctx.fill();
+    };
+
+    const drawLightbulb = (ctx, x, y, size) => {
+      // Bulb
+      ctx.beginPath();
+      ctx.arc(x, y - size * 0.1, size * 0.35, 0, Math.PI * 2);
+      ctx.fill();
+      // Base
+      ctx.fillRect(x - size * 0.15, y + size * 0.2, size * 0.3, size * 0.15);
+    };
+
+    const drawTrophy = (ctx, x, y, size) => {
+      // Cup
+      ctx.beginPath();
+      ctx.moveTo(x - size * 0.3, y - size * 0.3);
+      ctx.lineTo(x - size * 0.2, y + size * 0.1);
+      ctx.lineTo(x + size * 0.2, y + size * 0.1);
+      ctx.lineTo(x + size * 0.3, y - size * 0.3);
+      ctx.closePath();
+      ctx.fill();
+      // Base
+      ctx.fillRect(x - size * 0.15, y + size * 0.1, size * 0.3, size * 0.2);
+    };
+
+    const drawBook = (ctx, x, y, size) => {
+      ctx.fillRect(x - size * 0.35, y - size * 0.25, size * 0.7, size * 0.5);
+      ctx.strokeRect(x - size * 0.35, y - size * 0.25, size * 0.7, size * 0.5);
+      // Spine
+      ctx.beginPath();
+      ctx.moveTo(x, y - size * 0.25);
+      ctx.lineTo(x, y + size * 0.25);
+      ctx.stroke();
+    };
+
+    const drawRocket = (ctx, x, y, size) => {
+      // Body
+      ctx.beginPath();
+      ctx.moveTo(x, y - size * 0.4);
+      ctx.lineTo(x + size * 0.15, y + size * 0.2);
+      ctx.lineTo(x - size * 0.15, y + size * 0.2);
+      ctx.closePath();
+      ctx.fill();
+      // Fins
+      ctx.beginPath();
+      ctx.moveTo(x - size * 0.15, y + size * 0.1);
+      ctx.lineTo(x - size * 0.3, y + size * 0.3);
+      ctx.lineTo(x - size * 0.15, y + size * 0.2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(x + size * 0.15, y + size * 0.1);
+      ctx.lineTo(x + size * 0.3, y + size * 0.3);
+      ctx.lineTo(x + size * 0.15, y + size * 0.2);
+      ctx.fill();
+    };
+
+    const drawBadge = (ctx, x, y, size) => {
+      // Hexagon badge
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (i * Math.PI) / 3 - Math.PI / 2;
+        const px = x + size * 0.4 * Math.cos(angle);
+        const py = y + size * 0.4 * Math.sin(angle);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fill();
+    };
+
     const animateDefault = () => {
       elements.forEach((el) => {
         el.y += el.speed;
@@ -720,7 +950,7 @@ const AnimatedBackground = ({ theme = 'default' }) => {
         height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
-        backgroundColor: '#fafafa'
+        backgroundColor: theme === 'particles' ? 'transparent' : '#fafafa'
       }}
     />
   );

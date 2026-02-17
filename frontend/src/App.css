@@ -12,6 +12,8 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
 }
 
 .nav-brand {
@@ -481,6 +483,8 @@
   padding: var(--spacing-lg) var(--spacing-md);
   margin-top: var(--spacing-xl);
   text-align: center;
+  position: relative;
+  z-index: 10;
 }
 
 .footer-content {
@@ -1862,4 +1866,79 @@
   color: #333;
   margin-bottom: 1rem;
   font-weight: 600;
+}
+
+/* -----------------------------------------
+   Syntax Highlighting Fixes
+   ----------------------------------------- */
+
+/* Remove token backgrounds in code blocks to prevent white highlighting on dark backgrounds */
+.code-display pre[class*="language-"] span,
+.code-display code[class*="language-"] span,
+pre[class*="language-"] .token,
+code[class*="language-"] .token {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+/* Make syntax highlighting more visible on light backgrounds (Parsons blocks) */
+.parsons-block pre[class*="language-"],
+.parsons-block code[class*="language-"] {
+  background: transparent !important;
+}
+
+/* Boost token colors for light backgrounds */
+.parsons-block .token.comment,
+.parsons-block .token.prolog,
+.parsons-block .token.doctype,
+.parsons-block .token.cdata {
+  color: #5c6370 !important;
+}
+
+.parsons-block .token.punctuation {
+  color: #383a42 !important;
+}
+
+.parsons-block .token.property,
+.parsons-block .token.tag,
+.parsons-block .token.boolean,
+.parsons-block .token.number,
+.parsons-block .token.constant,
+.parsons-block .token.symbol,
+.parsons-block .token.deleted {
+  color: #c45c2c !important;
+}
+
+.parsons-block .token.selector,
+.parsons-block .token.attr-name,
+.parsons-block .token.string,
+.parsons-block .token.char,
+.parsons-block .token.builtin,
+.parsons-block .token.inserted {
+  color: #3c7a3f !important;
+}
+
+.parsons-block .token.operator,
+.parsons-block .token.entity,
+.parsons-block .token.url,
+.parsons-block .language-css .token.string,
+.parsons-block .style .token.string {
+  color: #0184bc !important;
+}
+
+.parsons-block .token.atrule,
+.parsons-block .token.attr-value,
+.parsons-block .token.keyword {
+  color: #a626a4 !important;
+}
+
+.parsons-block .token.function,
+.parsons-block .token.class-name {
+  color: #2563b0 !important;
+}
+
+.parsons-block .token.regex,
+.parsons-block .token.important,
+.parsons-block .token.variable {
+  color: #e45649 !important;
 }

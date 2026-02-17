@@ -22,12 +22,12 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 /**
  * FixedBlock - Non-draggable faded code block
  */
-function FixedBlock({ code, position }) {
+function FixedBlock({ code, position, syntaxHighlight = true }) {
   return (
     <div
       className="parsons-block fixed-block"
@@ -48,23 +48,32 @@ function FixedBlock({ code, position }) {
         {position}.
       </span>
       <div style={{ flexGrow: 1, minWidth: 0 }}>
-        <SyntaxHighlighter
-          language="python"
-          style={tomorrow}
-          customStyle={{
-            margin: 0,
-            padding: 0,
-            background: 'transparent',
+        {syntaxHighlight ? (
+          <SyntaxHighlighter
+            language="python"
+            style={oneLight}
+            customStyle={{
+              margin: 0,
+              padding: 0,
+              background: 'transparent',
+              fontSize: 'var(--font-base)',
+            }}
+            codeTagProps={{
+              style: {
+                fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
+              }
+            }}
+          >
+            {code}
+          </SyntaxHighlighter>
+        ) : (
+          <span style={{
+            fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
             fontSize: 'var(--font-base)',
-          }}
-          codeTagProps={{
-            style: {
-              fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
-            }
-          }}
-        >
-          {code}
-        </SyntaxHighlighter>
+          }}>
+            {code}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -73,7 +82,7 @@ function FixedBlock({ code, position }) {
 /**
  * SortableBlock - Individual draggable code block
  */
-function SortableBlock({ id, code, position }) {
+function SortableBlock({ id, code, position, syntaxHighlight = true }) {
   const {
     attributes,
     listeners,
@@ -111,23 +120,32 @@ function SortableBlock({ id, code, position }) {
         {position}.
       </span>
       <div style={{ flexGrow: 1, minWidth: 0 }}>
-        <SyntaxHighlighter
-          language="python"
-          style={tomorrow}
-          customStyle={{
-            margin: 0,
-            padding: 0,
-            background: 'transparent',
+        {syntaxHighlight ? (
+          <SyntaxHighlighter
+            language="python"
+            style={oneLight}
+            customStyle={{
+              margin: 0,
+              padding: 0,
+              background: 'transparent',
+              fontSize: 'var(--font-base)',
+            }}
+            codeTagProps={{
+              style: {
+                fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
+              }
+            }}
+          >
+            {code}
+          </SyntaxHighlighter>
+        ) : (
+          <span style={{
+            fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
             fontSize: 'var(--font-base)',
-          }}
-          codeTagProps={{
-            style: {
-              fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
-            }
-          }}
-        >
-          {code}
-        </SyntaxHighlighter>
+          }}>
+            {code}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -141,8 +159,9 @@ function SortableBlock({ id, code, position }) {
  * @param {Array} props.fixedIndices - Array of indices for fixed (non-draggable) blocks
  * @param {Array} props.order - Current order of movable block indices
  * @param {Function} props.onOrderChange - Callback when order changes
+ * @param {boolean} props.syntaxHighlight - Whether to apply syntax highlighting (default: true)
  */
-function FadedParsons({ blocks, fixedIndices = [], order, onOrderChange }) {
+function FadedParsons({ blocks, fixedIndices = [], order, onOrderChange, syntaxHighlight = true }) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -202,6 +221,7 @@ function FadedParsons({ blocks, fixedIndices = [], order, onOrderChange }) {
                   key={`fixed-${block.index}`}
                   code={blocks[block.index]}
                   position={position + 1}
+                  syntaxHighlight={syntaxHighlight}
                 />
               );
             } else {
@@ -211,6 +231,7 @@ function FadedParsons({ blocks, fixedIndices = [], order, onOrderChange }) {
                   id={block.index.toString()}
                   code={blocks[block.index]}
                   position={position + 1}
+                  syntaxHighlight={syntaxHighlight}
                 />
               );
             }
