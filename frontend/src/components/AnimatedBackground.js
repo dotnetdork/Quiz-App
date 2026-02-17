@@ -269,8 +269,9 @@ const AnimatedBackground = ({ theme = 'default' }) => {
       ctx.translate(x, y);
       if (direction < 0) ctx.scale(-1, 1);
       
-      // Shell
-      ctx.fillStyle = ctx.fillStyle;
+      // Shell - use the current fill style color
+      const shellColor = ctx.fillStyle;
+      ctx.fillStyle = shellColor;
       ctx.beginPath();
       ctx.ellipse(0, 0, size * 0.6, size * 0.4, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -378,6 +379,7 @@ const AnimatedBackground = ({ theme = 'default' }) => {
           break;
         default:
           animateDefault();
+          break;
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -414,6 +416,12 @@ const AnimatedBackground = ({ theme = 'default' }) => {
             break;
           case 'pentagon':
             drawPentagon(ctx, el.x, el.y, el.size, el.rotation);
+            break;
+          default:
+            // Default to circle if unknown shape
+            ctx.beginPath();
+            ctx.arc(el.x, el.y, el.size / 2, 0, Math.PI * 2);
+            ctx.fill();
             break;
         }
       });
