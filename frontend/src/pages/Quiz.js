@@ -15,6 +15,22 @@ import DebuggingQuestion from '../components/DebuggingQuestion';
 import FillInTheBlank from '../components/FillInTheBlank';
 import FreeResponse from '../components/FreeResponse';
 import FadedParsons from '../components/FadedParsons';
+import AnimatedBackground from '../components/AnimatedBackground';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+// Map quiz IDs to animation themes
+const QUIZ_THEMES = {
+  'types_and_logic_01': 'geometric',
+  'loops_module_01': 'spiral',
+  'turtles_module_01': 'ocean',
+  'data_structures_func_01': 'network',
+  'java_basics_01': 'coffee',
+  'java_oop_01': 'blocks',
+  'tech_concepts_01': 'circuit',
+  'cybersecurity_01': 'matrix',
+  'robotics_01': 'gears'
+};
 
 function Quiz() {
   // Get quiz ID from URL
@@ -31,6 +47,7 @@ function Quiz() {
   const [submitting, setSubmitting] = useState(false);
   const [results, setResults] = useState(null);
   const [loginWarning, setLoginWarning] = useState(false);
+  const [expandedResults, setExpandedResults] = useState({});
 
   // Load quiz data on mount
   useEffect(() => {
@@ -127,11 +144,24 @@ function Quiz() {
     }
   }
 
+  /**
+   * Toggle expanded state for a result
+   */
+  function toggleResultExpanded(questionId) {
+    setExpandedResults(prev => ({
+      ...prev,
+      [questionId]: !prev[questionId]
+    }));
+  }
+
   // Show loading state
   if (loading) {
     return (
-      <div className="loading">
-        <p>Loading quiz...</p>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div className="container loading" style={{ position: 'relative', zIndex: 1 }}>
+          <p>Loading quiz...</p>
+        </div>
       </div>
     );
   }
@@ -139,11 +169,14 @@ function Quiz() {
   // Show error state
   if (error) {
     return (
-      <div className="error-message">
-        <p>Error: {error}</p>
-        <Link to="/" className="btn-secondary mt-md">
-          Back to Home
-        </Link>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div className="container error-message" style={{ position: 'relative', zIndex: 1 }}>
+          <p>Error: {error}</p>
+          <Link to="/" className="btn-secondary mt-md">
+            Back to Home
+          </Link>
+        </div>
       </div>
     );
   }
@@ -151,53 +184,163 @@ function Quiz() {
   // Show results after submission
   if (results) {
     return (
-      <div>
-        <div className="results-summary">
-          <h1>Quiz Complete!</h1>
-          <div className="score-display">
-            {results.score} / {results.total}
-          </div>
-          <div className="score-label">
-            {results.percentage}% Correct
-          </div>
-          
-          {/* Show points awarded info for retakes */}
-          {results.is_retake && (
-            <div className="points-awarded-info">
-              <p>
-                <strong>Points Awarded:</strong> +{results.points_awarded} pts
-                {results.points_awarded < results.score && (
-                  <span className="points-note">
-                    (Only new correct answers earn points on retakes)
-                  </span>
-                )}
-              </p>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div className="results-summary">
+            <h1>Quiz Complete!</h1>
+            <div className="score-display">
+              {results.score} / {results.total}
             </div>
-          )}
-        </div>
-
-        {/* Show individual results */}
-        <h2 className="mt-lg">Your Answers</h2>
-        {results.results.map((result, index) => (
-          <div 
-            key={result.question_id} 
-            className={`card ${result.correct ? 'text-success' : 'text-error'}`}
-            style={{ 
-              borderLeft: `5px solid ${result.correct ? 'var(--color-accent)' : 'var(--color-error)'}` 
-            }}
-          >
-            <p>
-              <strong>Question {index + 1}:</strong>{' '}
-              {result.correct ? '✓ Correct!' : '✗ Incorrect'}
-            </p>
+            <div className="score-label">
+              {results.percentage}% Correct
+            </div>
+            
+            {/* Show points awarded info for retakes */}
+            {results.is_retake && (
+              <div className="points-awarded-info">
+                <p>
+                  <strong>Points Awarded:</strong> +{results.points_awarded} pts
+                  {results.points_awarded < results.score && (
+                    <span className="points-note">
+                      (Only new correct answers earn points on retakes)
+                    </span>
+                  )}
+                </p>
+              </div>
+            )}
           </div>
-        ))}
 
-        {/* Navigation buttons */}
-        <div className="mt-lg" style={{ display: 'flex', gap: '1rem' }}>
-          <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none' }}>
-            Back to Dashboard
-          </Link>
+        {/* Show individual results with expandable details */}
+        <h2 className="mt-lg">Your Answers</h2>
+        <p className="text-secondary mb-md">Click on any question to see details</p>
+        {results.results.map((result, index) => {
+          const isExpanded = expandedResults[result.question_id];
+          
+          return (
+            <div 
+              key={result.question_id} 
+              className={`card ${result.correct ? 'text-success' : 'text-error'}`}
+              style={{ 
+                borderLeft: `5px solid ${result.correct ? 'var(--color-accent)' : 'var(--color-error)'}}`,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onClick={() => toggleResultExpanded(result.question_id)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleResultExpanded(result.question_id);
+                }
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <p style={{ margin: 0 }}>
+                  <strong>Question {index + 1}:</strong>{' '}
+                  {result.correct ? '✓ Correct!' : '✗ Incorrect'}
+                </p>
+                <span style={{ fontSize: '1.5rem', color: 'var(--text-secondary)' }}>
+                  {isExpanded ? '▼' : '▶'}
+                </span>
+              </div>
+              
+              {/* Expanded details */}
+              {isExpanded && (
+                <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e0e0e0' }}>
+                  {/* Question prompt */}
+                  <div style={{ marginBottom: '1rem' }}>
+                    <strong>Question:</strong>
+                    <p style={{ marginTop: '0.5rem' }}>{result.prompt}</p>
+                  </div>
+                  
+                  {/* Show code if present */}
+                  {result.code && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      <strong>Code:</strong>
+                      <div style={{ marginTop: '0.5rem' }}>
+                        <SyntaxHighlighter
+                          language="python"
+                          style={tomorrow}
+                          customStyle={{
+                            margin: 0,
+                            padding: '1rem',
+                            borderRadius: '8px',
+                            fontSize: 'var(--font-base)',
+                          }}
+                        >
+                          {result.code}
+                        </SyntaxHighlighter>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Show blocks for Parsons problems */}
+                  {result.blocks && result.blocks.length > 0 && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      <strong>Code blocks:</strong>
+                      <div style={{ marginTop: '0.5rem' }}>
+                        {result.blocks.map((block, idx) => (
+                          <div key={idx} style={{ 
+                            backgroundColor: '#f5f5f5', 
+                            padding: '0.5rem', 
+                            marginBottom: '0.25rem',
+                            borderRadius: '4px',
+                            fontFamily: 'monospace'
+                          }}>
+                            {idx + 1}. {block}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Your answer */}
+                  <div style={{ marginBottom: '1rem' }}>
+                    <strong>Your Answer:</strong>
+                    <div style={{ 
+                      marginTop: '0.5rem',
+                      padding: '0.5rem',
+                      backgroundColor: result.correct ? '#e8f5e9' : '#ffebee',
+                      borderRadius: '4px'
+                    }}>
+                      {result.question_type === 'parsons' || result.question_type === 'faded_parsons' ? (
+                        <div>Order: [{result.submitted ? result.submitted.join(', ') : 'Not answered'}]</div>
+                      ) : (
+                        <div>{result.submitted || 'Not answered'}</div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Correct answer */}
+                  <div>
+                    <strong>Correct Answer:</strong>
+                    <div style={{ 
+                      marginTop: '0.5rem',
+                      padding: '0.5rem',
+                      backgroundColor: '#e8f5e9',
+                      borderRadius: '4px'
+                    }}>
+                      {result.question_type === 'parsons' || result.question_type === 'faded_parsons' ? (
+                        <div>Order: [{result.correct_answer ? result.correct_answer.join(', ') : 'N/A'}]</div>
+                      ) : (
+                        <div>{result.correct_answer || 'N/A'}</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+          {/* Navigation buttons */}
+          <div className="mt-lg" style={{ display: 'flex', gap: '1rem' }}>
+            <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none' }}>
+              Back to Dashboard
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -206,38 +349,49 @@ function Quiz() {
   // Show error if quiz hasn't loaded for some reason
   if (!quiz) {
     return (
-      <div className="error-message">
-        <p>Error: Quiz not found or failed to load</p>
-        <Link to="/dashboard" className="btn-secondary mt-md">
-          Back to Dashboard
-        </Link>
+      <div style={{ position: 'relative', minHeight: '100vh' }}>
+        <AnimatedBackground theme={QUIZ_THEMES[quizId] || 'default'} />
+        <div className="container error-message" style={{ position: 'relative', zIndex: 1 }}>
+          <p>Error: Quiz not found or failed to load</p>
+          <Link to="/dashboard" className="btn-secondary mt-md">
+            Back to Dashboard
+          </Link>
+        </div>
       </div>
     );
   }
 
+  // Get theme for this quiz
+  const theme = QUIZ_THEMES[quizId] || 'default';
+
   return (
-    <div>
-      {/* Quiz Header */}
-      <div className="card mb-lg">
-        <h1>{quiz.title}</h1>
-        <p>{quiz.description}</p>
-        {!user && (
-          <div className="error-message">
-            <p>
-              <strong>Note:</strong> You need to{' '}
-              <a href={`${API_URL}/auth/login`}>log in</a>{' '}
-              to submit your answers and save your score.
-            </p>
-          </div>
-        )}
-        {loginWarning && (
-          <div className="error-message" role="alert">
-            <p>
-              <strong>Cannot submit:</strong> Please log in first to submit your quiz answers.
-            </p>
-          </div>
-        )}
-      </div>
+    <div style={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Animated Background */}
+      <AnimatedBackground theme={theme} />
+      
+      {/* Quiz Content - positioned above background */}
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+        {/* Quiz Header */}
+        <div className="card mb-lg">
+          <h1>{quiz.title}</h1>
+          <p>{quiz.description}</p>
+          {!user && (
+            <div className="error-message">
+              <p>
+                <strong>Note:</strong> You need to{' '}
+                <a href={`${API_URL}/auth/login`}>log in</a>{' '}
+                to submit your answers and save your score.
+              </p>
+            </div>
+          )}
+          {loginWarning && (
+            <div className="error-message" role="alert">
+              <p>
+                <strong>Cannot submit:</strong> Please log in first to submit your quiz answers.
+              </p>
+            </div>
+          )}
+        </div>
 
       {/* Questions */}
       {quiz.questions.map((question, index) => (
@@ -301,16 +455,17 @@ function Quiz() {
         </div>
       ))}
 
-      {/* Submit Button */}
-      <div className="mt-lg text-center">
-        <button 
-          className="btn-success" 
-          onClick={handleSubmit}
-          disabled={submitting}
-          style={{ padding: '1rem 2rem', fontSize: '1.2rem' }}
-        >
-          {submitting ? 'Submitting...' : 'Submit Quiz'}
-        </button>
+        {/* Submit Button */}
+        <div className="mt-lg text-center">
+          <button 
+            className="btn-success" 
+            onClick={handleSubmit}
+            disabled={submitting}
+            style={{ padding: '1rem 2rem', fontSize: '1.2rem' }}
+          >
+            {submitting ? 'Submitting...' : 'Submit Quiz'}
+          </button>
+        </div>
       </div>
     </div>
   );

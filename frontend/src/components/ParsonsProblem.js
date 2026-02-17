@@ -20,6 +20,8 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 /**
  * SortableBlock - Individual draggable code block
@@ -65,14 +67,33 @@ function SortableBlock({ id, code, position }) {
         style={{ 
           marginRight: '1rem',
           fontWeight: 'bold',
-          color: 'var(--color-secondary)'
+          color: 'var(--color-secondary)',
+          flexShrink: 0
         }}
       >
         {position}.
       </span>
       
-      {/* Code content */}
-      <code>{code}</code>
+      {/* Code content with syntax highlighting */}
+      <div style={{ flexGrow: 1, minWidth: 0 }}>
+        <SyntaxHighlighter
+          language="python"
+          style={tomorrow}
+          customStyle={{
+            margin: 0,
+            padding: 0,
+            background: 'transparent',
+            fontSize: 'var(--font-base)',
+          }}
+          codeTagProps={{
+            style: {
+              fontFamily: "'Consolas', 'Monaco', 'Courier New', monospace",
+            }
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
+      </div>
     </div>
   );
 }

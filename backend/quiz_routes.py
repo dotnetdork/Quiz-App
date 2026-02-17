@@ -266,11 +266,26 @@ def submit_quiz(
             correct = submitted == question["answer"]
         elif question["type"] == "free_response":
             # Free response - check exact match or case insensitive
+            # Also accept common variations like method(), method, .method()
             case_sensitive = question.get("case_sensitive", False)
-            if case_sensitive:
-                correct = submitted == question["answer"]
-            else:
-                correct = (submitted or "").strip().lower() == question["answer"].strip().lower()
+            submitted_cleaned = (submitted or "").strip()
+            answer_cleaned = question["answer"].strip()
+            
+            if not case_sensitive:
+                submitted_cleaned = submitted_cleaned.lower()
+                answer_cleaned = answer_cleaned.lower()
+            
+            # Generate variations: method, method(), .method, .method()
+            variations = set()
+            variations.add(answer_cleaned)
+            variations.add(answer_cleaned.rstrip('()'))
+            variations.add(f".{answer_cleaned}")
+            variations.add(f".{answer_cleaned.rstrip('()')}")
+            variations.add(f"{answer_cleaned}()")
+            variations.add(f".{answer_cleaned}()")
+            
+            # Check if submitted answer matches any variation
+            correct = submitted_cleaned in variations
         elif question["type"] == "faded_parsons":
             # Faded Parsons - compare movable block order
             correct = submitted == question["answer"]
@@ -285,8 +300,14 @@ def submit_quiz(
         
         results.append({
             "question_id": question["id"],
+            "question_type": question["type"],
+            "prompt": question.get("prompt", ""),
             "submitted": submitted,
-            "correct": correct
+            "correct": correct,
+            "correct_answer": question.get("answer"),
+            "options": question.get("options", []),
+            "code": question.get("code", ""),
+            "blocks": question.get("blocks", [])
         })
     
     # Save score to database (only new points awarded)

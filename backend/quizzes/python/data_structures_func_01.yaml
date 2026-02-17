@@ -38,10 +38,14 @@ questions:
   - 'None'
   answer: '8'
 - id: func_q4
-  type: free_response
+  type: multiple_choice
   prompt: What statement is used to return a value from a function?
+  options:
+  - return
+  - output
+  - give
+  - send
   answer: return
-  case_sensitive: false
 - id: func_q5
   type: multiple_choice
   prompt: What is the default return value of a function without an explicit return?
@@ -67,7 +71,7 @@ questions:
   answer: multiply
 - id: func_q7
   type: debugging
-  prompt: What is wrong with this function call?
+  prompt: What error will occur when trying to run this function call?
   code: |
     def calculate(a, b, c):
         return a + b + c
@@ -81,13 +85,13 @@ questions:
   answer: Missing required argument c
 - id: func_q8
   type: multiple_choice
-  prompt: What is a parameter in a function?
+  prompt: What is a parameter in a function definition?
   options:
-  - A value passed to the function
-  - A variable in the function definition
+  - A value passed when calling the function
+  - A variable defined in the function signature that receives values
   - The return value
   - A function call
-  answer: A variable in the function definition
+  answer: A variable defined in the function signature that receives values
 - id: func_q9
   type: output_prediction
   prompt: What will this code output?
@@ -146,10 +150,14 @@ questions:
   - 2
   - 3
 - id: func_q14
-  type: free_response
+  type: multiple_choice
   prompt: What exception is raised when converting 'abc' to an integer?
+  options:
+  - ValueError
+  - TypeError
+  - ConversionError
+  - ParseError
   answer: ValueError
-  case_sensitive: false
 - id: func_q15
   type: debugging
   prompt: What is wrong with this error handling?
@@ -212,10 +220,14 @@ questions:
   - list = <>
   answer: list = []
 - id: func_q20
-  type: free_response
+  type: multiple_choice
   prompt: What method adds an element to the end of a list?
+  options:
+  - append
+  - add
+  - insert
+  - push
   answer: append
-  case_sensitive: false
 - id: func_q21
   type: output_prediction
   prompt: What will this code output?
@@ -295,10 +307,14 @@ questions:
   - push
   answer: add
 - id: func_q28
-  type: free_response
+  type: multiple_choice
   prompt: What data structure uses curly braces and stores key-value pairs?
+  options:
+  - dictionary
+  - list
+  - set
+  - tuple
   answer: dictionary
-  case_sensitive: false
 - id: func_q29
   type: multiple_choice
   prompt: How do you create a dictionary?
@@ -397,10 +413,14 @@ questions:
   - 1
   - 2
 - id: func_q38
-  type: free_response
+  type: multiple_choice
   prompt: What method returns both keys and values from a dictionary?
+  options:
+  - items
+  - pairs
+  - entries
+  - both
   answer: items
-  case_sensitive: false
 - id: func_q39
   type: multiple_choice
   prompt: What is list comprehension?
@@ -519,10 +539,14 @@ questions:
   - 4
   - 5
 - id: func_q49
-  type: free_response
+  type: multiple_choice
   prompt: What function checks if all elements in an iterable are True?
+  options:
+  - all
+  - every
+  - check
+  - verify
   answer: all
-  case_sensitive: false
 - id: func_q50
   type: output_prediction
   prompt: What will this code output?
