@@ -3,13 +3,18 @@
  * 
  * Adds subtle particle effects emanating from button borders when users interact.
  * Non-intrusive and respects reduced motion preferences.
+ * 
+ * Performance optimizations:
+ * - Only animates when particles exist
+ * - Memoized to prevent unnecessary re-renders
  */
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, memo } from 'react';
 
-const ClickParticles = () => {
+const ClickParticles = memo(() => {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
   const animationRef = useRef(null);
+  const isAnimatingRef = useRef(false);
 
   const createParticles = useCallback((element) => {
     const rect = element.getBoundingClientRect();
@@ -106,7 +111,21 @@ const ClickParticles = () => {
       });
 
       ctx.globalAlpha = 1;
-      animationRef.current = requestAnimationFrame(animate);
+      
+      // Only continue animating if there are particles (performance optimization)
+      if (particlesRef.current.length > 0) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        isAnimatingRef.current = false;
+      }
+    };
+    
+    // Start animation only when needed
+    const startAnimation = () => {
+      if (!isAnimatingRef.current) {
+        isAnimatingRef.current = true;
+        animationRef.current = requestAnimationFrame(animate);
+      }
     };
 
     const handleClick = (e) => {
@@ -125,13 +144,14 @@ const ClickParticles = () => {
 
       if (interactiveElement) {
         createParticles(interactiveElement);
+        startAnimation(); // Start animation when particles are created
       }
     };
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     document.addEventListener('click', handleClick);
-    animate();
+    // Don't start animation loop - it will start on first click
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
@@ -156,6 +176,6 @@ const ClickParticles = () => {
       }}
     />
   );
-};
+});
 
 export default ClickParticles;

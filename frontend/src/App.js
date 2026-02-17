@@ -4,15 +4,19 @@
  * This is the root component for the Quiz App.
  * It sets up routing and provides the main layout.
  */
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
 
-// Import page components
+// Import critical components synchronously
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Quiz from './pages/Quiz';
 import ProtectedRoute from './components/ProtectedRoute';
 import ClickParticles from './components/ClickParticles';
+import { AuthProvider } from './context/AuthContext';
+
+// Lazy load heavy page components for faster initial load
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Quiz = lazy(() => import('./pages/Quiz'));
 
 /**
  * App Logo Component
@@ -92,7 +96,9 @@ function Footer() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
@@ -114,24 +120,26 @@ function AppContent() {
       
       {/* Main content area */}
       <main className={isLoginPage ? '' : 'container'}>
-        <Routes>
-          {/* Login page - centered login with no nav/footer */}
-          <Route path="/" element={<Login />} />
-          
-          {/* Dashboard - user's quiz history and quiz browsing */}
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
-          
-          {/* Quiz page - take a specific quiz */}
-          <Route path="/quiz/:quizId" element={
-            <ProtectedRoute>
-              <Quiz />
-            </ProtectedRoute>
-          } />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes>
+            {/* Login page - centered login with no nav/footer */}
+            <Route path="/" element={<Login />} />
+            
+            {/* Dashboard - user's quiz history and quiz browsing */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            
+            {/* Quiz page - take a specific quiz */}
+            <Route path="/quiz/:quizId" element={
+              <ProtectedRoute>
+                <Quiz />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </Suspense>
       </main>
       
       {/* Footer - hide on login page */}

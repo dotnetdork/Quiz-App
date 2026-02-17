@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiCall, API_URL } from '../api';
-import { useAuth } from '../utils/useAuth';
+import { useAuth } from '../context/AuthContext';
 import MultipleChoice from '../components/MultipleChoice';
 import ParsonsProblem from '../components/ParsonsProblem';
 import OutputPrediction from '../components/OutputPrediction';
@@ -25,14 +25,14 @@ const QUIZ_THEMES = {
   'loops_iteration': 'spiral',
   'turtle_graphics': 'ocean',
   'functions_collections': 'network',
-  'java_basics_01': 'coffee',
-  'java_oop_01': 'blocks',
-  'java_collections_01': 'dataflow',
-  'java_advanced_01': 'lambda',
-  'tech_concepts_01': 'circuit',
-  'cybersecurity_01': 'matrix',
-  'robotics_01': 'gears',
-  'ai_fundamentals_01': 'neural'
+  'java_basics': 'coffee',
+  'java_oop': 'blocks',
+  'java_collections': 'dataflow',
+  'java_advanced': 'lambda',
+  'tech_concepts': 'circuit',
+  'cybersecurity_basics': 'matrix',
+  'robotics_fundamentals': 'gears',
+  'artificial_intelligence': 'neural'
 };
 
 function Quiz() {

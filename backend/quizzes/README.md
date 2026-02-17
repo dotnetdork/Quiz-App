@@ -45,16 +45,16 @@ questions:
 - `types_logic.yaml` - Types and Logic
 
 ### Java (`java/`)
-- `java_basics_01.yaml` - Java Fundamentals
-- `java_oop_01.yaml` - Java Object-Oriented Programming
-- `java_collections_01.yaml` - Java Collections Framework
-- `java_advanced_01.yaml` - Java Advanced Programming
+- `java_basics.yaml` - Java Fundamentals
+- `java_oop.yaml` - Java Object-Oriented Programming
+- `java_collections.yaml` - Java Collections Framework
+- `java_advanced.yaml` - Java Advanced Programming
 
 ### Technology (`technology/`)
-- `tech_concepts_01.yaml` - Technology Concepts
-- `robotics_01.yaml` - Robotics Fundamentals
-- `cybersecurity_01.yaml` - Cybersecurity Fundamentals
-- `ai_fundamentals_01.yaml` - Artificial Intelligence Fundamentals
+- `tech_concepts.yaml` - Technology Concepts
+- `robotics_fundamentals.yaml` - Robotics Fundamentals
+- `cybersecurity_basics.yaml` - Cybersecurity Basics
+- `artificial_intelligence.yaml` - Artificial Intelligence
 
 ## Adding a New Quiz
 

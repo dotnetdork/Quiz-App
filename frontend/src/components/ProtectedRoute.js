@@ -2,62 +2,51 @@
  * ProtectedRoute Component
  * 
  * Wraps routes that require authentication.
- * Redirects to login if user is not authenticated.
+ * Uses shared AuthContext to prevent duplicate API calls.
+ * Shows skeleton loading with animated background for smooth transitions.
  */
-import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { apiCall } from '../api';
+import { useAuth } from '../context/AuthContext';
+import AnimatedBackground from './AnimatedBackground';
+
+/**
+ * Dashboard skeleton loader shown during authentication
+ * Provides visual continuity between login and dashboard
+ */
+function DashboardSkeleton({ showLoadingBar }) {
+  return (
+    <>
+      <AnimatedBackground theme="dashboard" />
+      <div className="dashboard-skeleton" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="skeleton-profile-card">
+          <div className="skeleton-avatar"></div>
+          <div className="skeleton-text"></div>
+          <div className="skeleton-text short"></div>
+        </div>
+        <div className="skeleton-stats">
+          <div className="skeleton-stat-card"></div>
+          <div className="skeleton-stat-card"></div>
+          <div className="skeleton-stat-card"></div>
+        </div>
+        {showLoadingBar && (
+          <div className="loading-bar-overlay">
+            <div className="loading-bar">
+              <div className="loading-bar-fill"></div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
 
 function ProtectedRoute({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        await apiCall('/auth/me');
-        setIsAuthenticated(true);
-      } catch (error) {
-        // Log error in development for debugging
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Authentication check failed:', error.message);
-        }
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    checkAuth();
-  }, []);
+  const { isAuthenticated, loading, isAuthenticating } = useAuth();
 
   if (loading) {
-    // Check if we're coming from OAuth flow to show consistent loading bar
-    const isAuthenticating = sessionStorage.getItem('isAuthenticating') === 'true';
-    
-    if (isAuthenticating) {
-      // Show loading bar during authentication check
-      return (
-        <div className="loading-bar-container" style={{ 
-          position: 'fixed', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)',
-          width: '400px',
-          maxWidth: '80%'
-        }}>
-          <div className="loading-bar">
-            <div className="loading-bar-fill"></div>
-          </div>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="loading-spinner">
-        <p>Loading...</p>
-      </div>
-    );
+    // Always show skeleton with background during loading
+    // This prevents the white screen flash
+    return <DashboardSkeleton showLoadingBar={isAuthenticating} />;
   }
 
   if (!isAuthenticated) {

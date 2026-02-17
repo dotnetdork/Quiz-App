@@ -8,9 +8,10 @@
  */
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { apiCall, API_URL } from '../api';
+import { apiCall, API_URL, clearApiCache } from '../api';
 import { getRankEmoji, calculateTotalPoints } from '../utils/rankUtils';
 import AnimatedBackground from '../components/AnimatedBackground';
+import { useAuth, getPrefetchedData } from '../context/AuthContext';
 
 // Category Icons
 function PythonIcon({ size = 60 }) {
@@ -159,7 +160,8 @@ function QuizHistoryGroup({ quizTitle, quizId, attempts }) {
 
 function Dashboard() {
   const [activeTab, setActiveTab] = useState('quizzes');
-  const [user, setUser] = useState(null);
+  const { user: authUser } = useAuth();
+  const [user, setUser] = useState(authUser);
   const [scores, setScores] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
@@ -173,18 +175,30 @@ function Dashboard() {
   useEffect(() => {
     async function loadData() {
       try {
-        const userData = await apiCall('/auth/me');
+        // Use user from AuthContext (already authenticated)
+        const userData = authUser || await apiCall('/auth/me');
         setUser(userData);
         
-        const [scoreData, quizData, leaderData] = await Promise.all([
-          apiCall(`/api/leaderboard/user/${userData.username}`),
-          apiCall('/api/quiz/questions'),
-          apiCall('/api/leaderboard/')
-        ]);
+        // Check for prefetched data first (from AuthContext)
+        const prefetched = getPrefetchedData();
         
-        setScores(scoreData.scores || []);
-        setQuizzes(quizData.quizzes || []);
-        setLeaderboard(leaderData.leaderboard || []);
+        if (prefetched) {
+          // Use prefetched data - instant load!
+          setScores(prefetched.scores);
+          setQuizzes(prefetched.quizzes);
+          setLeaderboard(prefetched.leaderboard);
+        } else {
+          // Fall back to fresh fetch if no prefetched data
+          const [scoreData, quizData, leaderData] = await Promise.all([
+            apiCall(`/api/leaderboard/user/${userData.username}`),
+            apiCall('/api/quiz/questions'),
+            apiCall('/api/leaderboard/')
+          ]);
+          
+          setScores(scoreData.scores || []);
+          setQuizzes(quizData.quizzes || []);
+          setLeaderboard(leaderData.leaderboard || []);
+        }
         
         // Clear authentication flag and trigger profile animation
         sessionStorage.removeItem('isAuthenticating');
@@ -198,11 +212,14 @@ function Dashboard() {
     }
     
     loadData();
-  }, []);
+  }, [authUser]);
 
   const handleLogout = (e) => {
     e.preventDefault();
     setIsLoggingOut(true);
+    
+    // Clear caches on logout
+    clearApiCache();
     
     // Navigate after animation completes
     setTimeout(() => {

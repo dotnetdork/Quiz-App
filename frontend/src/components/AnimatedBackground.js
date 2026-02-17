@@ -3,10 +3,15 @@
  * 
  * Provides subtle, theme-specific background animations for quiz pages.
  * Each theme creates a unique, non-distracting visual experience.
+ * 
+ * Performance optimizations:
+ * - Frame rate limited to 30fps (sufficient for subtle backgrounds)
+ * - Memoized to prevent unnecessary re-renders
+ * - Respects reduced motion preference
  */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 
-const AnimatedBackground = ({ theme = 'default' }) => {
+const AnimatedBackground = memo(({ theme = 'default' }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -449,10 +454,21 @@ const AnimatedBackground = ({ theme = 'default' }) => {
       ctx.restore();
     };
 
-    // Animation loop
-    const animate = () => {
+    // Animation loop with frame rate limiting (~30fps for performance)
+    const targetFPS = 30;
+    const frameInterval = 1000 / targetFPS;
+    let lastFrameTime = 0;
+    
+    const animate = (currentTime) => {
+      animationFrameId = requestAnimationFrame(animate);
+      
+      // Frame rate limiting
+      const elapsed = currentTime - lastFrameTime;
+      if (elapsed < frameInterval) return;
+      lastFrameTime = currentTime - (elapsed % frameInterval);
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      time += 0.016; // ~60fps
+      time += 0.033; // ~30fps
 
       switch (theme) {
         case 'geometric':
@@ -501,8 +517,6 @@ const AnimatedBackground = ({ theme = 'default' }) => {
           animateDefault();
           break;
       }
-
-      animationFrameId = requestAnimationFrame(animate);
     };
 
     const animateGeometric = () => {
@@ -1108,7 +1122,7 @@ const AnimatedBackground = ({ theme = 'default' }) => {
     if (!prefersReducedMotion) {
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
-      animate();
+      animationFrameId = requestAnimationFrame(animate);
     }
 
     return () => {
@@ -1134,6 +1148,6 @@ const AnimatedBackground = ({ theme = 'default' }) => {
       }}
     />
   );
-};
+});
 
 export default AnimatedBackground;

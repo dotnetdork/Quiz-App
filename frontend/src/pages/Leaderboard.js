@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react';
 import { apiCall, API_URL } from '../api';
 import { getRankEmoji, getRankClass, calculateTotalPoints } from '../utils/rankUtils';
-import { useAuth } from '../utils/useAuth';
+import { useAuth } from '../context/AuthContext';
 
 function Leaderboard() {
   // State

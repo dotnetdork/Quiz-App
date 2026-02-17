@@ -1942,3 +1942,95 @@ code[class*="language-"] .token {
 .parsons-block .token.variable {
   color: #e45649 !important;
 }
+
+/* ========================================
+   Improved Page Transition Styles
+   ======================================== */
+
+/* Ensure body and html have dark background to prevent white flash */
+html, body {
+  background-color: var(--bg-dark, #0a0f1e);
+}
+
+/* Main app container should also prevent white flash */
+#root {
+  min-height: 100vh;
+  background-color: var(--bg-dark, #0a0f1e);
+}
+
+/* Skeleton in protected route - shows above animated background */
+.dashboard-skeleton {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  animation: skeletonFadeIn 0.4s ease;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes skeletonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Improved skeleton card styling with glass effect */
+.dashboard-skeleton .skeleton-profile-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Improved skeleton stat cards with glass effect */
+.dashboard-skeleton .skeleton-stat-card {
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 2rem;
+  height: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: shimmer 1.5s infinite;
+}
+
+/* Smooth content appearance when data loads */
+.dashboard-container {
+  animation: dashboardContentAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dashboardContentAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading bar overlay improvements */
+.loading-bar-overlay {
+  animation: loadingOverlayAppear 0.3s ease;
+}
+
+@keyframes loadingOverlayAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
