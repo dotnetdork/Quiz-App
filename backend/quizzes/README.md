@@ -39,8 +39,6 @@ questions:
 ## Available Quizzes
 
 ### Python (`python/`)
-- `python_basics_01.yaml` - Python Fundamentals
-- `python_data_structures.yaml` - Python Data Structures
 - `data_structures_func_01.yaml` - Data Structures and Functions
 - `loops_module_01.yaml` - Loops Module
 - `turtles_module_01.yaml` - Turtles Module
