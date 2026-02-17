@@ -151,3 +151,56 @@ questions:
   - print('Hello World')
   - System.out.println('Hello World')
   answer: print('Hello World')
+- id: q16
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    x = 10
+    y = 5
+    print(x + y)
+  options:
+  - '10'
+  - '5'
+  - '15'
+  - '105'
+  answer: '15'
+- id: q17
+  type: debugging
+  prompt: What is the bug in this code?
+  code: |
+    my_list = [1, 2, 3]
+    print(my_list[3])
+  options:
+  - Lists can't be printed
+  - Index 3 is out of range (list has indices 0-2)
+  - Lists need to use parentheses instead of brackets
+  - The print statement is incorrect
+  answer: Index 3 is out of range (list has indices 0-2)
+- id: q18
+  type: fill_in_blank
+  prompt: Fill in the blank to create a dictionary.
+  code: |
+    my_dict = ___ 'name': 'Alice', 'age': 25 ___
+  options:
+  - '( and )'
+  - '[ and ]'
+  - '{ and }'
+  - '< and >'
+  answer: '{ and }'
+- id: q19
+  type: free_response
+  prompt: What keyword is used to define a function in Python?
+  answer: def
+  case_sensitive: false
+- id: q20
+  type: faded_parsons
+  prompt: Complete this function by arranging the movable lines. The def and return lines are already in place.
+  blocks:
+  - 'def calculate_area(length, width):'
+  - '    area = length * width'
+  - '    return area'
+  fixed_indices:
+  - 0
+  - 2
+  answer:
+  - 1

@@ -1,0 +1,577 @@
+id: turtles_module_01
+title: Python Turtles - Module 10
+description: Test your knowledge of Python turtle graphics, including basic commands, loops, functions, and creative patterns
+category: python
+questions:
+- id: turtle_q1
+  type: multiple_choice
+  prompt: Which statement correctly imports the turtle module?
+  options:
+  - from turtle import *
+  - import turtle
+  - include turtle
+  - require turtle
+  answer: import turtle
+- id: turtle_q2
+  type: multiple_choice
+  prompt: How do you create a new turtle named 'tina'?
+  options:
+  - tina = turtle.new()
+  - tina = turtle.Turtle()
+  - tina = turtle.create()
+  - tina = Turtle()
+  answer: tina = turtle.Turtle()
+- id: turtle_q3
+  type: output_prediction
+  prompt: What shape will this turtle draw?
+  code: |
+    import turtle
+    tina = turtle.Turtle()
+    for i in range(4):
+        tina.forward(100)
+        tina.left(90)
+  options:
+  - Triangle
+  - Square
+  - Pentagon
+  - Circle
+  answer: Square
+- id: turtle_q4
+  type: multiple_choice
+  prompt: Which method moves the turtle forward by a specified distance?
+  options:
+  - tina.move(100)
+  - tina.forward(100)
+  - tina.go(100)
+  - tina.advance(100)
+  answer: tina.forward(100)
+- id: turtle_q5
+  type: multiple_choice
+  prompt: What does tina.penup() do?
+  options:
+  - Raises the pen so the turtle moves without drawing
+  - Increases the pen width
+  - Changes the pen color
+  - Rotates the pen upward
+  answer: Raises the pen so the turtle moves without drawing
+- id: turtle_q6
+  type: fill_in_blank
+  prompt: Fill in the blank to turn the turtle right by 90 degrees.
+  code: |
+    tina.___(90)
+  options:
+  - turn
+  - rotate
+  - right
+  - angle
+  answer: right
+- id: turtle_q7
+  type: debugging
+  prompt: What is wrong with this code?
+  code: |
+    import turtle
+    tina = turtle.Turtle()
+    tina.forward(100)
+    tina.left(45)
+    tina.forward(100)
+    # Window closes immediately
+  options:
+  - Missing turtle.done() or turtle.exitonclick()
+  - forward() should be move()
+  - left() should take radians not degrees
+  - tina was not created properly
+  answer: Missing turtle.done() or turtle.exitonclick()
+- id: turtle_q8
+  type: free_response
+  prompt: What method changes the turtle's pen color?
+  answer: pencolor
+  case_sensitive: false
+- id: turtle_q9
+  type: parsons
+  prompt: Arrange these lines to draw a triangle.
+  blocks:
+  - import turtle
+  - tina = turtle.Turtle()
+  - for i in range(3):
+  - '    tina.forward(100)'
+  - '    tina.left(120)'
+  - turtle.exitonclick()
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+- id: turtle_q10
+  type: multiple_choice
+  prompt: What does range(5) generate?
+  options:
+  - Numbers 1 through 5
+  - Numbers 0 through 4
+  - Numbers 0 through 5
+  - Numbers 1 through 4
+  answer: Numbers 0 through 4
+- id: turtle_q11
+  type: output_prediction
+  prompt: How many sides will this polygon have?
+  code: |
+    for i in range(6):
+        tina.forward(50)
+        tina.left(60)
+  options:
+  - '4'
+  - '5'
+  - '6'
+  - '7'
+  answer: '6'
+- id: turtle_q12
+  type: multiple_choice
+  prompt: Which method sets the turtle's speed?
+  options:
+  - tina.velocity()
+  - tina.speed()
+  - tina.rate()
+  - tina.pace()
+  answer: tina.speed()
+- id: turtle_q13
+  type: fill_in_blank
+  prompt: Fill in the blank to hide the turtle.
+  code: |
+    tina.___()
+  options:
+  - invisible()
+  - hide()
+  - hideturtle()
+  - conceal()
+  answer: hideturtle()
+- id: turtle_q14
+  type: multiple_choice
+  prompt: What does tina.goto(0, 0) do?
+  options:
+  - Moves turtle to the center of the screen
+  - Resets the turtle completely
+  - Clears the drawing
+  - Rotates to face coordinates (0,0)
+  answer: Moves turtle to the center of the screen
+- id: turtle_q15
+  type: debugging
+  prompt: What is the bug in this code?
+  code: |
+    import turtle
+    tina = turtle.Turtle()
+    tina.pencolor('red')
+    tina.fillcolor('blue')
+    tina.forward(100)
+    tina.left(90)
+    tina.forward(100)
+  options:
+  - Missing begin_fill() and end_fill() to actually fill the shape
+  - pencolor should be pen_color
+  - fillcolor should take RGB values
+  - forward and left are in wrong order
+  answer: Missing begin_fill() and end_fill() to actually fill the shape
+- id: turtle_q16
+  type: faded_parsons
+  prompt: Complete the code to fill a square with color. The turtle creation and exitonclick are already in place.
+  blocks:
+  - import turtle
+  - tina = turtle.Turtle()
+  - tina.fillcolor('red')
+  - tina.begin_fill()
+  - for i in range(4):
+  - '    tina.forward(100)'
+  - '    tina.left(90)'
+  - tina.end_fill()
+  - turtle.exitonclick()
+  fixed_indices:
+  - 0
+  - 1
+  - 8
+  answer:
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+- id: turtle_q17
+  type: free_response
+  prompt: What function keeps the turtle window open until you click on it?
+  answer: exitonclick
+  case_sensitive: false
+- id: turtle_q18
+  type: multiple_choice
+  prompt: To calculate the angle for a regular polygon with n sides, which formula is correct?
+  options:
+  - angle = n * 360
+  - angle = 360 / n
+  - angle = 180 / n
+  - angle = n / 360
+  answer: angle = 360 / n
+- id: turtle_q19
+  type: output_prediction
+  prompt: What angle should replace ??? to draw a pentagon?
+  code: |
+    for i in range(5):
+        tina.forward(80)
+        tina.left(???)
+  options:
+  - '60'
+  - '72'
+  - '90'
+  - '108'
+  answer: '72'
+- id: turtle_q20
+  type: parsons
+  prompt: Arrange these lines to define a function that draws a square.
+  blocks:
+  - def draw_square(size):
+  - '    for i in range(4):'
+  - '        tina.forward(size)'
+  - '        tina.left(90)'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: turtle_q21
+  type: multiple_choice
+  prompt: In the function definition 'def draw_circle(radius):', what is 'radius'?
+  options:
+  - A variable
+  - A parameter
+  - A return value
+  - A constant
+  answer: A parameter
+- id: turtle_q22
+  type: fill_in_blank
+  prompt: Fill in the blank to set the pen width to 5 pixels.
+  code: |
+    tina.___(5)
+  options:
+  - width
+  - pensize
+  - thickness
+  - penwidth
+  answer: penwidth
+- id: turtle_q23
+  type: debugging
+  prompt: Why doesn't this function work as expected?
+  code: |
+    def draw_star():
+        for i in range(5)
+            tina.forward(100)
+            tina.right(144)
+  options:
+  - Missing colon after range(5)
+  - forward should be backward
+  - right should be left
+  - Missing return statement
+  answer: Missing colon after range(5)
+- id: turtle_q24
+  type: multiple_choice
+  prompt: Which turtle shape is NOT valid?
+  options:
+  - turtle
+  - arrow
+  - square
+  - rectangle
+  answer: rectangle
+- id: turtle_q25
+  type: output_prediction
+  prompt: What color will the line be?
+  code: |
+    tina.pencolor('red')
+    tina.forward(50)
+    tina.pencolor('blue')
+    tina.forward(50)
+    tina.forward(50)
+  options:
+  - Red for all lines
+  - Blue for all lines
+  - Red then blue (50px each), then blue again (50px)
+  - Red, blue, red (50px each)
+  answer: Red then blue (50px each), then blue again (50px)
+- id: turtle_q26
+  type: free_response
+  prompt: What method starts filling a shape with color?
+  answer: begin_fill
+  case_sensitive: false
+- id: turtle_q27
+  type: multiple_choice
+  prompt: How do you create a list of colors in Python?
+  options:
+  - colors = ['red', 'blue', 'green']
+  - colors = {'red', 'blue', 'green'}
+  - colors = ('red', 'blue', 'green')
+  - colors = <'red', 'blue', 'green'>
+  answer: colors = ['red', 'blue', 'green']
+- id: turtle_q28
+  type: parsons
+  prompt: Arrange the code to iterate through a list of colors.
+  blocks:
+  - colors = ['red', 'blue', 'green']
+  - for color in colors:
+  - '    tina.pencolor(color)'
+  - '    tina.forward(50)'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+- id: turtle_q29
+  type: fill_in_blank
+  prompt: Fill in the blank to get the length of a list.
+  code: |
+    colors = ['red', 'blue', 'green']
+    num_colors = ___(colors)
+  options:
+  - length
+  - size
+  - len
+  - count
+  answer: len
+- id: turtle_q30
+  type: multiple_choice
+  prompt: What does the modulo operator % do?
+  options:
+  - Divides two numbers
+  - Multiplies two numbers
+  - Returns the remainder of division
+  - Returns the quotient of division
+  answer: Returns the remainder of division
+- id: turtle_q31
+  type: output_prediction
+  prompt: What will i % 3 equal when i is 5?
+  code: |
+    i = 5
+    result = i % 3
+  options:
+  - '0'
+  - '1'
+  - '2'
+  - '3'
+  answer: '2'
+- id: turtle_q32
+  type: debugging
+  prompt: What is wrong with this code that tries to cycle through colors?
+  code: |
+    colors = ['red', 'blue', 'green']
+    for i in range(10):
+        tina.pencolor(colors[i])
+        tina.forward(20)
+  options:
+  - List index out of range when i >= 3
+  - colors should be a tuple not a list
+  - pencolor doesn't accept list values
+  - range should be range(3)
+  answer: List index out of range when i >= 3
+- id: turtle_q33
+  type: faded_parsons
+  prompt: Fix the code to cycle through colors using modulo. The list and loop are in place.
+  blocks:
+  - colors = ['red', 'blue', 'green', 'yellow']
+  - for i in range(12):
+  - '    color_index = i % len(colors)'
+  - '    tina.pencolor(colors[color_index])'
+  - '    tina.forward(30)'
+  fixed_indices:
+  - 0
+  - 1
+  answer:
+  - 2
+  - 3
+  - 4
+- id: turtle_q34
+  type: multiple_choice
+  prompt: What does turtle.Screen() create?
+  options:
+  - A new turtle object
+  - A window/screen for drawing
+  - A color palette
+  - A drawing canvas
+  answer: A window/screen for drawing
+- id: turtle_q35
+  type: free_response
+  prompt: What keyword is used to define a function in Python?
+  answer: def
+  case_sensitive: false
+- id: turtle_q36
+  type: multiple_choice
+  prompt: In a hexadecimal color code like '#FF5733', what do the first two characters after # represent?
+  options:
+  - Blue value
+  - Green value
+  - Red value
+  - Alpha/transparency
+  answer: Red value
+- id: turtle_q37
+  type: output_prediction
+  prompt: How many times will the turtle turn in this nested loop?
+  code: |
+    for i in range(3):
+        for j in range(4):
+            tina.left(90)
+  options:
+  - '3'
+  - '4'
+  - '7'
+  - '12'
+  answer: '12'
+- id: turtle_q38
+  type: parsons
+  prompt: Arrange code to draw a spiral pattern.
+  blocks:
+  - for i in range(20):
+  - '    tina.forward(i * 5)'
+  - '    tina.right(45)'
+  answer:
+  - 0
+  - 1
+  - 2
+- id: turtle_q39
+  type: fill_in_blank
+  prompt: Fill in the blank to move the turtle backward.
+  code: |
+    tina.___(50)
+  options:
+  - reverse
+  - back
+  - backward
+  - retreat
+  answer: backward
+- id: turtle_q40
+  type: debugging
+  prompt: What is wrong with this function call?
+  code: |
+    def draw_line(length, color):
+        tina.pencolor(color)
+        tina.forward(length)
+    
+    draw_line(100)
+  options:
+  - Missing the color argument
+  - length should be a string
+  - forward is inside a function
+  - function name should be uppercase
+  answer: Missing the color argument
+- id: turtle_q41
+  type: multiple_choice
+  prompt: What happens when you call tina.clear()?
+  options:
+  - Deletes the turtle object
+  - Clears the drawing but keeps the turtle
+  - Closes the window
+  - Resets the turtle to center
+  answer: Clears the drawing but keeps the turtle
+- id: turtle_q42
+  type: output_prediction
+  prompt: After this code, where will the turtle be located?
+  code: |
+    tina.goto(50, 50)
+    tina.penup()
+    tina.goto(100, 100)
+  options:
+  - (0, 0)
+  - (50, 50)
+  - (100, 100)
+  - (150, 150)
+  answer: (100, 100)
+- id: turtle_q43
+  type: free_response
+  prompt: What method makes the turtle invisible?
+  answer: hideturtle
+  case_sensitive: false
+- id: turtle_q44
+  type: multiple_choice
+  prompt: Which import statement is more specific and recommended?
+  options:
+  - from turtle import *
+  - import turtle
+  - import turtle as t
+  - Both B and C are recommended
+  answer: Both B and C are recommended
+- id: turtle_q45
+  type: parsons
+  prompt: Arrange code to draw multiple squares of increasing size.
+  blocks:
+  - for size in [50, 75, 100]:
+  - '    for i in range(4):'
+  - '        tina.forward(size)'
+  - '        tina.left(90)'
+  - '    tina.penup()'
+  - '    tina.goto(0, 0)'
+  - '    tina.pendown()'
+  answer:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+- id: turtle_q46
+  type: fill_in_blank
+  prompt: Fill in the blank to end filling a shape.
+  code: |
+    tina.begin_fill()
+    # draw shape here
+    tina.___()
+  options:
+  - stop_fill
+  - close_fill
+  - end_fill
+  - finish_fill
+  answer: end_fill
+- id: turtle_q47
+  type: debugging
+  prompt: This code should draw a star, but the angle is wrong. What should it be?
+  code: |
+    for i in range(5):
+        tina.forward(100)
+        tina.right(72)  # Wrong angle!
+  options:
+  - Should be 144 degrees
+  - Should be 108 degrees
+  - Should be 36 degrees
+  - Should be 60 degrees
+  answer: Should be 144 degrees
+- id: turtle_q48
+  type: faded_parsons
+  prompt: Complete this function to draw a polygon with n sides. The function signature is in place.
+  blocks:
+  - def draw_polygon(sides, length):
+  - '    angle = 360 / sides'
+  - '    for i in range(sides):'
+  - '        tina.forward(length)'
+  - '        tina.left(angle)'
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+  - 3
+  - 4
+- id: turtle_q49
+  type: multiple_choice
+  prompt: What does tina.setheading(0) do?
+  options:
+  - Points the turtle to the right (East)
+  - Points the turtle up (North)
+  - Resets the turtle position
+  - Sets the turtle speed to 0
+  answer: Points the turtle to the right (East)
+- id: turtle_q50
+  type: output_prediction
+  prompt: What will be the final heading of the turtle?
+  code: |
+    tina.setheading(90)
+    tina.right(45)
+    tina.left(90)
+  options:
+  - '45 degrees'
+  - '90 degrees'
+  - '135 degrees'
+  - '180 degrees'
+  answer: '135 degrees'

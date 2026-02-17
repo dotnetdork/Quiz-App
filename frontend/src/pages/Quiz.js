@@ -10,6 +10,11 @@ import { apiCall, API_URL } from '../api';
 import { useAuth } from '../utils/useAuth';
 import MultipleChoice from '../components/MultipleChoice';
 import ParsonsProblem from '../components/ParsonsProblem';
+import OutputPrediction from '../components/OutputPrediction';
+import DebuggingQuestion from '../components/DebuggingQuestion';
+import FillInTheBlank from '../components/FillInTheBlank';
+import FreeResponse from '../components/FreeResponse';
+import FadedParsons from '../components/FadedParsons';
 
 function Quiz() {
   // Get quiz ID from URL
@@ -42,6 +47,12 @@ function Quiz() {
             // For Parsons, store the block indices in shuffled order
             const indices = question.blocks.map((_, index) => index);
             initialAnswers[question.id] = shuffleArray([...indices]);
+          } else if (question.type === 'faded_parsons') {
+            // For Faded Parsons, only shuffle non-fixed blocks
+            const movableIndices = question.blocks
+              .map((_, idx) => idx)
+              .filter(idx => !(question.fixed_indices || []).includes(idx));
+            initialAnswers[question.id] = shuffleArray([...movableIndices]);
           } else {
             initialAnswers[question.id] = null;
           }
@@ -233,6 +244,40 @@ function Quiz() {
           ) : question.type === 'parsons' ? (
             <ParsonsProblem
               blocks={question.blocks}
+              order={answers[question.id] || []}
+              onOrderChange={(newOrder) => handleAnswerChange(question.id, newOrder)}
+            />
+          ) : question.type === 'output_prediction' ? (
+            <OutputPrediction
+              code={question.code}
+              options={question.options}
+              selectedAnswer={answers[question.id]}
+              onSelect={(answer) => handleAnswerChange(question.id, answer)}
+            />
+          ) : question.type === 'debugging' ? (
+            <DebuggingQuestion
+              code={question.code}
+              options={question.options}
+              selectedAnswer={answers[question.id]}
+              onSelect={(answer) => handleAnswerChange(question.id, answer)}
+            />
+          ) : question.type === 'fill_in_blank' ? (
+            <FillInTheBlank
+              code={question.code}
+              options={question.options}
+              selectedAnswer={answers[question.id]}
+              onSelect={(answer) => handleAnswerChange(question.id, answer)}
+            />
+          ) : question.type === 'free_response' ? (
+            <FreeResponse
+              selectedAnswer={answers[question.id]}
+              onAnswer={(answer) => handleAnswerChange(question.id, answer)}
+              placeholder={question.placeholder}
+            />
+          ) : question.type === 'faded_parsons' ? (
+            <FadedParsons
+              blocks={question.blocks}
+              fixedIndices={question.fixed_indices || []}
               order={answers[question.id] || []}
               onOrderChange={(newOrder) => handleAnswerChange(question.id, newOrder)}
             />

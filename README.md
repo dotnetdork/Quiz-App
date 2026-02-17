@@ -9,6 +9,11 @@ A modern, interactive quiz platform built with React and FastAPI. Test your know
 - 🎯 **Interactive Question Types** 
   - Multiple choice questions
   - Parsons problems (drag-and-drop code ordering)
+  - Output prediction questions (predict code output)
+  - Debugging questions (identify and fix bugs)
+  - Fill in the blank questions (complete code snippets)
+  - Free response questions (type your answer)
+  - Faded Parsons (drag-and-drop with fixed lines)
 - 🏆 **Leaderboard System** - Track your progress and compete globally
 - 📊 **Personal Dashboard** - View your stats, quiz history, and skills profile
 - 🎨 **Modern UI/UX** - Space-themed login with animated backgrounds

@@ -146,3 +146,59 @@ questions:
   - 0
   - 1
   - 2
+- id: ds_q16
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    my_list = [1, 2, 3]
+    my_list.append(4)
+    print(len(my_list))
+  options:
+  - '3'
+  - '4'
+  - '5'
+  - error
+  answer: '4'
+- id: ds_q17
+  type: debugging
+  prompt: What is the bug in this code?
+  code: |
+    my_set = {1, 2, 3}
+    my_set[0] = 4
+  options:
+  - Sets cannot be modified
+  - Sets don't support indexing/assignment
+  - Should use append() instead
+  - Index should be 1, not 0
+  answer: Sets don't support indexing/assignment
+- id: ds_q18
+  type: fill_in_blank
+  prompt: Fill in the blank to add an item to a list.
+  code: |
+    fruits = ['apple', 'banana']
+    fruits.___('orange')
+  options:
+  - add
+  - append
+  - insert
+  - push
+  answer: append
+- id: ds_q19
+  type: free_response
+  prompt: What method removes and returns the last item from a list?
+  answer: pop
+  case_sensitive: false
+- id: ds_q20
+  type: faded_parsons
+  prompt: Complete the list comprehension. The opening bracket is in place.
+  blocks:
+  - 'squared = ['
+  - '    x**2'
+  - '    for x in range(5)'
+  - ']'
+  fixed_indices:
+  - 0
+  - 3
+  answer:
+  - 1
+  - 2

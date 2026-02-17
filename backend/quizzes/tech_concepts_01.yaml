@@ -157,3 +157,57 @@ questions:
   - Floppy Disk
   - Magnetic Tape
   answer: SSD (Solid State Drive)
+- id: tech_q16
+  type: output_prediction
+  prompt: What would be the result of this binary operation?
+  code: |
+    Binary: 1010 (decimal 10)
+    Binary: 0101 (decimal 5)
+    Operation: AND
+  options:
+  - '0000 (0)'
+  - '1111 (15)'
+  - '1010 (10)'
+  - '0101 (5)'
+  answer: '0000 (0)'
+- id: tech_q17
+  type: debugging
+  prompt: What is wrong with this URL?
+  code: |
+    htp://www.example.com/page
+  options:
+  - Missing 't' in 'http'
+  - Missing port number
+  - Should use 'ftp' instead
+  - Domain name is invalid
+  answer: Missing 't' in 'http'
+- id: tech_q18
+  type: fill_in_blank
+  prompt: Fill in the blank for this IP address format.
+  code: |
+    IPv4 address: 192.168.___.___ (range 0-255)
+  options:
+  - 0.0
+  - x.y
+  - 1.1
+  - A.B
+  answer: x.y
+- id: tech_q19
+  type: free_response
+  prompt: What does 'DNS' stand for?
+  answer: Domain Name System
+  case_sensitive: false
+- id: tech_q20
+  type: faded_parsons
+  prompt: Arrange the layers in the correct order for an HTTP request flow. The Application layer is already in place.
+  blocks:
+  - Application Layer
+  - Transport Layer
+  - Network Layer
+  - Data Link Layer
+  fixed_indices:
+  - 0
+  answer:
+  - 1
+  - 2
+  - 3

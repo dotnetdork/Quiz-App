@@ -60,6 +60,41 @@ questions:
 - `blocks` contains the code lines
 - `answer` contains the correct order as an array of indices (starting from 0)
 
+### Output Prediction
+- Show code and ask user to predict its output
+- User selects from multiple choice options
+- `code` field contains the code snippet
+- `options` contains possible outputs
+- `answer` contains the correct output
+
+### Debugging Questions
+- Show buggy code and ask user to identify the bug or fix
+- User selects from multiple choice options
+- `code` field contains the buggy code
+- `options` contains possible fixes or bug descriptions
+- `answer` contains the correct fix/description
+
+### Fill in the Blank
+- Show code with blanks (marked as `___`)
+- User selects what should replace the blank
+- `code` field contains the code with blanks
+- `options` contains possible values
+- `answer` contains the correct value
+
+### Free Response
+- User types their answer
+- Supports exact or case-insensitive matching
+- `answer` contains the correct answer
+- `case_sensitive` (optional, default: false) controls matching
+- `placeholder` (optional) provides hint text
+
+### Faded Parsons
+- Variant of Parsons where some lines are fixed in position
+- User only arranges the remaining blocks
+- `blocks` contains all code lines
+- `fixed_indices` contains array of indices for fixed blocks
+- `answer` contains correct order of movable blocks only
+
 ## Editing Guidelines
 
 - Keep questions clear and concise

@@ -1,0 +1,184 @@
+/**
+ * FadedParsons Component
+ * 
+ * A variant of Parsons problems where some lines are fixed/faded
+ * and users only arrange the remaining blocks.
+ * Uses @dnd-kit library for accessible drag and drop.
+ */
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+/**
+ * FixedBlock - Non-draggable faded code block
+ */
+function FixedBlock({ code, position }) {
+  return (
+    <div
+      className="parsons-block fixed-block"
+      style={{
+        opacity: 0.5,
+        backgroundColor: '#e0e0e0',
+        cursor: 'default'
+      }}
+    >
+      {/* No drag handle for fixed blocks */}
+      <span style={{ 
+        marginRight: '1rem',
+        fontWeight: 'bold',
+        color: 'var(--color-secondary)',
+        marginLeft: '1.5rem'
+      }}>
+        {position}.
+      </span>
+      <code>{code}</code>
+    </div>
+  );
+}
+
+/**
+ * SortableBlock - Individual draggable code block
+ */
+function SortableBlock({ id, code, position }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`parsons-block ${isDragging ? 'dragging' : ''}`}
+      {...attributes}
+      {...listeners}
+    >
+      <span className="drag-handle" aria-label="Drag handle">
+        ☰
+      </span>
+      <span 
+        style={{ 
+          marginRight: '1rem',
+          fontWeight: 'bold',
+          color: 'var(--color-secondary)'
+        }}
+      >
+        {position}.
+      </span>
+      <code>{code}</code>
+    </div>
+  );
+}
+
+/**
+ * FadedParsons - Main component
+ * 
+ * @param {Object} props
+ * @param {Array} props.blocks - Array of all code strings
+ * @param {Array} props.fixedIndices - Array of indices for fixed (non-draggable) blocks
+ * @param {Array} props.order - Current order of movable block indices
+ * @param {Function} props.onOrderChange - Callback when order changes
+ */
+function FadedParsons({ blocks, fixedIndices = [], order, onOrderChange }) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  function handleDragEnd(event) {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = order.indexOf(parseInt(active.id));
+      const newIndex = order.indexOf(parseInt(over.id));
+
+      const newOrder = arrayMove(order, oldIndex, newIndex);
+      onOrderChange(newOrder);
+    }
+  }
+
+  // Combine fixed and movable blocks into a single display array
+  const allBlocks = [];
+  let movableIdx = 0;
+  
+  for (let i = 0; i < blocks.length; i++) {
+    if (fixedIndices.includes(i)) {
+      allBlocks.push({ type: 'fixed', index: i });
+    } else {
+      allBlocks.push({ type: 'movable', index: order[movableIdx] });
+      movableIdx++;
+    }
+  }
+
+  const itemIds = order.map((index) => index.toString());
+
+  return (
+    <div className="parsons-container">
+      <p 
+        className="text-secondary mb-sm"
+        style={{ fontSize: 'var(--font-small)' }}
+      >
+        Drag and drop the blocks to complete the code. Faded lines are already in the correct position.
+      </p>
+
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={itemIds}
+          strategy={verticalListSortingStrategy}
+        >
+          {allBlocks.map((block, position) => {
+            if (block.type === 'fixed') {
+              return (
+                <FixedBlock
+                  key={`fixed-${block.index}`}
+                  code={blocks[block.index]}
+                  position={position + 1}
+                />
+              );
+            } else {
+              return (
+                <SortableBlock
+                  key={block.index}
+                  id={block.index.toString()}
+                  code={blocks[block.index]}
+                  position={position + 1}
+                />
+              );
+            }
+          })}
+        </SortableContext>
+      </DndContext>
+    </div>
+  );
+}
+
+export default FadedParsons;
