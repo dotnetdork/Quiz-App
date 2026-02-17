@@ -92,7 +92,7 @@ questions:
   blocks:
   - import turtle
   - tina = turtle.Turtle()
-  - for i in range(3):
+  - 'for i in range(3):'
   - '    tina.forward(100)'
   - '    tina.left(120)'
   - turtle.exitonclick()
@@ -179,7 +179,7 @@ questions:
   - tina = turtle.Turtle()
   - tina.fillcolor('red')
   - tina.begin_fill()
-  - for i in range(4):
+  - 'for i in range(4):'
   - '    tina.forward(100)'
   - '    tina.left(90)'
   - tina.end_fill()
@@ -226,7 +226,7 @@ questions:
   type: parsons
   prompt: Arrange these lines to define a function that draws a square.
   blocks:
-  - def draw_square(size):
+  - 'def draw_square(size):'
   - '    for i in range(4):'
   - '        tina.forward(size)'
   - '        tina.left(90)'
@@ -312,7 +312,7 @@ questions:
   prompt: Arrange the code to iterate through a list of colors.
   blocks:
   - colors = ['red', 'blue', 'green']
-  - for color in colors:
+  - 'for color in colors:'
   - '    tina.pencolor(color)'
   - '    tina.forward(50)'
   answer:
@@ -372,7 +372,7 @@ questions:
   prompt: Fix the code to cycle through colors using modulo. The list and loop are in place.
   blocks:
   - colors = ['red', 'blue', 'green', 'yellow']
-  - for i in range(12):
+  - 'for i in range(12):'
   - '    color_index = i % len(colors)'
   - '    tina.pencolor(colors[color_index])'
   - '    tina.forward(30)'
@@ -423,7 +423,7 @@ questions:
   type: parsons
   prompt: Arrange code to draw a spiral pattern.
   blocks:
-  - for i in range(20):
+  - 'for i in range(20):'
   - '    tina.forward(i * 5)'
   - '    tina.right(45)'
   answer:
@@ -496,7 +496,7 @@ questions:
   type: parsons
   prompt: Arrange code to draw multiple squares of increasing size.
   blocks:
-  - for size in [50, 75, 100]:
+  - 'for size in [50, 75, 100]:'
   - '    for i in range(4):'
   - '        tina.forward(size)'
   - '        tina.left(90)'
@@ -541,7 +541,7 @@ questions:
   type: faded_parsons
   prompt: Complete this function to draw a polygon with n sides. The function signature is in place.
   blocks:
-  - def draw_polygon(sides, length):
+  - 'def draw_polygon(sides, length):'
   - '    angle = 360 / sides'
   - '    for i in range(sides):'
   - '        tina.forward(length)'

@@ -387,7 +387,7 @@ questions:
   prompt: Arrange these lines to check if a number is positive.
   blocks:
   - num = 10
-  - if num > 0:
+  - 'if num > 0:'
   - '    print("Positive")'
   answer:
   - 0
@@ -451,11 +451,11 @@ questions:
   prompt: Complete the age categorization code. The input is already provided.
   blocks:
   - age = 15
-  - if age < 13:
+  - 'if age < 13:'
   - '    print("Child")'
-  - elif age < 20:
+  - 'elif age < 20:'
   - '    print("Teen")'
-  - else:
+  - 'else:'
   - '    print("Adult")'
   fixed_indices:
   - 0
@@ -506,7 +506,7 @@ questions:
   prompt: Arrange these lines to check if a string starts with 'Py'.
   blocks:
   - text = 'Python'
-  - if text.startswith('Py'):
+  - 'if text.startswith(''Py''):'
   - '    print("Starts with Py")'
   answer:
   - 0

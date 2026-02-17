@@ -42,21 +42,23 @@ function Quiz() {
         
         // Initialize answers
         const initialAnswers = {};
-        quizData.questions.forEach((question) => {
-          if (question.type === 'parsons') {
-            // For Parsons, store the block indices in shuffled order
-            const indices = question.blocks.map((_, index) => index);
-            initialAnswers[question.id] = shuffleArray([...indices]);
-          } else if (question.type === 'faded_parsons') {
-            // For Faded Parsons, only shuffle non-fixed blocks
-            const movableIndices = question.blocks
-              .map((_, idx) => idx)
-              .filter(idx => !(question.fixed_indices || []).includes(idx));
-            initialAnswers[question.id] = shuffleArray([...movableIndices]);
-          } else {
-            initialAnswers[question.id] = null;
-          }
-        });
+        if (quizData.questions && Array.isArray(quizData.questions)) {
+          quizData.questions.forEach((question) => {
+            if (question.type === 'parsons') {
+              // For Parsons, store the block indices in shuffled order
+              const indices = question.blocks.map((_, index) => index);
+              initialAnswers[question.id] = shuffleArray([...indices]);
+            } else if (question.type === 'faded_parsons') {
+              // For Faded Parsons, only shuffle non-fixed blocks
+              const movableIndices = question.blocks
+                .map((_, idx) => idx)
+                .filter(idx => !(question.fixed_indices || []).includes(idx));
+              initialAnswers[question.id] = shuffleArray([...movableIndices]);
+            } else {
+              initialAnswers[question.id] = null;
+            }
+          });
+        }
         setAnswers(initialAnswers);
       } catch (err) {
         setError(err.message);
@@ -197,6 +199,18 @@ function Quiz() {
             Back to Dashboard
           </Link>
         </div>
+      </div>
+    );
+  }
+
+  // Show error if quiz hasn't loaded for some reason
+  if (!quiz) {
+    return (
+      <div className="error-message">
+        <p>Error: Quiz not found or failed to load</p>
+        <Link to="/dashboard" className="btn-secondary mt-md">
+          Back to Dashboard
+        </Link>
       </div>
     );
   }

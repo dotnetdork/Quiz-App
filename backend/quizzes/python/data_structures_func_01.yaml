@@ -16,7 +16,7 @@ questions:
   type: parsons
   prompt: Arrange these lines to define a simple function.
   blocks:
-  - def greet(name):
+  - 'def greet(name):'
   - '    message = f"Hello, {name}"'
   - '    return message'
   answer:
@@ -106,7 +106,7 @@ questions:
   type: faded_parsons
   prompt: Complete the function to calculate the average. The function signature is in place.
   blocks:
-  - def average(a, b, c):
+  - 'def average(a, b, c):'
   - '    total = a + b + c'
   - '    return total / 3'
   fixed_indices:
@@ -136,9 +136,9 @@ questions:
   type: parsons
   prompt: Arrange these lines to handle a ValueError.
   blocks:
-  - try:
+  - 'try:'
   - '    num = int(input("Enter number: "))'
-  - except ValueError:
+  - 'except ValueError:'
   - '    print("Invalid number")'
   answer:
   - 0
@@ -504,7 +504,7 @@ questions:
   type: faded_parsons
   prompt: Complete the function to find the maximum in a list. The function signature is in place.
   blocks:
-  - def find_max(numbers):
+  - 'def find_max(numbers):'
   - '    max_val = numbers[0]'
   - '    for num in numbers:'
   - '        if num > max_val:'
