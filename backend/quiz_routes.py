@@ -55,7 +55,7 @@ PROGRESS_FILE = os.path.join(
 def load_questions():
     """
     Load quiz questions from individual quiz files in the quizzes/ directory,
-    or fall back to the old questions.yaml file.
+    including subdirectories, or fall back to the old questions.yaml file.
     
     Returns:
         dict containing quiz data
@@ -64,13 +64,15 @@ def load_questions():
     if os.path.isdir(QUIZZES_DIR):
         try:
             quizzes = []
-            for filename in sorted(os.listdir(QUIZZES_DIR)):
-                if filename.endswith('.yaml') or filename.endswith('.yml'):
-                    filepath = os.path.join(QUIZZES_DIR, filename)
-                    with open(filepath, 'r') as file:
-                        quiz_data = yaml.safe_load(file)
-                        if quiz_data:
-                            quizzes.append(quiz_data)
+            # Walk through the quizzes directory and subdirectories
+            for root, dirs, files in os.walk(QUIZZES_DIR):
+                for filename in sorted(files):
+                    if filename.endswith('.yaml') or filename.endswith('.yml'):
+                        filepath = os.path.join(root, filename)
+                        with open(filepath, 'r') as file:
+                            quiz_data = yaml.safe_load(file)
+                            if quiz_data:
+                                quizzes.append(quiz_data)
             return {"quizzes": quizzes}
         except Exception as e:
             # Fall through to try questions.yaml

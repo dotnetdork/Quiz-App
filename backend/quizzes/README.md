@@ -1,6 +1,13 @@
 # Quiz Files
 
-This directory contains individual quiz files in YAML format. Each quiz is stored in a separate file for easy editing and management.
+This directory contains individual quiz files in YAML format, organized by category. Each quiz is stored in a separate file for easy editing and management.
+
+## Directory Structure
+
+Quizzes are organized into subdirectories by category:
+- `python/` - Python programming quizzes
+- `java/` - Java programming quizzes
+- `technology/` - General technology and computer science quizzes
 
 ## File Structure
 
@@ -31,21 +38,31 @@ questions:
 
 ## Available Quizzes
 
+### Python (`python/`)
 - `python_basics_01.yaml` - Python Fundamentals
 - `python_data_structures.yaml` - Python Data Structures
+- `data_structures_func_01.yaml` - Data Structures and Functions
+- `loops_module_01.yaml` - Loops Module
+- `turtles_module_01.yaml` - Turtles Module
+- `types_and_logic_01.yaml` - Types and Logic
+
+### Java (`java/`)
 - `java_basics_01.yaml` - Java Fundamentals
 - `java_oop_01.yaml` - Java Object-Oriented Programming
+
+### Technology (`technology/`)
 - `tech_concepts_01.yaml` - Technology Concepts
 - `robotics_01.yaml` - Robotics Fundamentals
 - `cybersecurity_01.yaml` - Cybersecurity Fundamentals
 
 ## Adding a New Quiz
 
-1. Create a new YAML file in this directory (e.g., `my_new_quiz.yaml`)
-2. Follow the structure above
-3. Ensure the `id` is unique
-4. Set the appropriate `category` (python, java, or technology)
-5. The quiz will automatically appear in the app
+1. Determine the appropriate category directory (python, java, or technology)
+2. Create a new YAML file in that directory (e.g., `python/my_new_quiz.yaml`)
+3. Follow the structure above
+4. Ensure the `id` is unique
+5. Set the appropriate `category` (python, java, or technology)
+6. The quiz will automatically appear in the app
 
 ## Question Types
 
