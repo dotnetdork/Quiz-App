@@ -5,7 +5,7 @@ category: python
 questions:
 - id: types_q1
   type: multiple_choice
-  prompt: Which of these is an integer in Python?
+  prompt: Which of these values is an integer in Python?
   options:
   - '3.0'
   - '3'
@@ -14,7 +14,7 @@ questions:
   answer: '3'
 - id: types_q2
   type: multiple_choice
-  prompt: What type is the value True?
+  prompt: What data type is the boolean value True?
   options:
   - int
   - str
@@ -22,8 +22,17 @@ questions:
   - float
   answer: bool
 - id: types_q3
+  type: multiple_choice
+  prompt: Which operator performs floor division in Python?
+  options:
+  - /
+  - //
+  - '%'
+  - div
+  answer: //
+- id: types_q4
   type: output_prediction
-  prompt: What is the type of the result?
+  prompt: What is the type of the result when dividing with the / operator?
   code: |
     result = 10 / 2
     print(type(result))
@@ -33,25 +42,17 @@ questions:
   - <class 'str'>
   - <class 'bool'>
   answer: <class 'float'>
-- id: types_q4
+- id: types_q5
   type: free_response
-  prompt: What function returns the type of a variable?
+  prompt: What built-in function can you use to find the data type of a variable?
   answer: type
   case_sensitive: false
-- id: types_q5
-  type: multiple_choice
-  prompt: Which operator performs floor division?
-  options:
-  - /
-  - //
-  - '%'
-  - div
-  answer: //
 - id: types_q6
   type: output_prediction
-  prompt: What will this code output?
+  prompt: What will this code output? (Focus on understanding floor division)
   code: |
-    print(17 // 5)
+    quotient = 17 // 5
+    print(quotient)
   options:
   - '3.4'
   - '3'
@@ -60,9 +61,10 @@ questions:
   answer: '3'
 - id: types_q7
   type: output_prediction
-  prompt: What is the result of this modulo operation?
+  prompt: What will this code output? (Focus on understanding the modulo operator)
   code: |
-    print(17 % 5)
+    remainder = 17 % 5
+    print(remainder)
   options:
   - '2'
   - '3'
@@ -91,7 +93,7 @@ questions:
   answer: '**'
 - id: types_q10
   type: parsons
-  prompt: Arrange these lines to convert a string to an integer and add 5.
+  prompt: Arrange these lines to convert a string to an integer and add 5 to it.
   blocks:
   - num_str = '10'
   - num = int(num_str)
@@ -104,7 +106,7 @@ questions:
   - 3
 - id: types_q11
   type: debugging
-  prompt: What is wrong with this code?
+  prompt: What is the bug in this code that prevents it from running?
   code: |
     age = '25'
     next_year = age + 1
@@ -150,13 +152,13 @@ questions:
   case_sensitive: false
 - id: types_q16
   type: multiple_choice
-  prompt: What does the + operator do with strings?
+  prompt: What does the + operator do when used with two strings?
   options:
   - Adds their numeric values
-  - Concatenates them
+  - Concatenates them (joins them together)
   - Compares them
   - Creates a list
-  answer: Concatenates them
+  answer: Concatenates them (joins them together)
 - id: types_q17
   type: output_prediction
   prompt: What will this code output?
@@ -214,7 +216,7 @@ questions:
   answer: n
 - id: types_q22
   type: multiple_choice
-  prompt: What does 'Python'[1:4] return?
+  prompt: What does the slice 'Python'[1:4] return? (Remember, slicing is inclusive of start, exclusive of end)
   options:
   - Pyt
   - yth

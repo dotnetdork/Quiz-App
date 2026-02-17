@@ -67,7 +67,7 @@ questions:
   answer: multiply
 - id: func_q7
   type: debugging
-  prompt: What is wrong with this function call?
+  prompt: What error will occur when trying to run this function call?
   code: |
     def calculate(a, b, c):
         return a + b + c
@@ -81,13 +81,13 @@ questions:
   answer: Missing required argument c
 - id: func_q8
   type: multiple_choice
-  prompt: What is a parameter in a function?
+  prompt: What is a parameter in a function definition?
   options:
-  - A value passed to the function
-  - A variable in the function definition
+  - A value passed when calling the function
+  - A variable defined in the function signature that receives values
   - The return value
   - A function call
-  answer: A variable in the function definition
+  answer: A variable defined in the function signature that receives values
 - id: func_q9
   type: output_prediction
   prompt: What will this code output?

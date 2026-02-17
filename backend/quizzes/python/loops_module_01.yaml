@@ -5,7 +5,7 @@ category: python
 questions:
 - id: loop_q1
   type: multiple_choice
-  prompt: Which statement creates a for loop that repeats 5 times?
+  prompt: Which statement correctly creates a for loop that repeats 5 times?
   options:
   - 'for i in 5:'
   - 'for i in range(5):'
@@ -13,8 +13,13 @@ questions:
   - 'repeat 5 times:'
   answer: 'for i in range(5):'
 - id: loop_q2
+  type: free_response
+  prompt: What keyword starts a for loop in Python?
+  answer: for
+  case_sensitive: false
+- id: loop_q3
   type: output_prediction
-  prompt: How many times will 'Hello' be printed?
+  prompt: How many times will 'Hello' be printed in this loop?
   code: |
     for i in range(3):
         print('Hello')
@@ -24,32 +29,27 @@ questions:
   - '4'
   - infinite
   answer: '3'
-- id: loop_q3
+- id: loop_q4
   type: multiple_choice
-  prompt: What does range(1, 6) generate?
+  prompt: What does range(1, 6) generate? (Remember, range is inclusive of start, exclusive of end)
   options:
   - Numbers 1, 2, 3, 4, 5
   - Numbers 0, 1, 2, 3, 4, 5
   - Numbers 1, 2, 3, 4, 5, 6
   - Numbers 0, 1, 2, 3, 4
   answer: Numbers 1, 2, 3, 4, 5
-- id: loop_q4
+- id: loop_q5
   type: output_prediction
-  prompt: What will this code output?
+  prompt: What will this code output? (The step parameter in range controls how much to increment each time)
   code: |
-    for i in range(2, 8, 2):
-        print(i, end=' ')
+    for num in range(2, 8, 2):
+        print(num, end=' ')
   options:
   - 2 4 6 8
   - 2 4 6
   - 0 2 4 6
   - 2 3 4 5 6 7
   answer: 2 4 6
-- id: loop_q5
-  type: free_response
-  prompt: What keyword starts a for loop in Python?
-  answer: for
-  case_sensitive: false
 - id: loop_q6
   type: parsons
   prompt: Arrange these lines to print numbers 0 through 4.
@@ -61,7 +61,7 @@ questions:
   - 1
 - id: loop_q7
   type: fill_in_blank
-  prompt: Fill in the blank to iterate through a list.
+  prompt: Fill in the blank to iterate through each item in a list.
   code: |
     colors = ['red', 'blue', 'green']
     ___ color in colors:
@@ -74,7 +74,7 @@ questions:
   answer: for
 - id: loop_q8
   type: multiple_choice
-  prompt: What is the loop variable in 'for i in range(10):'?
+  prompt: What is the loop variable in the statement 'for i in range(10):'?
   options:
   - range
   - '10'
@@ -83,7 +83,7 @@ questions:
   answer: i
 - id: loop_q9
   type: debugging
-  prompt: What is wrong with this code?
+  prompt: What syntax error prevents this loop from running?
   code: |
     for i in range(5)
         print(i)

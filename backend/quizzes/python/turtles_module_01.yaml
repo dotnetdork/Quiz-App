@@ -136,7 +136,7 @@ questions:
   answer: tina.speed()
 - id: turtle_q13
   type: fill_in_blank
-  prompt: Fill in the blank to hide the turtle.
+  prompt: Fill in the blank to hide the turtle cursor from the screen.
   code: |
     tina.___()
   options:
@@ -197,34 +197,34 @@ questions:
   - 7
 - id: turtle_q17
   type: free_response
-  prompt: What function keeps the turtle window open until you click on it?
+  prompt: What turtle function keeps the window open until the user clicks on it?
   answer: exitonclick
   case_sensitive: false
 - id: turtle_q18
-  type: multiple_choice
-  prompt: To calculate the angle for a regular polygon with n sides, which formula is correct?
-  options:
-  - angle = n * 360
-  - angle = 360 / n
-  - angle = 180 / n
-  - angle = n / 360
-  answer: angle = 360 / n
-- id: turtle_q19
   type: output_prediction
-  prompt: What angle should replace ??? to draw a pentagon?
+  prompt: What shape will this code draw? (Focus on the loop iterations and turn angle)
   code: |
     for i in range(5):
         tina.forward(80)
-        tina.left(???)
+        tina.left(72)
   options:
-  - '60'
-  - '72'
-  - '90'
-  - '108'
-  answer: '72'
+  - Square
+  - Pentagon
+  - Hexagon
+  - Triangle
+  answer: Pentagon
+- id: turtle_q19
+  type: multiple_choice
+  prompt: When drawing regular polygons with turtle, why do we turn the turtle by a specific angle?
+  options:
+  - To make the shape look pretty
+  - To ensure the turtle returns to starting position
+  - To create equal exterior angles that form a closed shape
+  - To prevent the turtle from going off screen
+  answer: To create equal exterior angles that form a closed shape
 - id: turtle_q20
   type: parsons
-  prompt: Arrange these lines to define a function that draws a square.
+  prompt: Arrange these lines to define a function that draws a square of any size.
   blocks:
   - 'def draw_square(size):'
   - '    for i in range(4):'
@@ -236,15 +236,6 @@ questions:
   - 2
   - 3
 - id: turtle_q21
-  type: multiple_choice
-  prompt: In the function definition 'def draw_circle(radius):', what is 'radius'?
-  options:
-  - A variable
-  - A parameter
-  - A return value
-  - A constant
-  answer: A parameter
-- id: turtle_q22
   type: fill_in_blank
   prompt: Fill in the blank to set the pen width to 5 pixels.
   code: |
@@ -255,9 +246,18 @@ questions:
   - thickness
   - penwidth
   answer: penwidth
+- id: turtle_q22
+  type: multiple_choice
+  prompt: In the function definition 'def draw_circle(radius):', what is 'radius'?
+  options:
+  - A variable
+  - A parameter
+  - A return value
+  - A constant
+  answer: A parameter
 - id: turtle_q23
   type: debugging
-  prompt: Why doesn't this function work as expected?
+  prompt: What syntax error prevents this function from working?
   code: |
     def draw_star():
         for i in range(5)
