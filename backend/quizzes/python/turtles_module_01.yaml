@@ -82,10 +82,14 @@ questions:
   - tina was not created properly
   answer: Missing turtle.done() or turtle.exitonclick()
 - id: turtle_q8
-  type: free_response
+  type: multiple_choice
   prompt: What method changes the turtle's pen color?
+  options:
+  - pencolor
+  - color
+  - setcolor
+  - changecolor
   answer: pencolor
-  case_sensitive: false
 - id: turtle_q9
   type: parsons
   prompt: Arrange these lines to draw a triangle.
@@ -196,13 +200,17 @@ questions:
   - 6
   - 7
 - id: turtle_q17
-  type: free_response
+  type: multiple_choice
   prompt: What turtle function keeps the window open until the user clicks on it?
+  options:
+  - exitonclick
+  - done
+  - wait
+  - mainloop
   answer: exitonclick
-  case_sensitive: false
 - id: turtle_q18
   type: output_prediction
-  prompt: What shape will this code draw? (Focus on the loop iterations and turn angle)
+  prompt: What shape will this code draw?
   code: |
     for i in range(5):
         tina.forward(80)
@@ -294,10 +302,14 @@ questions:
   - Red, blue, red (50px each)
   answer: Red then blue (50px each), then blue again (50px)
 - id: turtle_q26
-  type: free_response
+  type: multiple_choice
   prompt: What method starts filling a shape with color?
+  options:
+  - begin_fill
+  - start_fill
+  - fillstart
+  - fill
   answer: begin_fill
-  case_sensitive: false
 - id: turtle_q27
   type: multiple_choice
   prompt: How do you create a list of colors in Python?
@@ -393,10 +405,14 @@ questions:
   - A drawing canvas
   answer: A window/screen for drawing
 - id: turtle_q35
-  type: free_response
+  type: multiple_choice
   prompt: What keyword is used to define a function in Python?
+  options:
+  - def
+  - function
+  - define
+  - func
   answer: def
-  case_sensitive: false
 - id: turtle_q36
   type: multiple_choice
   prompt: In a hexadecimal color code like '#FF5733', what do the first two characters after # represent?
@@ -479,10 +495,14 @@ questions:
   - (150, 150)
   answer: (100, 100)
 - id: turtle_q43
-  type: free_response
+  type: multiple_choice
   prompt: What method makes the turtle invisible?
+  options:
+  - hideturtle
+  - hide
+  - invisible
+  - conceal
   answer: hideturtle
-  case_sensitive: false
 - id: turtle_q44
   type: multiple_choice
   prompt: Which import statement is more specific and recommended?

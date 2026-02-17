@@ -13,10 +13,14 @@ questions:
   - 'repeat 5 times:'
   answer: 'for i in range(5):'
 - id: loop_q2
-  type: free_response
+  type: multiple_choice
   prompt: What keyword starts a for loop in Python?
+  options:
+  - for
+  - loop
+  - foreach
+  - repeat
   answer: for
-  case_sensitive: false
 - id: loop_q3
   type: output_prediction
   prompt: How many times will 'Hello' be printed in this loop?
@@ -31,7 +35,7 @@ questions:
   answer: '3'
 - id: loop_q4
   type: multiple_choice
-  prompt: What does range(1, 6) generate? (Remember, range is inclusive of start, exclusive of end)
+  prompt: What does range(1, 6) generate?
   options:
   - Numbers 1, 2, 3, 4, 5
   - Numbers 0, 1, 2, 3, 4, 5
@@ -40,7 +44,7 @@ questions:
   answer: Numbers 1, 2, 3, 4, 5
 - id: loop_q5
   type: output_prediction
-  prompt: What will this code output? (The step parameter in range controls how much to increment each time)
+  prompt: What will this code output?
   code: |
     for num in range(2, 8, 2):
         print(num, end=' ')
@@ -165,10 +169,14 @@ questions:
   - 2
   - 3
 - id: loop_q16
-  type: free_response
+  type: multiple_choice
   prompt: What statement skips the current iteration and continues with the next?
+  options:
+  - continue
+  - skip
+  - next
+  - pass
   answer: continue
-  case_sensitive: false
 - id: loop_q17
   type: multiple_choice
   prompt: What is a while loop condition?
@@ -276,10 +284,14 @@ questions:
   - 1
   - 2
 - id: loop_q26
-  type: free_response
+  type: multiple_choice
   prompt: What function pairs elements from two lists together?
+  options:
+  - zip
+  - pair
+  - combine
+  - merge
   answer: zip
-  case_sensitive: false
 - id: loop_q27
   type: output_prediction
   prompt: What will this code print first?
@@ -372,10 +384,14 @@ questions:
   - 1
   - 2
 - id: loop_q35
-  type: free_response
+  type: multiple_choice
   prompt: What method adds an item to the end of a list?
+  options:
+  - append
+  - add
+  - insert
+  - push
   answer: append
-  case_sensitive: false
 - id: loop_q36
   type: multiple_choice
   prompt: What does my_list.sort() do?
@@ -501,10 +517,14 @@ questions:
   - 1
   - 2
 - id: loop_q47
-  type: free_response
-  prompt: What happens when you try to modify a tuple?
+  type: multiple_choice
+  prompt: What error occurs when you try to modify a tuple?
+  options:
+  - TypeError
+  - ValueError
+  - AttributeError
+  - IndexError
   answer: TypeError
-  case_sensitive: false
 - id: loop_q48
   type: multiple_choice
   prompt: What does pass do in a loop?

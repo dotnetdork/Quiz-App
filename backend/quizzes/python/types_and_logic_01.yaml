@@ -43,13 +43,17 @@ questions:
   - <class 'bool'>
   answer: <class 'float'>
 - id: types_q5
-  type: free_response
+  type: multiple_choice
   prompt: What built-in function can you use to find the data type of a variable?
+  options:
+  - typeof
+  - type
+  - gettype
+  - datatype
   answer: type
-  case_sensitive: false
 - id: types_q6
   type: output_prediction
-  prompt: What will this code output? (Focus on understanding floor division)
+  prompt: What will this code output?
   code: |
     quotient = 17 // 5
     print(quotient)
@@ -61,7 +65,7 @@ questions:
   answer: '3'
 - id: types_q7
   type: output_prediction
-  prompt: What will this code output? (Focus on understanding the modulo operator)
+  prompt: What will this code output?
   code: |
     remainder = 17 % 5
     print(remainder)
@@ -146,10 +150,14 @@ questions:
   - 0x10
   answer: 0b1010
 - id: types_q15
-  type: free_response
+  type: multiple_choice
   prompt: What function converts a decimal number to hexadecimal?
+  options:
+  - hex
+  - hexadecimal
+  - tohex
+  - int_to_hex
   answer: hex
-  case_sensitive: false
 - id: types_q16
   type: multiple_choice
   prompt: What does the + operator do when used with two strings?
@@ -216,7 +224,7 @@ questions:
   answer: n
 - id: types_q22
   type: multiple_choice
-  prompt: What does the slice 'Python'[1:4] return? (Remember, slicing is inclusive of start, exclusive of end)
+  prompt: What does the slice 'Python'[1:4] return?
   options:
   - Pyt
   - yth
@@ -235,10 +243,14 @@ questions:
   - 1
   - 2
 - id: types_q24
-  type: free_response
+  type: multiple_choice
   prompt: What string method converts text to lowercase?
+  options:
+  - lower
+  - lowercase
+  - toLower
+  - downcase
   answer: lower
-  case_sensitive: false
 - id: types_q25
   type: multiple_choice
   prompt: What does the .replace() method do?
