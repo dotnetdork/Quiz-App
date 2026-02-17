@@ -253,6 +253,25 @@ def submit_quiz(
         elif question["type"] == "parsons":
             # For Parsons, compare list of indices
             correct = submitted == question["answer"]
+        elif question["type"] == "output_prediction":
+            # Output prediction uses multiple choice answer format
+            correct = submitted == question["answer"]
+        elif question["type"] == "debugging":
+            # Debugging uses multiple choice answer format
+            correct = submitted == question["answer"]
+        elif question["type"] == "fill_in_blank":
+            # Fill in blank uses multiple choice answer format
+            correct = submitted == question["answer"]
+        elif question["type"] == "free_response":
+            # Free response - check exact match or case insensitive
+            case_sensitive = question.get("case_sensitive", False)
+            if case_sensitive:
+                correct = submitted == question["answer"]
+            else:
+                correct = (submitted or "").strip().lower() == question["answer"].strip().lower()
+        elif question["type"] == "faded_parsons":
+            # Faded Parsons - compare movable block order
+            correct = submitted == question["answer"]
         
         if correct:
             total_correct_this_attempt += 1

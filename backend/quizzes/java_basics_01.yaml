@@ -152,3 +152,58 @@ questions:
   - '*'
   - \
   answer: '%'
+- id: java_q16
+  type: output_prediction
+  prompt: What will this code output?
+  code: |
+    int x = 7;
+    int y = 3;
+    System.out.println(x / y);
+  options:
+  - '2.33'
+  - '2'
+  - '3'
+  - '2.0'
+  answer: '2'
+- id: java_q17
+  type: debugging
+  prompt: What is wrong with this code?
+  code: |
+    String message = "Hello"
+    System.out.println(message);
+  options:
+  - Missing semicolon after "Hello"
+  - String should be lowercase
+  - System.out.println is incorrect
+  - message should be capitalized
+  answer: Missing semicolon after "Hello"
+- id: java_q18
+  type: fill_in_blank
+  prompt: Fill in the blank to create a new array.
+  code: |
+    int[] numbers = ___ 1, 2, 3, 4, 5 ___;
+  options:
+  - '() ()'
+  - '[] []'
+  - 'new int[] {}'
+  - '<> <>'
+  answer: 'new int[] {}'
+- id: java_q19
+  type: free_response
+  prompt: What is the entry point method name for a Java application?
+  answer: main
+  case_sensitive: true
+- id: java_q20
+  type: faded_parsons
+  prompt: Complete this method by arranging the movable lines. The method signature is already in place.
+  blocks:
+  - 'public static int add(int a, int b) {'
+  - '    int sum = a + b;'
+  - '    return sum;'
+  - '}'
+  fixed_indices:
+  - 0
+  - 3
+  answer:
+  - 1
+  - 2
