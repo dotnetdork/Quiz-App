@@ -1,85 +1,117 @@
-# Handoff: Build Real Stuff (AI/SDLC Course Extension)
+# Handoff: Quiz-App UI/UX Redesign & Studio Extension
 
-**Written:** 2026-07-10, end of session, for a fresh Opus session picking this up with no memory of the work described here.
-**Companion docs (read these too, in this order):** `docs/AI-COURSE-EXTENSION-PLAN.md` (the *why* — original design), `docs/AI-COURSE-BUILD-PLAN.md` (the *where* — living milestone tracker, update it as you go), then this file (the *what's-next*).
-**Repo:** Quiz-App (The League of Amazing Programmers' Codecademy-style quiz platform). This extension adds a gamified course, "Build Real Stuff," that teaches high schoolers to use AI as a tool without losing ownership of the work — credit economy, quests, XP/streaks, all wired into the existing FastAPI + React app.
-
----
-
-## 1. Do this first, it's unfinished
-
-The most recent thing the user asked for, right before this handoff was requested, **has not been implemented yet**:
-
-> "Can you make the design of the course unique in comparison to the quiz app portion in the dashboard? I'm also wondering what a good solution for this design is for future scalability. I like the color scheme and everything else, but would like to improve all aspects of this app. Please help me figure out what could be refined throughout the entire quiz-app to make this system work. That goes for its UI/UX design of the app itself."
-
-Context: earlier in the session the course pages (`CourseMap.js`, `QuestDetail.js`) were deliberately redesigned to **match** Dashboard.js's existing visual language (gradient hero card, spinning avatar ring, `stat-card-modern` tiles, `quiz-card-modern` cards) because the first pass looked too plain and the user said to reuse the app's existing playful style. That work is done and looks good. But the user's *follow-up* ask is different and hasn't been addressed: they now want the course section to have its **own distinct visual identity** rather than looking identical to the quiz dashboard, *and* they want a broader think-through of the whole app's CSS architecture for scalability, plus general UI/UX refinement ideas across the entire app (not just this course extension).
-
-This is a real scope expansion. Suggested approach, not yet executed:
-
-- **Give the course its own accent identity while sharing structure.** The app's CSS (`frontend/src/index.css` + `frontend/src/App.css`, ~2300 lines combined) already has a decent token layer (`--color-primary`, `--color-secondary`, `--spacing-*`, `--radius-*`, `--font-*` custom properties defined in `index.css`). The problem is that component-level classes (`.user-profile-card`, `.stat-card-modern`, `.quiz-card-modern`, `.category-card-modern`) hardcode League Orange/Navy directly in the CSS rather than through a themeable variable, so reusing the *structure* for the course currently means reusing the *exact same colors* too. A clean fix: introduce a `--theme-accent`/`--theme-accent-dark` pair (or similar) that these shared classes reference instead of the hardcoded orange, then wrap the course pages in a container class (e.g. `.theme-build-real-stuff`) that overrides those two variables to a distinct hue (something like a violet/teal to signal "AI/build lab" vs. the orange "quiz" identity — the existing `getQuestColor()`/`QUEST_TYPE_ICONS` in `frontend/src/components/QuestIcons.js` already establishes an orange/navy/green per-quest-type palette that could inform this, or be reworked alongside it).
-- **Extract real shared primitives instead of copy-pasted card variants.** Right now `user-profile-card` (Dashboard's profile card, reused as-is for the course hero) and `quiz-card-modern` (quiz cards, reused as-is for quest cards) are literally the same CSS classes doing double duty. That's fine for now, but if a third section is added later (e.g. a future course, a badges page) the instinct will be to either reuse these dashboard-specific class names for unrelated content (confusing) or copy-paste the whole block again (the exact duplication problem the user is flagging). Worth proposing genuinely generic primitive classes — e.g. `.hero-card`, `.stat-tile`, `.content-card` — that `Dashboard.js`, `CourseMap.js`, and `QuestDetail.js` all consume, with `.user-profile-card`/`.stat-card-modern`/`.quiz-card-modern` either becoming thin aliases or being migrated away from over time. This is a bigger refactor — scope it with the user before doing a sweeping rename, since `Dashboard.js`, `Quiz.js`, and `Leaderboard.js` all currently depend on the existing class names.
-- **CSS file organization.** `App.css` is one 2300+ line file with section-comment dividers but no real modularity. CRA supports plain CSS imports fine, so splitting into `styles/tokens.css`, `styles/dashboard.css`, `styles/course.css`, `styles/quiz.css` etc. (imported from `App.css` or directly in components) would make "which file do I touch for X" much clearer as the app grows. This is a mechanical, low-risk refactor — good candidate to actually just do, after confirming the user wants file-splitting and not just conceptual guidance.
-- **Broader app-wide UI/UX refinement** — the user's ask here is open-ended ("refine throughout the entire quiz-app"). Do not assume they want you to redesign `Dashboard.js`/`Quiz.js`/`Leaderboard.js`/`Login.js` visuals right now. That's a much bigger job than today's course-extension work. **Recommend using `AskUserQuestion` to scope this** before touching those files: are they asking for (a) just the course's visual distinction + a scalable pattern going forward, (b) a full design-token refactor across the whole app now, or (c) a lighter audit/punch-list first. The user has previously pushed back hard when work proceeded on an assumption rather than confirmed scope (see §5), so don't guess big here.
+**Written:** 2026-07-11, end of session.  
+**For:** A fresh session picking this up with no memory of prior work.  
+**Companion docs:** `docs/Studio-Architecture-Plan.md` (Studio design philosophy + phase details), `docs/AI-COURSE-EXTENSION-PLAN.md` (original AI course design), `docs/AI-COURSE-BUILD-PLAN.md` (milestone tracker).  
+**Repo:** Quiz-App (The League of Amazing Programmers). React CRA frontend + FastAPI backend. Teaches high schoolers to use AI as a tool for real software development — not a crutch.
 
 ---
 
-## 2. What's actually done and working
+## 1. Current state of the app
 
-All four milestones from `docs/AI-COURSE-BUILD-PLAN.md` are complete as of 2026-07-10:
+The app has five sidebar nav items (top to bottom): **Dashboard**, **Learn**, **Crucible**, **Workspaces**, **Studio**.
 
-- **Milestone 0/1 (backend AI plumbing):** `backend/ai_routes.py` — credit-ledger enforcement (`call_model_and_log`, `get_remaining_budget`, never a cached balance), rate limiting, `POST /api/ai/tutor-chat`, `GET /api/ai/credits`. Routes through **OpenRouter** (not DeepSeek directly — see §4 for why), model slugs `deepseek/deepseek-v4-flash` (fast tier) / `deepseek/deepseek-v4-pro` (agent tier, unused so far).
-- **Milestone 2 (quest content + progress):** `backend/course_routes.py` (mirrors `quiz_routes.py`'s role — `load_quests()`, `get_quest()`, `GET .../quests`, `GET .../quests/{id}`, `POST .../quests/{id}/complete`, `GET .../progress`). Two real quests in `backend/courses/build-real-stuff/`: `kickoff_ux_reflection` (renamed today from `kickoff_driver_seat_reflection` — see §3) and `pressure_test_target_customer` (`ai_chat_challenge`, 4-criterion rubric). `POST /api/ai/grade-response` for rubric grading (structured JSON output, temperature 0.1).
-- **Milestone 3 (frontend):** `frontend/src/pages/CourseMap.js` (quest list + XP/level/streak header), `frontend/src/pages/QuestDetail.js` (branches on quest type: reflection textarea with word-count bar, or the AI chat panel), `frontend/src/components/AITutorPanel.js` (chat widget, avatar bubbles, student-initiated grading), `frontend/src/components/CreditMeter.js` (live budget bar), `frontend/src/components/QuestIcons.js` (SVG icons per quest type). Routes `/course/:courseSlug` and `/course/:courseSlug/quest/:questId` added to `App.js`, both `ProtectedRoute`-wrapped, plus a nav link.
-- **Test suite:** `backend/tests/` — 26/26 passing (`pytest tests/ -v` from `backend/`). Covers credit-ledger mechanics (fake client, decoupled from real quest content), real quest loading/completion/progress, and rubric grading (success, mixed pass/fail, no-rubric 400, malformed-JSON 502, credits-exhausted 402).
-- **Design/copy fix (2026-07-10, later in session):** the course description and the kickoff quest were originally framed around "staying in the driver's seat" (AI-ownership language). User feedback: this course should lead with **UI/UX first**, not AI-ownership philosophy. Fixed: `CourseMap.js`'s hero description now leads with UI/UX/research/planning; `kickoff_driver_seat_reflection` was renamed to `kickoff_ux_reflection` and its prompt rewritten to ask students to observe concrete UI/UX decisions in an app they already use, rather than reflect on AI ownership. The AI-ownership theme still exists in the design doc (`AI-COURSE-EXTENSION-PLAN.md` §3, credit economy) and now surfaces later through the credit meter/tutor experience itself rather than as the opening reflection.
+### What's built and working
 
----
+- **Dashboard** (`pages/Dashboard.js`, 11,742 bytes) — Three-zone layout: profile card with avatar ring, stat tiles (XP, streak, quizzes completed), recent activity. Fully functional, fetches from backend.
 
-## 3. Known blockers (not bugs — don't try to "fix" these)
+- **Crucible** (`pages/Crucible.js`, ~21K bytes) — Three tabs: Arena (category-based quiz browsing with Python/Java/Technology cards → filtered quiz list), Gauntlet (quiz history groups), Review Lab (leaderboard + spaced repetition placeholder). Fully functional.
 
-1. **OpenRouter account has a $0 credit balance.** Confirmed via a real `402 Insufficient credits` from OpenRouter itself, after auth/routing were both confirmed correct (see `AI-COURSE-BUILD-PLAN.md`'s bugfix notes for the two real bugs that led here: wrong model name/base URL, then wrong provider entirely — DeepSeek key vs. OpenRouter key). This is an external account-funding issue, not something fixable in code. The user explicitly said to build ahead of this and treat it as resolved externally later. Nothing needs to change in the code once it's funded.
-2. **`frontend/build/` (the production bundle FastAPI serves via its static-file catch-all in `main.py`) is stale** — it predates all of today's frontend work and does not contain `CourseMap`/`QuestDetail`/etc. This caused real user-visible confusion (`localhost:8000/courses/build-real-stuff` rendered blank, because that build has never heard of the course routes, and also because the user tried the plural `/courses/` URL instead of the actual singular `/course/` route).
-   - **If you're running in the same Linux sandbox this session used:** `npm run build` fails at the "empty the build directory" step with `EPERM: operation not permitted, unlink ...` — the sandbox can *overwrite* files in place (`cp` over an existing file works) but cannot *delete* them (`rm`/`unlink` fails on files that live on the Windows-mounted path). Workaround if you need to rebuild from this sandbox: set `BUILD_PATH=/tmp/newbuild` (or similar, off the mounted path) so CRA builds somewhere deletion works, then `cp -r` (not `rm` first) the output files into `frontend/build/`, accepting that old orphaned hashed chunk files will sit unused alongside the new ones (harmless — nothing references them once `index.html`/`asset-manifest.json` are overwritten with the new hashes).
-   - **Better fix:** tell the user to just run `npm run build` themselves from a real Windows terminal (not this sandbox), or better yet, use `npm start` (dev server on port 3000) to actually develop/verify against, and only build for the port-8000 static-serving path when they want a "production-style" check.
-3. **This sandbox's bash-mounted view of the repo (`/sessions/.../mnt/Quiz-App/...`) repeatedly goes stale or corrupts relative to the real Windows-path files (`D:\Users\voido\source\repos\Quiz-App\...`).** Symptoms seen this session: truncated file contents, stale `.pyc` bytecode being used despite source changes, and once, null bytes injected into two test files after a `replace_all` Edit. **The Windows-path Read/Write/Edit tools are always ground truth.** Established workaround, used repeatedly and successfully: Read the file via the Windows path, `Write` an identical copy to a scratch file in the outputs directory, then `cp` that scratch file over the stale bash-mounted path, then re-verify (`python3 -c "import ast; ast.parse(...)"` for Python, `@babel/parser` for JS — see `frontend/node_modules/@babel/parser`, already available, no need to run a full CRA build to catch syntax errors). Expect to hit this again; don't trust bash-side reads/edits without cross-checking against the Windows-path tools when something looks unexpectedly broken.
+- **Studio** (`pages/CourseMap.js`, ~22K bytes) — The big new feature. Three-panel layout:
+  - Left sidebar: project list (capstone + 5 guided projects), XP/level card, collapsible
+  - Center: phase-dependent workspace with 5-phase nav bar (Discover → Analyze → Design → Build → Ship)
+  - AI Mentor: floating chat widget in bottom-right corner (minimizable to a FAB button)
+  - **AI is NOT wired to backend yet** — chat shows a placeholder response. That's next week's work.
+  - Phase nav tabs are currently freely clickable (no progression gating). Will be locked by deliverable completion once backend is wired.
+  - Each phase has placeholder workspace content (textareas, buttons, templates, file trees) showing what the real tools will look like.
 
----
+- **Learn** (`pages/Learn.js`) — Coming soon placeholder. Will be the course catalog where students browse and enroll in courses.
 
-## 4. Architecture map (where things live)
+- **Workspaces** (`pages/Workspaces.js`) — Coming soon placeholder. Will be an IDE-like coding environment connected to Studio projects.
 
-**Backend** (`backend/`):
-- `config.py` — `OPENROUTER_API_KEY`/`OPENROUTER_API_BASE`, `AI_MODEL_BY_TIER`, rate-limit constants.
-- `ai_routes.py` — all AI-model-calling endpoints, credit-ledger enforcement, rate limiting. `call_model_and_log()` is the *only* function allowed to call a model — route everything through it.
-- `course_routes.py` — quest content loading (`load_quests()`/`get_quest()`, auto-discovered from `backend/courses/<slug>/*.yaml`), quest listing/detail/completion/progress endpoints. `ai_routes.py` imports `get_quest()` from here rather than duplicating loading logic.
-- `courses/build-real-stuff/*.yaml` — quest content. Each file's top level is a **list** of quest dicts (differs from `backend/quizzes/`'s one-dict-per-file convention).
-- `models.py` — `CreditLedger`, `CourseProgress`, `QuestCompletion` (new tables for this extension).
-- `tests/` — `conftest.py` has the shared fixtures (`client`, `unauth_client`, `test_user`, `test_engine` — isolated in-memory SQLite per test, `get_db`/`require_user` overridden). `test_ai_routes.py`, `test_course_routes.py`, `test_grade_response.py`.
-- `.claude/skills/` — `credit-ledger-integration`, `ai-tutor-endpoints`, `ai-coding-tier-setup`, `course-quest-authoring` — read these for the *how* of extending any of this.
+### Design system
 
-**Frontend** (`frontend/src/`):
-- `api.js` — the shared `apiCall()` fetch helper. Already handles the AI extension's object-shaped `HTTPException` `detail` (a real bug found and fixed this session — most FastAPI errors have string `detail`, this extension's don't) and clears the right caches after credit-spending/quest-completing mutations.
-- `context/AuthContext.js` — `prefetchDashboardData()` now also prefetches course progress (`BUILD_REAL_STUFF_SLUG` exported from here as the one hardcoded course slug — will need to become a route param if a second course is ever added).
-- `pages/CourseMap.js`, `pages/QuestDetail.js`, `components/AITutorPanel.js`, `components/CreditMeter.js`, `components/QuestIcons.js` — see §2.
-- `App.js` — routes and nav link for the course extension.
-- `App.css`/`index.css` — see §1 for the scalability discussion; this is where any design-system work happens.
+- **One unified theme everywhere**: League Orange (`#ef6c00`) + Navy (`#1a365d`). No separate color palettes per section — user was explicit about this.
+- **CSS**: Plain CSS with custom properties in `index.css` (tokens) + `App.css` (components, ~3500+ lines). No CSS modules, no Tailwind.
+- **Typography**: Google Fonts — Poppins (headings) + Open Sans (body).
+- **Layout**: Fixed left sidebar (240px desktop, bottom tab bar on mobile <768px). 8dp spacing grid.
+- **Icons**: Inline SVG components, Lucide-style (20-24px, 1.5px stroke).
 
 ---
 
-## 5. Judgment calls made autonomously — worth a second look, not blocking
+## 2. File inventory (what changed this session)
 
-Flagging these per the working style established this session (user wants autonomous progress with judgment calls documented, not blocked on):
-
-- XP award is a flat 10/quest (`XP_AWARD_PER_QUEST` in `course_routes.py`), streak window is 24h, "level" is a purely cosmetic frontend construct (50 XP/level, not stored anywhere server-side) — all arbitrary starting points, easy to retune once real usage exists.
-- `AIChatChallengeQuest`'s "Mark quest complete" button in `QuestDetail.js` is **not gated** on the AI grader returning `all_passed: true` — mirrors the backend's own "if you're out of credits, finish on your own" philosophy. Not fully settled; revisit during a UX pass.
-- A reflection quest's actual written text is **not persisted server-side** — `QuestCompletion` only has `artifact_ref` (a reference/path, not a text body). The draft lives in browser `localStorage` and is cleared on submit. Fine for now (no instructor-review flow exists), but will need a real field if reflections ever need to be read by anyone besides the student.
-- `git status` currently shows nearly every file in the repo as modified, including files untouched this session (quiz YAML, Docker config, etc.) — almost certainly line-ending or mount-related noise from the Windows↔Linux sandbox bridge, not real content drift. Worth a `git diff --stat` sanity check before assuming anything unexpected changed.
+| File | Status | Notes |
+|------|--------|-------|
+| `frontend/src/App.js` | Modified | 5 nav items (added Workspaces), WorkspacesIcon, route for `/workspaces` |
+| `frontend/src/App.css` | Modified | Coming-soon styles (§9b), Studio three-panel layout (§10), floating AI widget, sidebar collapse grid fix |
+| `frontend/src/pages/CourseMap.js` | Rewritten | Complete Studio skeleton — was the old quest-list course page |
+| `frontend/src/pages/Learn.js` | Rewritten | Was quiz category browser, now coming-soon placeholder |
+| `frontend/src/pages/Workspaces.js` | New | Coming-soon placeholder for IDE environment |
+| `frontend/src/pages/Crucible.js` | Modified (earlier) | Arena tab restored with category quiz browsing |
+| `frontend/src/pages/Dashboard.js` | Unchanged | |
+| `docs/Studio-Architecture-Plan.md` | New | Full Studio design: philosophy, phases, AI roles, gamification, implementation plan |
 
 ---
 
-## 6. Working-style notes (how this user likes to collaborate)
+## 3. Architecture decisions
 
-- No fixed deadline; sequence for quality over speed.
-- Wants the agent doing real autonomous work between check-ins, not constant clarifying questions — but *does* expect a check-in via `AskUserQuestion` before large, ambiguous-scope work (e.g. the design-system question in §1) rather than guessing and redoing.
-- Has corrected overconfident/incorrect claims sharply before (e.g. asserting a `.env` value was missing based on a stale sandbox view, when it wasn't) — when the sandbox's view of a file conflicts with what should be true, say so plainly and verify via the Windows-path tools rather than asserting confidence in the sandbox's view.
-- Reacted badly to a visually plain first pass on the course pages ("looks terrible and extremely boring") — this user cares about the app actually looking good and game-like, not just functioning. Don't under-invest in visual polish on user-facing work for this project.
-- Prefers concise, direct chat responses (minimal preamble/postamble) — but this document itself should stay thorough, since it's the one artifact a context-free successor session depends on.
+- **Studio replaces the old CourseMap.** The file is still named `CourseMap.js` but exports `Studio`. Route is `/course/build-real-stuff`.
+- **AI Mentor is a floating widget**, not a fixed panel column. Opens/closes via a sparkles FAB in the bottom-right. Uses `aiPanelOpen` state. This was a deliberate UX choice — the user wanted it minimizable into the corner.
+- **Sidebar collapse** uses a CSS class on the grid container (`studio-layout.sidebar-collapsed`) that changes `grid-template-columns` from `260px 1fr` to `60px 1fr`. The collapsed state hides text labels and shows only icons.
+- **Phase progression** is visual-only right now. The PHASES array defines 5 phases with colors and icons. No backend gating exists yet — that's future work.
+- **Two project tracks**: Guided Projects (short skill-builders, hardcoded in GUIDED_PROJECTS array) and Capstone (one long-running full-SDLC project). Both are UI stubs.
+
+---
+
+## 4. What to build next (user's stated priorities)
+
+1. **Wire AI Mentor to backend** — Connect the chat widget to `POST /api/ai/tutor-chat`. Phase-aware system prompts (coach in Discover, generator in Design, evaluator in Build, etc.). Credit spending per interaction.
+2. **Phase progression gating** — Lock phases behind deliverable completion. Student can't enter Design until they've submitted artifacts in Discover and Analyze.
+3. **Learn page** — Course catalog with categories, enrollment, progress tracking.
+4. **Workspaces page** — IDE-like coding environment (file explorer, code editor, terminal, live preview).
+5. **Mini-games** — Interactive concept checkpoints between phases (drag-and-drop, spot-the-bug, timed puzzles). Never essay questions.
+
+---
+
+## 5. Known issues / gotchas
+
+1. **Sandbox mount staleness.** The bash-mounted view (`/sessions/.../mnt/Quiz-App/...`) frequently goes stale relative to the Windows-path files (`D:\Users\voido\source\repos\Quiz-App\...`). **Windows-path Read/Write/Edit tools are always ground truth.** Workaround used successfully multiple times: Read via Windows path → Write to outputs scratch file → `cp` to mount path → verify with parser (`@babel/parser` for JS at `frontend/node_modules/@babel/parser`, `ast.parse()` for Python).
+
+2. **OpenRouter $0 balance.** The AI backend (`backend/ai_routes.py`) routes through OpenRouter to DeepSeek models. Account has $0 credits — confirmed via real 402 error. This is an external funding issue, not a code bug. Everything works once funded.
+
+3. **`frontend/build/` is stale.** The production bundle predates all recent frontend work. `npm run build` fails in the sandbox due to EPERM on unlink. User should run `npm run build` from a real Windows terminal, or just use `npm start` (dev server on port 3000) for development.
+
+4. **git status noise.** Many files show as modified due to line-ending differences from the Windows↔Linux sandbox bridge. Run `git diff --stat` to check for real content drift.
+
+---
+
+## 6. Backend recap (unchanged this session)
+
+- `backend/ai_routes.py` — Credit-ledger enforcement, `POST /api/ai/tutor-chat`, `POST /api/ai/grade-response`, `GET /api/ai/credits`. Routes through OpenRouter.
+- `backend/course_routes.py` — Quest loading from YAML, listing/detail/completion/progress endpoints.
+- `backend/courses/build-real-stuff/` — Two quest YAML files: `reflection_kickoff.yaml` (no AI, UX observation prompt) and `pressure_test_target_customer.yaml` (AI chat challenge with 4-criterion rubric).
+- `backend/tests/` — 26/26 passing. Covers credit ledger, quest loading, rubric grading.
+
+---
+
+## 7. Working-style notes
+
+- **"Improve design" means full professional redesign**, not incremental tweaks. User has pushed back hard on boring/plain output.
+- **One unified orange/navy theme** — no separate color palettes per section. This was explicit feedback.
+- **Concise and direct** — user prefers minimal preamble/postamble in chat.
+- **Use AskUserQuestion before large ambiguous work** — don't guess scope on open-ended requests.
+- **Verify sandbox views** — when something looks broken, cross-check Windows-path tools before asserting.
+- **Fun, game-like, not homework** — concept checkpoints should be interactive games (Duolingo-style), never essays or paragraphs of text.
+- **AI available from day one** — students direct AI, they don't earn access to it. The skill is learning what to tell AI to build, how to evaluate output, and when to push back.
+
+---
+
+## 8. UA Framework plugin
+
+The UA Framework plugin (installed in Cowork) already implements SDLC coaching logic that maps to Studio phases 1-3:
+- Opportunity discovery → Stage 1 Discovery (positioning statement)
+- Stage 2 Analysis (landscape, personas, JTBD, scenarios)
+- Stage 3 Specification + Wireframes
+
+These skills (`ua-framework:*`) are available and can be invoked. They own their own markdown artifacts (`ua1-*` through `ua6-*`) and route through an orchestrator skill.
