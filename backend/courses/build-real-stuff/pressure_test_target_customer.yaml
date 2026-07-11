@@ -1,0 +1,27 @@
+# "Build Real Stuff" course extension -- quest content, auto-discovered by
+# ai_routes.load_quests(). See .claude/skills/course-quest-authoring/SKILL.md
+# for the schema and docs/AI-COURSE-EXTENSION-PLAN.md for the design.
+#
+# This is the second quest: exercises the real tutor call end to end
+# (fast tier), graded by POST /api/ai/grade-response against the rubric
+# below rather than a vague "did they do a good job" prompt.
+- id: pressure_test_target_customer
+  type: ai_chat_challenge
+  stage: "Stage 1 — Pass 1"
+  credit_budget: 1500
+  prompt: >
+    Use the AI tutor to pressure-test your positioning statement's
+    "target customer" clause. Get it to point out one group of people
+    your current wording would accidentally exclude, without pasting
+    your whole positioning statement into the chat.
+  target_outcome: >
+    Student asks a targeted question about their specific "target
+    customer" clause rather than dumping the full document; the
+    tutor's response surfaces a real edge case or excluded group the
+    student hadn't already named.
+  rubric:
+    - "Student's message quotes or closely paraphrases their target customer clause, not the whole document"
+    - "Student's message is a specific question, not a request to rewrite the clause"
+    - "The AI's response names a group or edge case the student's message didn't already mention"
+    - "Student does not simply accept the AI's first suggestion without any follow-up question"
+  max_turns: 4

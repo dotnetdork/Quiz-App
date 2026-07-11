@@ -1,0 +1,27 @@
+# "Build Real Stuff" course extension -- quest content, auto-discovered by
+# ai_routes.load_quests() the same way quiz_routes.load_questions() walks
+# backend/quizzes/. See .claude/skills/course-quest-authoring/SKILL.md for
+# the schema and docs/AI-COURSE-EXTENSION-PLAN.md for the design.
+#
+# This is the very first quest in the course, deliberately: no AI call at
+# all (credit_budget: 0), so it's the simplest possible content to prove
+# the quest-loading pattern before any real credit spend happens.
+#
+# Leads with UI/UX rather than the AI-ownership "driver's seat" framing --
+# that theme still matters (see the credit-economy design in
+# docs/AI-COURSE-EXTENSION-PLAN.md section 3) but shouldn't be the very
+# first thing a student reads. This quest instead gets them observing real
+# design decisions before they start making their own.
+- id: kickoff_ux_reflection
+  type: reflection_journal
+  stage: "Stage 1 — Pass 0"
+  credit_budget: 0
+  prompt: >
+    Before you write a single line of your own project, think of an app or
+    website you use almost every day -- one that feels easy, even
+    satisfying, to use. Write a few sentences: what specific design
+    decisions make it work (layout, the order things happen in, how it
+    responds when you tap or click, the words it uses)? Name one concrete
+    detail you'd want to borrow for your own project, and why it works.
+  min_length_words: 40
+  unlock_condition: "submission"

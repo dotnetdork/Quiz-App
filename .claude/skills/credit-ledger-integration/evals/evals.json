@@ -1,0 +1,11 @@
+{
+  "skill_name": "credit-ledger-integration",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I'm adding two new AI-calling endpoints to the Quiz-App backend (backend/ai_routes.py): one for tutor chat and one for generating a subtly-buggy code snippet. Write the credit-ledger integration for these — the SQLAlchemy model, the shared helper function both endpoints will call through, and a budget-check that stops a call before it happens if the student is out of credits. I don't want each endpoint doing its own DeepSeek call directly.",
+      "expected_output": "A CreditLedger SQLAlchemy model (user_id, quest_id, model_tier, tokens_spent, budget, timestamp), a single shared helper function that both endpoints call through (not two separate inline API calls), an explicit tier parameter with only two valid values, and a budget check that runs before the model call and prevents it when the student is out of credits.",
+      "files": []
+    }
+  ]
+}

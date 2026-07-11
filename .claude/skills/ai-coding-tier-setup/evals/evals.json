@@ -1,0 +1,11 @@
+{
+  "skill_name": "ai-coding-tier-setup",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need the /api/ai/generate-bug endpoint for our new debug_rescue quest type — it should take a topic and difficulty and produce a plausible but subtly wrong code snippet for the student to catch, along with an answer key. Also give me the Continue.dev devcontainer config we should ship so students can use DeepSeek for real coding in their dev environment.",
+      "expected_output": "A generate-bug endpoint that calls DeepSeek V4 Pro (the coding-capable tier, not the cheap tier), includes some validation step before serving the generated bug to the student, and keeps the answer key server-side. A devcontainer config.yaml listing both DeepSeek models with different roles (cheap model for autocomplete, capable model for chat/edit/agent tasks).",
+      "files": []
+    }
+  ]
+}

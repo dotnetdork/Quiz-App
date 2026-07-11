@@ -23,6 +23,7 @@ from config import SECRET_KEY, FRONTEND_URL
 from database import get_db, init_db
 from models import User, Score
 from auth import authorize_redirect, authorize_access_token, get_github_user
+from deps import get_current_user, require_user
 
 # ----------------------------
 # Determine static files path
@@ -74,33 +75,6 @@ def startup_event():
 
 
 # ----------------------------
-# Helper: Get current user from session
-# ----------------------------
-def get_current_user(request: Request, db: Session = Depends(get_db)):
-    """
-    Get the current logged-in user from the session.
-    Returns None if not logged in.
-    """
-    github_id = request.session.get("user_id")
-    if not github_id:
-        return None
-    
-    user = db.query(User).filter(User.github_id == str(github_id)).first()
-    return user
-
-
-def require_user(request: Request, db: Session = Depends(get_db)):
-    """
-    Dependency that requires a logged-in user.
-    Raises 401 if not logged in.
-    """
-    user = get_current_user(request, db)
-    if not user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    return user
-
-
-# ----------------------------
 # Root endpoint
 # ----------------------------
 @app.get("/")
@@ -112,7 +86,7 @@ def read_root():
     index_path = STATIC_DIR / "index.html"
     if index_path.exists():
         return FileResponse(str(index_path))
-    
+
     return {
         "message": "Welcome to Quiz App API",
         "docs": "/docs",
@@ -131,7 +105,15 @@ async def login(request: Request):
     Redirects to GitHub's authorization page.
     """
     redirect_uri = request.url_for("auth_callback")
-    return await authorize_redirect(request, redirect_uri)
+    response = await authorize_redirect(request, redirect_uri)
+    # TEMP DEBUG (2026-07-10): tracking down a recurring mismatching_state
+    # CSRF error -- logging what got stored in the session right after
+    # Authlib sets its state, plus the cookie header the browser will
+    # actually receive, so we can tell whether the state made it into the
+    # cookie at all. Remove once the root cause is confirmed.
+    print(f"[oauth-debug] /auth/login session after redirect setup: {dict(request.session)}")
+    print(f"[oauth-debug] /auth/login outgoing Set-Cookie: {response.headers.get('set-cookie')}")
+    return response
 
 
 @app.get("/auth/callback")
@@ -141,19 +123,25 @@ async def auth_callback(request: Request, db: Session = Depends(get_db)):
     Receives the code from GitHub, exchanges for token,
     and creates/updates user in database.
     """
+    # TEMP DEBUG (2026-07-10): see note above -- logging what session data
+    # (if any) and cookies actually arrived on this request, before Authlib
+    # gets a chance to raise on the state mismatch.
+    print(f"[oauth-debug] /auth/callback incoming cookies: {request.cookies}")
+    print(f"[oauth-debug] /auth/callback session as seen by server: {dict(request.session)}")
+    print(f"[oauth-debug] /auth/callback query params: {dict(request.query_params)}")
     try:
         # Exchange code for token
         token = await authorize_access_token(request)
-        
+
         # Get user info from GitHub
         github_user = await get_github_user(token)
-        
+
         github_id = str(github_user["id"])
         username = github_user["login"]
-        
+
         # Check if user exists
         user = db.query(User).filter(User.github_id == github_id).first()
-        
+
         if not user:
             # Create new user as Student (TitleCase)
             user = User(
@@ -169,16 +157,16 @@ async def auth_callback(request: Request, db: Session = Depends(get_db)):
             if user.username != username:
                 user.username = username
                 db.commit()
-        
+
         # Store user ID in session
         request.session["user_id"] = github_id
         request.session["username"] = username
-        
+
         # Redirect to frontend dashboard
         # If FRONTEND_URL is set, redirect there; otherwise redirect to local /dashboard
         redirect_url = f"{FRONTEND_URL}/dashboard" if FRONTEND_URL else "/dashboard"
         return RedirectResponse(url=redirect_url)
-        
+
     except Exception as e:
         # Handle OAuth errors
         raise HTTPException(status_code=400, detail=f"OAuth error: {str(e)}")
@@ -221,6 +209,18 @@ from leaderboard_routes import router as leaderboard_router
 app.include_router(leaderboard_router, prefix="/api/leaderboard", tags=["leaderboard"])
 
 # ----------------------------
+# AI Course Extension Endpoints ("Build Real Stuff")
+# ----------------------------
+# course_routes owns quest content (loading, detail, completion/progress);
+# ai_routes owns the AI-model-calling endpoints and imports get_quest()
+# from course_routes rather than duplicating quest-loading logic.
+from course_routes import router as course_router
+app.include_router(course_router, prefix="/api/courses", tags=["courses"])
+
+from ai_routes import router as ai_router
+app.include_router(ai_router, prefix="/api/ai", tags=["ai"])
+
+# ----------------------------
 # Static File Serving (Frontend)
 # ----------------------------
 # Serve the React frontend build if it exists
@@ -232,7 +232,7 @@ app.include_router(leaderboard_router, prefix="/api/leaderboard", tags=["leaderb
 if STATIC_DIR.exists():
     # Mount static files (JS, CSS, images) at /static
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR / "static")), name="static")
-    
+
     @app.get("/{path:path}")
     async def serve_frontend(path: str):
         """
@@ -243,15 +243,15 @@ if STATIC_DIR.exists():
         # Don't serve frontend for API or auth routes (they should 404 if not found)
         if path.startswith("api/") or path.startswith("auth/"):
             raise HTTPException(status_code=404, detail="Not found")
-        
+
         # Check if the requested file exists
         file_path = STATIC_DIR / path
         if file_path.exists() and file_path.is_file():
             return FileResponse(str(file_path))
-        
+
         # For all other paths, serve index.html (React Router will handle)
         index_path = STATIC_DIR / "index.html"
         if index_path.exists():
             return FileResponse(str(index_path))
-        
+
         raise HTTPException(status_code=404, detail="Not found")

@@ -1,0 +1,11 @@
+{
+  "skill_name": "course-quest-authoring",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Can you write two new quest YAML files for our course: one where a student has to convince the AI tutor to reveal a competitive alternative they hadn't thought of (limited budget), and one where they have to write a five-part screen description for a 'Leaderboard' screen and get it graded against a rubric.",
+      "expected_output": "Two YAML quest files: one type ai_chat_challenge with a target_outcome and rubric focused on efficient/targeted questioning, one type spec_sprint with required_parts covering the five-part screen description and a rubric grounded in the Leaderboard screen specifically. Both include id, stage, and a deliberately chosen credit_budget rather than a copy-pasted default.",
+      "files": []
+    }
+  ]
+}

@@ -10,6 +10,11 @@ import { apiCall } from '../api';
 
 const AuthContext = createContext(null);
 
+// Slug for the "Build Real Stuff" AI/SDLC course extension. Hardcoded for
+// now since there's only one course -- if a second course is ever added,
+// this (and CourseMap's usage of it) should become a route param instead.
+export const BUILD_REAL_STUFF_SLUG = 'build-real-stuff';
+
 // Cache for prefetched data
 let prefetchedData = null;
 let prefetchPromise = null;
@@ -20,21 +25,28 @@ let prefetchPromise = null;
  */
 function prefetchDashboardData(username) {
   if (prefetchPromise) return prefetchPromise;
-  
+
   prefetchPromise = Promise.all([
     apiCall(`/api/leaderboard/user/${username}`).catch(() => ({ scores: [] })),
     apiCall('/api/quiz/questions').catch(() => ({ quizzes: [] })),
-    apiCall('/api/leaderboard/').catch(() => ({ leaderboard: [] }))
-  ]).then(([scoreData, quizData, leaderData]) => {
+    apiCall('/api/leaderboard/').catch(() => ({ leaderboard: [] })),
+    // Course progress for the "Build Real Stuff" extension -- best-effort;
+    // falls back to a zeroed snapshot so a slow/failing courses API never
+    // blocks the rest of the (already-working) dashboard prefetch.
+    apiCall(`/api/courses/${BUILD_REAL_STUFF_SLUG}/progress`).catch(() => ({
+      course_slug: BUILD_REAL_STUFF_SLUG, xp: 0, streak_count: 0, current_quest: null, completed_quest_ids: []
+    }))
+  ]).then(([scoreData, quizData, leaderData, courseProgress]) => {
     prefetchedData = {
       scores: scoreData.scores || [],
       quizzes: quizData.quizzes || [],
       leaderboard: leaderData.leaderboard || [],
+      courseProgress,
       timestamp: Date.now()
     };
     return prefetchedData;
   });
-  
+
   return prefetchPromise;
 }
 

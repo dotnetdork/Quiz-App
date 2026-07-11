@@ -22,6 +22,8 @@ const CACHE_TTL = {
   '/api/quiz/questions': 5 * 60 * 1000,  // Quiz list: 5 minutes
   '/api/quiz/quiz/': 10 * 60 * 1000,      // Individual quiz: 10 minutes
   '/api/leaderboard/': 30 * 1000,         // Leaderboard: 30 seconds (changes frequently)
+  '/api/ai/credits': 5 * 1000,            // AI credit balance: 5 seconds (changes after every AI call)
+  '/api/courses/': 60 * 1000,             // Quest lists/detail/progress: 1 minute
   default: 60 * 1000                       // Default: 1 minute
 };
 
@@ -96,24 +98,52 @@ export async function apiCall(endpoint, options = {}) {
   
   // Parse JSON response
   const data = await response.json();
-  
+
   // Check for errors
   if (!response.ok) {
-    throw new Error(data.detail || 'API request failed');
+    // Most endpoints use a plain string `detail` (FastAPI's default), but
+    // the AI course extension's endpoints raise HTTPException with an
+    // object detail (e.g. {"error": "credits_exhausted", "message": "..."}
+    // -- see backend/ai_routes.py) so a specific error code can be told
+    // apart from a human-readable message. `new Error(data.detail)` on an
+    // object would stringify to "[object Object]", so prefer `.message`
+    // when detail is an object, and still surface `.detail` on the thrown
+    // Error so callers can branch on `.detail.error` (e.g. show a
+    // dedicated "out of credits" UI instead of a generic error banner).
+    let message = 'API request failed';
+    if (typeof data.detail === 'string') {
+      message = data.detail;
+    } else if (data.detail && typeof data.detail === 'object') {
+      message = data.detail.message || data.detail.error || message;
+    }
+    const error = new Error(message);
+    error.status = response.status;
+    error.detail = data.detail;
+    throw error;
   }
-  
+
   // Cache successful GET responses
   if (method === 'GET') {
     apiCache.set(cacheKey, { data, timestamp: Date.now() });
   }
-  
+
   // Clear relevant caches after mutations
   if (method === 'POST' || method === 'PUT' || method === 'DELETE') {
     // Clear leaderboard cache after quiz submission
     if (endpoint.includes('/submit')) {
       clearCacheFor('/api/leaderboard');
     }
+    // AI credit-spending calls change the remaining balance -- clear the
+    // cached balance so CreditMeter reflects the new spend on next read
+    // instead of a stale number.
+    if (endpoint.includes('/api/ai/tutor-chat') || endpoint.includes('/api/ai/grade-response')) {
+      clearCacheFor('/api/ai/credits');
+    }
+    // Completing a quest changes course progress (xp/streak/completed list).
+    if (endpoint.includes('/complete')) {
+      clearCacheFor('/progress');
+    }
   }
-  
+
   return data;
 }

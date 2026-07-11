@@ -1,0 +1,11 @@
+{
+  "skill_name": "ai-tutor-endpoints",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Write the system prompt and route handler for our AI tutor chat endpoint (backend/ai_routes.py, POST /api/ai/tutor-chat) for the Quiz-App course extension. Kids are going to ask it to just solve their coding problems for them — I need the persona to coach instead of handing over finished code, while still actually being helpful.",
+      "expected_output": "A system prompt that explicitly instructs the model not to hand over complete, pasteable solutions when asked directly, instead asking guiding questions or explaining concepts; a FastAPI route handler following the existing Pydantic-model pattern from quiz_routes.py; the call routed to the fast/cheap tier (DeepSeek V4 Flash), not the coding tier.",
+      "files": []
+    }
+  ]
+}

@@ -19,4 +19,16 @@ python-dotenv==1.0.1
 # YAML parsing
 pyyaml==6.0.1
 
+# AI course extension (Build Real Stuff) - calls route through OpenRouter
+# (openrouter.ai), which is OpenAI-compatible, so the official openai
+# client works against it by pointing base_url at
+# https://openrouter.ai/api/v1. See docs/AI-COURSE-EXTENSION-PLAN.md
+# section 6.
+openai==2.44.0
+
+# Testing (dev-only, but there wasn't a test framework in this file at all
+# before the AI course extension -- see docs/AI-COURSE-BUILD-PLAN.md
+# Milestone 1. backend/tests/ uses this + FastAPI's built-in TestClient.
+pytest==9.1.1
+
 # Note: FastAPI includes starlette dependency (>=0.49.1 required for security)

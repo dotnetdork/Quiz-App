@@ -11,15 +11,16 @@ import json
 import logging
 import os
 from datetime import datetime
-from typing import List, Any
+from typing import List, Any, cast
 
 import yaml
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from config import QUIZFILES_PATH
 from database import get_db
+from deps import require_user
 from models import User, Score
 
 # Set up logging
@@ -184,26 +185,22 @@ def get_quiz(quiz_id: str):
 @router.post("/submit")
 def submit_quiz(
     submission: QuizSubmission,
-    request: Request,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user: User = Depends(require_user)
 ):
     """
     Submit answers for a quiz.
     Calculates score and saves progress.
-    
+
     On retakes, only awards points for questions that were:
     - Answered correctly this time AND
     - Never answered correctly before on this quiz
     """
-    # Get current user from session
-    github_id = request.session.get("user_id")
-    if not github_id:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    
-    user = db.query(User).filter(User.github_id == str(github_id)).first()
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-    
+    # `user` comes from the shared require_user dependency (backend/deps.py)
+    # instead of an inline session lookup -- this used to duplicate (with a
+    # slightly different error message) the same check main.py defines for
+    # /auth/me. Same behavior, one source of truth.
+
     # Load the quiz
     data = load_questions()
     quiz = None
@@ -225,9 +222,9 @@ def submit_quiz(
     # Build set of all previously correct question IDs
     previously_correct = set()
     for prev_score in previous_scores:
-        if prev_score.correct_questions:
+        if prev_score.correct_questions is not None:
             try:
-                prev_correct = json.loads(prev_score.correct_questions)
+                prev_correct = json.loads(str(prev_score.correct_questions))
                 previously_correct.update(prev_correct)
             except (json.JSONDecodeError, TypeError) as e:
                 logger.warning(
@@ -322,8 +319,8 @@ def submit_quiz(
     
     # Save progress to Base64 file
     save_student_progress(
-        user_id=user.id,
-        username=user.username,
+        user_id=cast(int, user.id),
+        username=str(user.username),
         answers={
             "quiz_id": submission.quiz_id,
             "results": results,

@@ -1,87 +1,95 @@
 /**
- * Enhanced Dashboard Component
- * 
- * Dynamic tabbed interface with:
- * - Quizzes tab (browse and take quizzes)
- * - History tab (user's quiz attempts with collapsible groups)
- * - Leaderboard tab (global rankings and personal stats)
+ * Dashboard — Hub Page
+ *
+ * Three-zone layout:
+ * - Mission Control: user profile hero with primary stats
+ * - Status Panel: cards linking to Learn, Crucible, Studio
+ * - Vitals: compact stats (streak, rank, total points)
  */
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { apiCall, API_URL, clearApiCache } from '../api';
-import { getRankEmoji, calculateTotalPoints } from '../utils/rankUtils';
+import { apiCall, API_URL } from '../api';
+import { calculateTotalPoints } from '../utils/rankUtils';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { useAuth, getPrefetchedData } from '../context/AuthContext';
 
-// Category Icons
-function PythonIcon({ size = 60 }) {
+/* Lucide-style SVG Icons */
+function BookOpenIcon({ size = 20 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" rx="12" fill="#3776ab"/>
-      <path d="M50 15C35 15 35 25 35 25V35H52V38H28C28 38 18 37 18 52C18 67 26 67 26 67H35V57C35 57 34 47 45 47H55C55 47 65 47 65 37V25C65 25 66 15 50 15ZM42 22C44.2091 22 46 23.7909 46 26C46 28.2091 44.2091 30 42 30C39.7909 30 38 28.2091 38 26C38 23.7909 39.7909 22 42 22Z" fill="#ffd43b"/>
-      <path d="M50 85C65 85 65 75 65 75V65H48V62H72C72 62 82 63 82 48C82 33 74 33 74 33H65V43C65 43 66 53 55 53H45C45 53 35 53 35 63V75C35 75 34 85 50 85ZM58 78C55.7909 78 54 76.2091 54 74C54 71.7909 55.7909 70 58 70C60.2091 70 62 71.7909 62 74C62 76.2091 60.2091 78 58 78Z" fill="#ffd43b"/>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
     </svg>
   );
 }
 
-function JavaIcon({ size = 60 }) {
+function SwordsIcon({ size = 20 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" rx="12" fill="#f89820"/>
-      <path d="M35 25C35 25 40 30 50 30C60 30 65 25 65 25" stroke="white" strokeWidth="4" strokeLinecap="round"/>
-      <path d="M30 35H70V70C70 75 65 80 50 80C35 80 30 75 30 70V35Z" fill="white"/>
-      <path d="M30 35H70V45H30V35Z" fill="#5382a1"/>
-      <path d="M72 45C75 45 78 48 78 52C78 56 75 60 72 60" stroke="white" strokeWidth="4" strokeLinecap="round"/>
-      <text x="50" y="68" textAnchor="middle" fill="#f89820" fontSize="16" fontWeight="bold" fontFamily="Arial">JAVA</text>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
+      <line x1="13" y1="19" x2="19" y2="13" />
+      <line x1="16" y1="16" x2="20" y2="20" />
+      <line x1="19" y1="21" x2="21" y2="19" />
+      <polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5" />
+      <line x1="5" y1="14" x2="9" y2="18" />
+      <line x1="7" y1="17" x2="4" y2="20" />
+      <line x1="3" y1="19" x2="5" y2="21" />
     </svg>
   );
 }
 
-function TechnologyIcon({ size = 60 }) {
+function PaletteIcon({ size = 20 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" rx="12" fill="#607d8b"/>
-      <circle cx="50" cy="50" r="15" stroke="white" strokeWidth="3" fill="none"/>
-      <circle cx="50" cy="50" r="6" fill="#4caf50"/>
-      <line x1="50" y1="20" x2="50" y2="35" stroke="white" strokeWidth="3"/>
-      <line x1="50" y1="65" x2="50" y2="80" stroke="white" strokeWidth="3"/>
-      <line x1="20" y1="50" x2="35" y2="50" stroke="white" strokeWidth="3"/>
-      <line x1="65" y1="50" x2="80" y2="50" stroke="white" strokeWidth="3"/>
-      <circle cx="25" cy="25" r="5" fill="#4caf50"/>
-      <circle cx="75" cy="25" r="5" fill="#4caf50"/>
-      <circle cx="25" cy="75" r="5" fill="#4caf50"/>
-      <circle cx="75" cy="75" r="5" fill="#4caf50"/>
-      <line x1="30" y1="30" x2="40" y2="40" stroke="white" strokeWidth="2"/>
-      <line x1="70" y1="30" x2="60" y2="40" stroke="white" strokeWidth="2"/>
-      <line x1="30" y1="70" x2="40" y2="60" stroke="white" strokeWidth="2"/>
-      <line x1="70" y1="70" x2="60" y2="60" stroke="white" strokeWidth="2"/>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="13.5" cy="6.5" r="0.5" fill="currentColor" /><circle cx="17.5" cy="10.5" r="0.5" fill="currentColor" />
+      <circle cx="8.5" cy="7.5" r="0.5" fill="currentColor" /><circle cx="6.5" cy="12.5" r="0.5" fill="currentColor" />
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
     </svg>
   );
 }
 
-const CATEGORIES = [
-  { id: 'python', name: 'Python', Icon: PythonIcon, color: '#3776ab' },
-  { id: 'java', name: 'Java', Icon: JavaIcon, color: '#f89820' },
-  { id: 'technology', name: 'Technology', Icon: TechnologyIcon, color: '#607d8b' }
-];
+function TrophyIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9H4.5a2.5 2.5 0 010-5H6" /><path d="M18 9h1.5a2.5 2.5 0 000-5H18" />
+      <path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22h10c0-2-1-3.25-2.03-3.79A1.09 1.09 0 0114 17v-2.34" />
+      <path d="M18 2H6v7a6 6 0 0012 0V2Z" />
+    </svg>
+  );
+}
 
-// Animated Skill Bar component
+function BarChartIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_901_1558)">
+        <path d="M29 7H30C30.553 7 31 7.447 31 8V30C31 30.553 30.553 31 30 31H2C1.447 31 1 30.553 1 30V8C1 7.447 1.447 7 2 7H19M6 28V19H10V28M14 28V13H18V28M22 28V1H26V28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_901_1558">
+          <rect width="32" height="32" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function ArrowRightIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+    </svg>
+  );
+}
+
 function AnimatedSkillBar({ skill, count, totalQuizzes, color, delay }) {
   const [width, setWidth] = useState(0);
   const percentage = (count / totalQuizzes) * 100;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setWidth(percentage);
-    }, delay);
+    const timer = setTimeout(() => setWidth(percentage), delay);
     return () => clearTimeout(timer);
   }, [percentage, delay]);
 
-  const skillLabels = {
-    'python': 'Python',
-    'java': 'Java',
-    'technology': 'Technology'
-  };
+  const skillLabels = { python: 'Python', java: 'Java', technology: 'Technology' };
 
   return (
     <div className="skill-bar-container animated">
@@ -90,14 +98,7 @@ function AnimatedSkillBar({ skill, count, totalQuizzes, color, delay }) {
         <span className="skill-count">{count} quiz{count !== 1 ? 'zes' : ''}</span>
       </div>
       <div className="skill-bar">
-        <div 
-          className="skill-bar-fill animated-fill" 
-          style={{ 
-            width: `${width}%`,
-            backgroundColor: color,
-            transition: `width 2s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`
-          }}
-        >
+        <div className="skill-bar-fill animated-fill" style={{ width: `${width}%`, backgroundColor: color, transition: `width 2s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms` }}>
           <span className="skill-percentage">{Math.round(percentage)}%</span>
         </div>
       </div>
@@ -105,102 +106,46 @@ function AnimatedSkillBar({ skill, count, totalQuizzes, color, delay }) {
   );
 }
 
-// Collapsible quiz history group
-function QuizHistoryGroup({ quizTitle, quizId, attempts }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const latestAttempt = attempts[0];
-  const attemptCount = attempts.length;
-
-  return (
-    <div className={`history-group ${isExpanded ? 'expanded' : ''}`}>
-      <div 
-        className="history-group-header"
-        onClick={() => attemptCount > 1 && setIsExpanded(!isExpanded)}
-        style={{ cursor: attemptCount > 1 ? 'pointer' : 'default' }}
-      >
-        <div className="history-group-info">
-          <div className="history-quiz-title">
-            <strong>{quizTitle}</strong>
-            {attemptCount > 1 && (
-              <span className="attempt-count-badge">
-                {attemptCount} attempt{attemptCount !== 1 ? 's' : ''}
-              </span>
-            )}
-          </div>
-          <div className="history-latest">
-            <span className="score-badge">{latestAttempt.score} pts</span>
-            <span className="history-date">{new Date(latestAttempt.timestamp).toLocaleDateString()}</span>
-          </div>
-        </div>
-        <div className="history-group-actions">
-          <Link to={`/quiz/${quizId}`} className="btn-retake" onClick={(e) => e.stopPropagation()}>
-            Retake Quiz →
-          </Link>
-          {attemptCount > 1 && (
-            <span className={`expand-icon ${isExpanded ? 'rotated' : ''}`}>
-              ▼
-            </span>
-          )}
-        </div>
-      </div>
-      {isExpanded && attemptCount > 1 && (
-        <div className="history-group-details">
-          {attempts.slice(1).map((attempt, index) => (
-            <div key={index} className="history-attempt-row">
-              <span className="attempt-number">Attempt {attemptCount - index - 1}</span>
-              <span className="score-badge secondary">{attempt.score} pts</span>
-              <span className="history-date">{new Date(attempt.timestamp).toLocaleDateString()}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+const CATEGORIES = [
+  { id: 'python', name: 'Python', color: '#3776ab' },
+  { id: 'java', name: 'Java', color: '#f89820' },
+  { id: 'technology', name: 'Technology', color: '#607d8b' }
+];
 
 function Dashboard() {
-  const [activeTab, setActiveTab] = useState('quizzes');
   const { user: authUser } = useAuth();
   const [user, setUser] = useState(authUser);
   const [scores, setScores] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [showProfileAnimation, setShowProfileAnimation] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const profileRef = useRef(null);
 
   useEffect(() => {
     async function loadData() {
       try {
-        // Use user from AuthContext (already authenticated)
         const userData = authUser || await apiCall('/auth/me');
         setUser(userData);
-        
-        // Check for prefetched data first (from AuthContext)
+
         const prefetched = getPrefetchedData();
-        
         if (prefetched) {
-          // Use prefetched data - instant load!
           setScores(prefetched.scores);
           setQuizzes(prefetched.quizzes);
           setLeaderboard(prefetched.leaderboard);
         } else {
-          // Fall back to fresh fetch if no prefetched data
           const [scoreData, quizData, leaderData] = await Promise.all([
             apiCall(`/api/leaderboard/user/${userData.username}`),
             apiCall('/api/quiz/questions'),
             apiCall('/api/leaderboard/')
           ]);
-          
           setScores(scoreData.scores || []);
           setQuizzes(quizData.quizzes || []);
           setLeaderboard(leaderData.leaderboard || []);
         }
-        
-        // Clear authentication flag and trigger profile animation
+
         sessionStorage.removeItem('isAuthenticating');
         setShowProfileAnimation(true);
       } catch (err) {
@@ -210,46 +155,16 @@ function Dashboard() {
         setLoading(false);
       }
     }
-    
     loadData();
   }, [authUser]);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    setIsLoggingOut(true);
-    
-    // Clear caches on logout
-    clearApiCache();
-    
-    // Navigate after animation completes
-    setTimeout(() => {
-      window.location.href = `${API_URL}/auth/logout`;
-    }, 800);
-  };
-
   if (loading) {
-    // Check if we're coming from OAuth flow
     const isAuthenticating = sessionStorage.getItem('isAuthenticating') === 'true';
-    
     return (
       <div className="dashboard-skeleton">
-        <div className="skeleton-profile-card">
-          <div className="skeleton-avatar"></div>
-          <div className="skeleton-text"></div>
-          <div className="skeleton-text short"></div>
-        </div>
-        <div className="skeleton-stats">
-          <div className="skeleton-stat-card"></div>
-          <div className="skeleton-stat-card"></div>
-          <div className="skeleton-stat-card"></div>
-        </div>
-        {isAuthenticating && (
-          <div className="loading-bar-overlay">
-            <div className="loading-bar">
-              <div className="loading-bar-fill"></div>
-            </div>
-          </div>
-        )}
+        <div className="skeleton-profile-card"><div className="skeleton-avatar"></div><div className="skeleton-text"></div><div className="skeleton-text short"></div></div>
+        <div className="skeleton-stats"><div className="skeleton-stat-card"></div><div className="skeleton-stat-card"></div><div className="skeleton-stat-card"></div></div>
+        {isAuthenticating && <div className="loading-bar-overlay"><div className="loading-bar"><div className="loading-bar-fill"></div></div></div>}
       </div>
     );
   }
@@ -259,295 +174,115 @@ function Dashboard() {
       <div className="card text-center mt-lg">
         <h2>Please Log In</h2>
         <p>You need to log in to view your dashboard.</p>
-        <a href={`${API_URL}/auth/login`} className="btn-primary" style={{ display: 'inline-block', marginTop: '1rem' }}>
-          Login with GitHub
-        </a>
+        <a href={`${API_URL}/auth/login`} className="btn-primary" style={{ display: 'inline-block', marginTop: '1rem' }}>Login with GitHub</a>
       </div>
     );
   }
 
   const totalPoints = calculateTotalPoints(scores);
   const userRank = leaderboard.findIndex(entry => entry.username === user.username) + 1;
-  const filteredQuizzes = selectedCategory
-    ? quizzes.filter(quiz => quiz.category === selectedCategory)
-    : [];
-
-  // Get set of completed quiz IDs
-  const completedQuizIds = new Set(scores.map(score => score.quiz_id));
 
   // Calculate skills from quiz history
-  const calculateSkills = () => {
-    if (!scores.length || !quizzes.length) {
-      return {};
-    }
-    
-    // Optimize: Create quiz lookup map for O(1) access instead of O(n) find
-    const quizMap = Object.fromEntries(quizzes.map(quiz => [quiz.id, quiz]));
-    
-    const skillCounts = {};
-    scores.forEach(score => {
-      const quiz = quizMap[score.quiz_id];
-      if (quiz && quiz.category) {
-        const category = quiz.category;
-        skillCounts[category] = (skillCounts[category] || 0) + 1;
-      }
-    });
-    return skillCounts;
-  };
-
-  const skills = calculateSkills();
-  const totalQuizzes = Object.values(skills).reduce((sum, count) => sum + count, 0);
-
-  // Group scores by quiz for history display
-  const groupedHistory = () => {
-    const groups = {};
-    scores.forEach(score => {
-      if (!groups[score.quiz_id]) {
-        groups[score.quiz_id] = [];
-      }
-      groups[score.quiz_id].push(score);
-    });
-    
-    // Sort each group by timestamp (most recent first)
-    Object.keys(groups).forEach(quizId => {
-      groups[quizId].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    });
-    
-    return groups;
-  };
-
-  // Get quiz title by ID - optimized to use O(1) lookup
   const quizMap = Object.fromEntries(quizzes.map(quiz => [quiz.id, quiz]));
-  const getQuizTitle = (quizId) => {
-    return quizMap[quizId]?.title || quizId;
-  };
-
-  const historyGroups = groupedHistory();
+  const skills = {};
+  scores.forEach(score => {
+    const quiz = quizMap[score.quiz_id];
+    if (quiz?.category) {
+      skills[quiz.category] = (skills[quiz.category] || 0) + 1;
+    }
+  });
+  const totalQuizzes = Object.values(skills).reduce((sum, c) => sum + c, 0);
 
   return (
     <>
       <AnimatedBackground theme="dashboard" />
-      <div className={`dashboard-container ${isLoggingOut ? 'transitioning-out' : ''}`} style={{ position: 'relative', zIndex: 1 }}>
-      {/* User Profile Card */}
-      <div className={`user-profile-card ${showProfileAnimation ? 'loaded' : ''}`} ref={profileRef}>
-        <div className="profile-header">
-          <div className="profile-avatar-wrapper">
-            <div className="profile-avatar">
-              <img 
-                src={`https://github.com/${user.username}.png`} 
-                alt={`${user.username}'s avatar`}
-                onError={(e) => {
-                  e.target.src = '/images/clearRobot3Color1.png';
-                }}
-              />
+      <div className="dashboard-container" style={{ position: 'relative', zIndex: 1 }}>
+
+        {/* ZONE 1: Mission Control — Profile Hero */}
+        <div className={`user-profile-card ${showProfileAnimation ? 'loaded' : ''}`} ref={profileRef}>
+          <div className="profile-header">
+            <div className="profile-avatar-wrapper">
+              <div className="profile-avatar">
+                <img src={`https://github.com/${user.username}.png`} alt={`${user.username}'s avatar`} onError={(e) => { e.target.src = '/images/clearRobot3Color1.png'; }} />
+              </div>
+              <div className="avatar-ring"></div>
             </div>
-            <div className="avatar-ring"></div>
-          </div>
-          <div className="profile-info">
-            <h2>{user.username}</h2>
-            <div className="role-badge">{user.role}</div>
-          </div>
-          <a 
-            href={`${API_URL}/auth/logout`} 
-            className="btn-logout"
-            onClick={handleLogout}
-          >
-            Logout
-          </a>
-        </div>
-
-        {/* Skills Chart with Animation */}
-        <div className="skills-section">
-          <h3 aria-label="Skills Profile">📊 Skills Profile</h3>
-          {totalQuizzes > 0 ? (
-            <div className="skills-chart">
-              {Object.entries(skills).map(([skill, count], index) => {
-                const categoryData = CATEGORIES.find(c => c.id === skill);
-                return (
-                  <AnimatedSkillBar
-                    key={skill}
-                    skill={skill}
-                    count={count}
-                    totalQuizzes={totalQuizzes}
-                    color={categoryData?.color || '#607d8b'}
-                    delay={showProfileAnimation ? index * 200 : 0}
-                  />
-                );
-              })}
+            <div className="profile-info">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '30px', flexWrap: 'wrap' }}>
+                <div>
+                  <h2>{user.username}</h2>
+                  <div className="role-badge">{user.role}</div>
+                </div>
+                <div className="stats-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', minWidth: '300px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                    <div className="stat-label">Total Points</div>
+                    <div className="stat-icon" style={{ marginBottom: '8px' }}></div>
+                    <div className="stat-value">{totalPoints}</div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                    <div className="stat-label">Quizzes Taken</div>
+                    <div className="stat-icon" style={{ marginBottom: '8px' }}></div>
+                    <div className="stat-value">{scores.length}</div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                    <div className="stat-label">Global Rank</div>
+                    <div className="stat-icon" style={{ marginBottom: '8px' }}></div>
+                    <div className="stat-value">{userRank > 0 ? `#${userRank}` : '-'}</div>
+                  </div>
+                </div>
+              </div>
             </div>
-          ) : (
-            <p className="text-secondary empty-skills">Complete quizzes to build your skills profile!</p>
-          )}
-        </div>
-      </div>
+          </div>
 
-      {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card-modern">
-          <div className="stat-icon">🏆</div>
-          <div className="stat-value">{totalPoints}</div>
-          <div className="stat-label">Total Points</div>
-        </div>
-        <div className="stat-card-modern">
-          <div className="stat-icon">📝</div>
-          <div className="stat-value">{scores.length}</div>
-          <div className="stat-label">Quizzes Completed</div>
-        </div>
-        <div className="stat-card-modern">
-          <div className="stat-icon">📊</div>
-          <div className="stat-value">{userRank > 0 ? `#${userRank}` : '-'}</div>
-          <div className="stat-label">Global Rank</div>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="tabs-container">
-        <div className="tabs-header">
-          <button 
-            className={`tab ${activeTab === 'quizzes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('quizzes')}
-          >
-            📚 Quizzes
-          </button>
-          <button 
-            className={`tab ${activeTab === 'history' ? 'active' : ''}`}
-            onClick={() => setActiveTab('history')}
-          >
-            📋 History
-          </button>
-          <button 
-            className={`tab ${activeTab === 'leaderboard' ? 'active' : ''}`}
-            onClick={() => setActiveTab('leaderboard')}
-          >
-            🏅 Leaderboard
-          </button>
-        </div>
-
-        <div className="tabs-content">
-          {activeTab === 'quizzes' && (
-            <div className="tab-panel">
-              <h2>Browse Quizzes</h2>
-              <p className="text-secondary mb-md">Select a category to view available quizzes</p>
-              
-              <div className="category-grid-modern">
-                {CATEGORIES.map((category) => {
-                  const Icon = category.Icon;
-                  const quizCount = quizzes.filter(q => q.category === category.id).length;
-                  const isSelected = selectedCategory === category.id;
-                  
-                  return (
-                    <div
-                      key={category.id}
-                      className={`category-card-modern ${isSelected ? 'selected' : ''}`}
-                      onClick={() => setSelectedCategory(isSelected ? null : category.id)}
-                      style={{ '--category-color': category.color }}
-                    >
-                      <Icon size={60} />
-                      <h3>{category.name}</h3>
-                      <span className="quiz-badge">{quizCount} quiz{quizCount !== 1 ? 'zes' : ''}</span>
-                    </div>
-                  );
+          <div className="skills-section">
+            <h3 aria-label="Skills Profile"><BarChartIcon size={18} /> Skills Profile</h3>
+            {totalQuizzes > 0 ? (
+              <div className="skills-chart">
+                {Object.entries(skills).map(([skill, count], index) => {
+                  const cat = CATEGORIES.find(c => c.id === skill);
+                  return <AnimatedSkillBar key={skill} skill={skill} count={count} totalQuizzes={totalQuizzes} color={cat?.color || '#607d8b'} delay={showProfileAnimation ? index * 200 : 0} />;
                 })}
               </div>
-
-              {selectedCategory && (
-                <div className="quiz-list mt-lg">
-                  <div className="section-header">
-                    <h3>{CATEGORIES.find(c => c.id === selectedCategory)?.name} Quizzes</h3>
-                    <button className="btn-link" onClick={() => setSelectedCategory(null)}>← Back</button>
-                  </div>
-                  
-                  {filteredQuizzes.length === 0 ? (
-                    <p>No quizzes available in this category.</p>
-                  ) : (
-                    <div className="quiz-grid">
-                      {filteredQuizzes.map((quiz) => {
-                        const isCompleted = completedQuizIds.has(quiz.id);
-                        return (
-                          <div key={quiz.id} className={`quiz-card-modern ${isCompleted ? 'completed' : ''}`}>
-                            {isCompleted && <span className="completed-badge">✓ Completed</span>}
-                            <h4 title={quiz.title}>{quiz.title}</h4>
-                            <p>{quiz.description}</p>
-                            <div className="quiz-meta">
-                              <span>📝 {quiz.questions?.length || 0} questions</span>
-                            </div>
-                            <Link to={`/quiz/${quiz.id}`} className={`btn-primary btn-block ${isCompleted ? 'btn-retake-quiz' : ''}`}>
-                              {isCompleted ? 'Retake Quiz →' : 'Start Quiz →'}
-                            </Link>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === 'history' && (
-            <div className="tab-panel">
-              <h2>Quiz History</h2>
-              {scores.length === 0 ? (
-                <div className="empty-state">
-                  <p>📝 You haven't taken any quizzes yet.</p>
-                  <button className="btn-primary" onClick={() => setActiveTab('quizzes')}>
-                    Browse Quizzes
-                  </button>
-                </div>
-              ) : (
-                <div className="history-list">
-                  {Object.keys(historyGroups).map((quizId) => (
-                    <QuizHistoryGroup
-                      key={quizId}
-                      quizId={quizId}
-                      quizTitle={getQuizTitle(quizId)}
-                      attempts={historyGroups[quizId]}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === 'leaderboard' && (
-            <div className="tab-panel">
-              <h2>🏆 Global Leaderboard</h2>
-              <p className="text-secondary mb-md">Top 10 quiz champions by total points</p>
-              
-              {leaderboard.length === 0 ? (
-                <p>No scores yet. Be the first!</p>
-              ) : (
-                <table className="leaderboard-table">
-                  <thead>
-                    <tr>
-                      <th>Rank</th>
-                      <th>Player</th>
-                      <th>Points</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {leaderboard.map((entry) => (
-                      <tr key={entry.rank} className={entry.username === user.username ? 'highlight' : ''}>
-                        <td>
-                          <span className={`rank-badge ${entry.rank <= 3 ? `rank-${entry.rank}` : ''}`}>
-                            {getRankEmoji(entry.rank)}
-                          </span>
-                        </td>
-                        <td>
-                          <strong>{entry.username}</strong>
-                          {entry.username === user.username && <span className="you-badge">You</span>}
-                        </td>
-                        <td><strong>{entry.total_points}</strong> pts</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          )}
+            ) : (
+              <p className="text-secondary empty-skills">Complete quizzes to build your skills profile!</p>
+            )}
+          </div>
         </div>
+
+        {/* ZONE 2: Status Panel — Three Destination Cards */}
+        <div className="status-panel">
+          <Link to="/learn" className="zone-card zone-learn">
+            <div className="zone-card-icon"><BookOpenIcon size={28} /></div>
+            <div className="zone-card-content">
+              <h3>Learn</h3>
+              <p>Browse courses by category and build your skills</p>
+              <span className="zone-card-stat">{courses.length} courses available</span>
+            </div>
+            <ArrowRightIcon size={20} />
+          </Link>
+
+          <Link to="/crucible" className="zone-card zone-crucible">
+            <div className="zone-card-icon"><SwordsIcon size={28} /></div>
+            <div className="zone-card-content">
+              <h3>Crucible</h3>
+              <p>Test your skills with fun challenges and track your rank</p>
+              <span className="zone-card-stat">{quizzes.length} challenges ready</span>
+            </div>
+            <ArrowRightIcon size={20} />
+          </Link>
+
+          <Link to="/course/build-real-stuff" className="zone-card zone-studio">
+            <div className="zone-card-icon"><PaletteIcon size={28} /></div>
+            <div className="zone-card-content">
+              <h3>Studio</h3>
+              <p>Design and build real applications with AI guidance</p>
+              <span className="zone-card-stat">AI-assisted UI/UX development</span>
+            </div>
+            <ArrowRightIcon size={20} />
+          </Link>
+        </div>
+
       </div>
-    </div>
     </>
   );
 }
