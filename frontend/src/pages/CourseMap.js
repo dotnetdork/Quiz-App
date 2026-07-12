@@ -1,28 +1,49 @@
 /**
- * Studio Page — "Create" Mode
+ * Studio Page — AI Builder
  *
- * Three-panel layout:
- * - Left: Project sidebar (capstone + guided projects, XP/level)
- * - Center: Phase-dependent workspace with phase nav bar
- * - Right: AI Mentor panel (chat stub, credits display)
+ * Chat-first workspace inspired by Codecademy's AI Builder.
+ * Two states:
+ * 1. Welcome — "What do you want to build?" with suggestion chips
+ * 2. Workspace — Chat + Live Preview split, Build/Learn tabs
  *
- * {AI_MENTOR_NAME} is available in every phase from day one. The student directs;
- * {AI_MENTOR_NAME} executes. Concept checkpoints are interactive games, not essays.
+ * LeagueAI is central from day one. The student directs; AI executes.
+ * SDLC phases are tracked subtly at the bottom, not as primary nav.
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { apiCall } from '../api';
 import { useAuth, getPrefetchedData } from '../context/AuthContext';
 import AnimatedBackground from '../components/AnimatedBackground';
 
-/* -- SVG Icons (Lucide-style) -- */
+/* -- SVG Icons (Lucide-style, 1.5px stroke) -- */
 
-function RocketIcon({ size = 20 }) {
+function SparklesIcon({ size = 20 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z" />
-      <path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z" />
-      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      <path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z" />
+    </svg>
+  );
+}
+
+function SendIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  );
+}
+
+function ArrowLeftIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
+    </svg>
+  );
+}
+
+function CodeIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
     </svg>
   );
 }
@@ -54,14 +75,6 @@ function PenToolIcon({ size = 20 }) {
   );
 }
 
-function CodeIcon({ size = 20 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
-    </svg>
-  );
-}
-
 function PackageIcon({ size = 20 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -72,280 +85,58 @@ function PackageIcon({ size = 20 }) {
   );
 }
 
-function SparklesIcon({ size = 20 }) {
+function EyeIcon({ size = 20 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z" />
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
     </svg>
   );
 }
 
-function PlusIcon({ size = 20 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  );
-}
+/* -- Constants -- */
 
-function SendIcon({ size = 20 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-    </svg>
-  );
-}
-
-function ChevronRightIcon({ size = 16 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="9 18 15 12 9 6" />
-    </svg>
-  );
-}
-
-function XIcon({ size = 16 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
-}
-
-/* -- Phase definitions -- */
-
-const PHASES = [
-  { id: 'discover', name: 'Discover', Icon: SearchIcon, color: '#1565c0', description: 'Find a real problem worth solving' },
-  { id: 'analyze', name: 'Analyze', Icon: UsersIcon, color: '#2e7d32', description: 'Understand your users and the landscape' },
-  { id: 'design', name: 'Design', Icon: PenToolIcon, color: '#ef6c00', description: 'Turn research into screens and wireframes' },
-  { id: 'build', name: 'Build', Icon: CodeIcon, color: '#c62828', description: 'Direct {AI_MENTOR_NAME} to build your application' },
-  { id: 'ship', name: 'Ship', Icon: PackageIcon, color: '#7b1fa2', description: 'Polish, test, and present your work' },
-];
-
-/* -- Sample guided projects -- */
-
-const GUIDED_PROJECTS = [
-  { id: 'login-flow', name: 'Design a Login Flow', phase: 'design', xp: 150, difficulty: 'Beginner' },
-  { id: 'user-research', name: 'Interview Real Users', phase: 'discover', xp: 200, difficulty: 'Beginner' },
-  { id: 'spot-ux-mistake', name: 'Spot the UX Mistake', phase: 'design', xp: 100, difficulty: 'Beginner' },
-  { id: 'build-component', name: 'Build a Component', phase: 'build', xp: 250, difficulty: 'Intermediate' },
-  { id: 'security-audit', name: 'Find the Security Flaw', phase: 'build', xp: 200, difficulty: 'Intermediate' },
-];
-
-/* -- AI Mentor Configuration -- */
 const AI_MENTOR_NAME = 'LeagueAI';
 
-/* -- AI Mentor suggestions per phase -- */
+const PHASES = [
+  { id: 'discover', name: 'Discover', Icon: SearchIcon, color: '#1565c0' },
+  { id: 'analyze', name: 'Analyze', Icon: UsersIcon, color: '#2e7d32' },
+  { id: 'design', name: 'Design', Icon: PenToolIcon, color: '#ef6c00' },
+  { id: 'build', name: 'Build', Icon: CodeIcon, color: '#c62828' },
+  { id: 'ship', name: 'Ship', Icon: PackageIcon, color: '#7b1fa2' },
+];
 
-const AI_SUGGESTIONS = {
-  discover: [
-    'Help me brainstorm problems to solve',
-    'Draft interview questions for my user',
-    'What makes a good positioning statement?',
-  ],
-  analyze: [
-    'Find apps similar to my idea',
-    'Create a persona from my interview notes',
-    'What are jobs-to-be-done?',
-  ],
-  design: [
-    'Suggest a layout for my main screen',
-    'Review my wireframe for UX issues',
-    'What is visual hierarchy?',
-  ],
-  build: [
-    'Scaffold my project from wireframes',
-    'Build the navbar component',
-    'Explain how this code works',
-  ],
-  ship: [
-    'Review my app for accessibility',
-    'Help me write my demo script',
-    'What should I test before launching?',
-  ],
-};
-
-/* -- Phase workspace content -- */
-
-function PhaseWorkspace({ phase, project }) {
-  const phaseData = PHASES.find(p => p.id === phase);
-
-  if (!project) {
-    return (
-      <div className="studio-workspace-empty">
-        <RocketIcon size={48} />
-        <h3>Select or create a project to get started</h3>
-        <p>Pick a guided project to build skills, or start your capstone to build something real.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="studio-workspace-content">
-      <div className="workspace-phase-header" style={{ '--phase-color': phaseData.color }}>
-        <phaseData.Icon size={24} />
-        <div>
-          <h3>{phaseData.name}</h3>
-          <p>{phaseData.description}</p>
-        </div>
-      </div>
-
-      <div className="workspace-activity-area">
-        {phase === 'discover' && (
-          <>
-            <div className="activity-card">
-              <h4>Opportunity Notes</h4>
-              <p className="text-secondary">Who has the problem? What friction did you observe? Write quick notes from real conversations.</p>
-              <textarea
-                className="studio-textarea"
-                placeholder="Marcus mentioned he spends 20 min every morning looking for recipes..."
-                rows={4}
-              />
-            </div>
-            <div className="activity-card">
-              <h4>Positioning Statement</h4>
-              <p className="text-secondary">One sentence that captures what you are building and for whom. Ask {AI_MENTOR_NAME} to help draft it.</p>
-              <div className="positioning-template">
-                <span className="template-label">For</span>
-                <input type="text" placeholder="[target users]" className="template-input" />
-                <span className="template-label">who</span>
-                <input type="text" placeholder="[have this problem]" className="template-input" />
-                <span className="template-label">our product is a</span>
-                <input type="text" placeholder="[category]" className="template-input" />
-                <span className="template-label">that</span>
-                <input type="text" placeholder="[key benefit]" className="template-input" />
-              </div>
-            </div>
-          </>
-        )}
-
-        {phase === 'analyze' && (
-          <>
-            <div className="activity-card">
-              <h4>Landscape</h4>
-              <p className="text-secondary">What already exists? Ask {AI_MENTOR_NAME} to research competitors.</p>
-              <button className="btn-studio-action">
-                <SparklesIcon size={16} /> Ask {AI_MENTOR_NAME} to find similar apps
-              </button>
-            </div>
-            <div className="activity-card">
-              <h4>User Personas</h4>
-              <p className="text-secondary">Based on your interviews, who are the key users?</p>
-              <div className="persona-placeholder">
-                <div className="persona-avatar-placeholder" />
-                <span>No personas yet</span>
-              </div>
-            </div>
-          </>
-        )}
-
-        {phase === 'design' && (
-          <>
-            <div className="activity-card">
-              <h4>Screen Inventory</h4>
-              <p className="text-secondary">List every screen your app needs.</p>
-              <div className="screen-list-placeholder">
-                <div className="screen-item-placeholder">
-                  <span className="screen-number">1</span>
-                  <input type="text" placeholder="e.g. Home / Recipe Browser" className="screen-input" />
-                </div>
-                <div className="screen-item-placeholder">
-                  <span className="screen-number">2</span>
-                  <input type="text" placeholder="e.g. Recipe Detail" className="screen-input" />
-                </div>
-                <button className="btn-add-screen"><PlusIcon size={14} /> Add screen</button>
-              </div>
-            </div>
-            <div className="activity-card">
-              <h4>Wireframes</h4>
-              <p className="text-secondary">Describe a screen to {AI_MENTOR_NAME} and it will generate a wireframe.</p>
-              <div className="wireframe-placeholder">
-                <div className="wireframe-canvas">
-                  <span>Wireframe canvas</span>
-                  <p>Describe a screen to get started</p>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        {phase === 'build' && (
-          <>
-            <div className="activity-card">
-              <h4>Project Structure</h4>
-              <p className="text-secondary">Tell {AI_MENTOR_NAME} to scaffold your project from your wireframes.</p>
-              <button className="btn-studio-action">
-                <SparklesIcon size={16} /> Scaffold from my wireframes
-              </button>
-              <div className="file-tree-placeholder">
-                <code>
-                  my-app/<br/>
-                  &nbsp;&nbsp;src/<br/>
-                  &nbsp;&nbsp;&nbsp;&nbsp;components/<br/>
-                  &nbsp;&nbsp;&nbsp;&nbsp;pages/<br/>
-                  &nbsp;&nbsp;&nbsp;&nbsp;App.js<br/>
-                  &nbsp;&nbsp;package.json
-                </code>
-              </div>
-            </div>
-            <div className="activity-card">
-              <h4>Build Components</h4>
-              <p className="text-secondary">Direct {AI_MENTOR_NAME} one component at a time.</p>
-              <div className="component-list-placeholder">
-                <span className="text-secondary">Components will appear here as you build them</span>
-              </div>
-            </div>
-          </>
-        )}
-
-        {phase === 'ship' && (
-          <>
-            <div className="activity-card">
-              <h4>Quality Check</h4>
-              <p className="text-secondary">Ask {AI_MENTOR_NAME} to audit your app for issues.</p>
-              <button className="btn-studio-action">
-                <SparklesIcon size={16} /> Run accessibility audit
-              </button>
-              <button className="btn-studio-action secondary">
-                <SparklesIcon size={16} /> Check for security issues
-              </button>
-            </div>
-            <div className="activity-card">
-              <h4>Demo Prep</h4>
-              <p className="text-secondary">{AI_MENTOR_NAME} can help write talking points from your positioning statement.</p>
-              <button className="btn-studio-action">
-                <SparklesIcon size={16} /> Draft my demo script
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
+const SUGGESTION_CHIPS = [
+  'A habit tracker app',
+  'A recipe finder for busy people',
+  'I need help finding an idea',
+  'A portfolio website',
+  'A game for my friends',
+];
 
 /* -- Main Studio Component -- */
 
 function Studio() {
   const { user: authUser } = useAuth();
-  const [user, setUser] = useState(authUser);
   const [loading, setLoading] = useState(true);
-  const [activePhase, setActivePhase] = useState('discover');
-  const [activeProject, setActiveProject] = useState(null);
-  const [aiMessage, setAiMessage] = useState('');
-  const [aiChat, setAiChat] = useState([
-    { role: 'assistant', text: `Hey! I'm ${AI_MENTOR_NAME}, your handy helper. I'm here in every phase. Ask me to research, draft, build, or review anything. You direct, I execute. What are we working on?` }
-  ]);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-  const [aiPanelOpen, setAiPanelOpen] = useState(false);
   const [progress, setProgress] = useState(null);
   const [tokens] = useState({ current: 1500, total: 1500 });
+
+  // View: 'welcome' or 'workspace'
+  const [view, setView] = useState('welcome');
+  const [projectName, setProjectName] = useState('');
+  const [activeTab, setActiveTab] = useState('build');
+  const [activePhase, setActivePhase] = useState('discover');
+  const [showCode, setShowCode] = useState(false);
+
+  // Chat state
+  const [inputValue, setInputValue] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     async function loadData() {
       try {
         const userData = authUser || await apiCall('/auth/me');
-        setUser(userData);
         const prefetched = getPrefetchedData();
         if (prefetched?.courseProgress) {
           setProgress(prefetched.courseProgress);
@@ -366,36 +157,70 @@ function Studio() {
     loadData();
   }, [authUser]);
 
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages]);
+
   const xp = progress?.xp || 0;
   const level = Math.floor(xp / 50) + 1;
-  const levelProgress = ((xp % 50) / 50) * 100;
-
   const RANK_NAMES = ['Explorer', 'Explorer', 'Scout', 'Designer', 'Designer', 'Builder', 'Builder', 'Architect', 'Architect', 'Architect', 'Shipper'];
   const rankName = RANK_NAMES[Math.min(level, RANK_NAMES.length - 1)];
 
-  function getTokenUsagePercent() {
-    if (!tokens.total) return 0;
-    return Math.min((tokens.current / tokens.total) * 100, 100);
-  }
-
-  function handleSendMessage(e) {
-    e.preventDefault();
-    if (!aiMessage.trim()) return;
-    setAiChat(prev => [...prev, { role: 'user', text: aiMessage }]);
-    setTimeout(() => {
-      setAiChat(prev => [...prev, {
+  function startProject(prompt) {
+    const name = extractProjectName(prompt);
+    setProjectName(name);
+    setChatMessages([
+      { role: 'user', text: prompt },
+      {
         role: 'assistant',
-        text: `I'm not connected to the ${AI_MENTOR_NAME} backend yet. That's coming next week! For now, use me as a notepad for your ideas.`
-      }]);
-    }, 500);
-    setAiMessage('');
+        text: `Great idea! I've started scaffolding "${name}" for you. I've broken this into 4 milestones across the SDLC phases. You can see a live preview on the right — describe changes and I'll update it. Switch to the Learn tab anytime to understand how the code works.`
+      }
+    ]);
+    setView('workspace');
   }
 
-  function selectProject(project) {
-    setActiveProject(project);
-    if (project.phase) {
-      setActivePhase(project.phase);
+  function extractProjectName(prompt) {
+    const lower = prompt.toLowerCase();
+    if (lower.includes('habit')) return 'Habit Tracker';
+    if (lower.includes('recipe')) return 'Recipe Finder';
+    if (lower.includes('portfolio')) return 'Portfolio Site';
+    if (lower.includes('game')) return 'Game Project';
+    if (lower.includes('idea') || lower.includes('help')) return 'New Project';
+    // Capitalize first letter of prompt as fallback
+    return prompt.length > 30 ? prompt.slice(0, 30) + '...' : prompt;
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+
+    if (view === 'welcome') {
+      startProject(inputValue.trim());
+    } else {
+      setChatMessages(prev => [...prev, { role: 'user', text: inputValue }]);
+      setTimeout(() => {
+        setChatMessages(prev => [...prev, {
+          role: 'assistant',
+          text: `I'm not connected to the ${AI_MENTOR_NAME} backend yet — that's coming soon! For now, describe your vision and I'll be ready to build it when the backend goes live.`
+        }]);
+      }, 500);
     }
+    setInputValue('');
+  }
+
+  function handleChipClick(chip) {
+    startProject(chip);
+  }
+
+  function resetToWelcome() {
+    setView('welcome');
+    setProjectName('');
+    setChatMessages([]);
+    setActiveTab('build');
+    setActivePhase('discover');
+    setShowCode(false);
   }
 
   if (loading) {
@@ -413,180 +238,253 @@ function Studio() {
   return (
     <>
       <AnimatedBackground theme="neural" />
-      <div className={`studio-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      <div className="studio-builder">
 
-        {/* LEFT: Project Sidebar */}
-        <aside className={`studio-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
-          <div className="studio-sidebar-header">
-            <h2>Studio</h2>
-            <button
-              className="sidebar-toggle"
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              <ChevronRightIcon size={16} />
-            </button>
+        {/* Header */}
+        <div className="studio-builder-header">
+          <div>
+            <h1>Studio</h1>
+            <p>Build real things with {AI_MENTOR_NAME}</p>
           </div>
-
-          <div className="studio-level-card">
-            <div className="level-info">
-              <span className="level-rank">{rankName}</span>
-              <span className="level-number">Lv. {level}</span>
-            </div>
-            <div className="level-bar">
-              <div className="level-bar-fill" style={{ width: `${levelProgress}%` }} />
-            </div>
-            <span className="level-xp">{xp} XP</span>
-          </div>
-
-          <div className="sidebar-section">
-            <h3 className="sidebar-section-title">My Project</h3>
-            <button
-              className={`project-item capstone ${activeProject?.id === 'capstone' ? 'active' : ''}`}
-              onClick={() => selectProject({ id: 'capstone', name: 'My Capstone', type: 'capstone' })}
-            >
-              <RocketIcon size={18} />
-              <div className="project-item-info">
-                <span className="project-name">My Capstone</span>
-                <span className="project-phase">Phase: {PHASES.find(p => p.id === activePhase)?.name || 'Discover'}</span>
-              </div>
-            </button>
-          </div>
-
-          <div className="sidebar-section">
-            <h3 className="sidebar-section-title">Guided Projects</h3>
-            {GUIDED_PROJECTS.map(project => {
-              const phaseMatch = PHASES.find(p => p.id === project.phase);
-              const Icon = phaseMatch ? phaseMatch.Icon : CodeIcon;
-              return (
-                <button
-                  key={project.id}
-                  className={`project-item guided ${activeProject?.id === project.id ? 'active' : ''}`}
-                  onClick={() => selectProject(project)}
-                >
-                  <Icon size={16} />
-                  <div className="project-item-info">
-                    <span className="project-name">{project.name}</span>
-                    <span className="project-meta">{project.xp} XP</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <button className="btn-new-project">
-            <PlusIcon size={16} />
-            <span>New Project</span>
-          </button>
-        </aside>
-
-        {/* CENTER: Workspace */}
-        <main className="studio-main">
-          <div className="phase-nav">
-            {PHASES.map((phase, index) => (
-              <button
-                key={phase.id}
-                className={`phase-tab ${activePhase === phase.id ? 'active' : ''}`}
-                onClick={() => setActivePhase(phase.id)}
-                style={{ '--phase-color': phase.color }}
-              >
-                <phase.Icon size={18} />
-                <span className="phase-tab-name">{phase.name}</span>
-                {index < PHASES.length - 1 && <span className="phase-connector" />}
-              </button>
-            ))}
-          </div>
-
-          <div className="phase-progress-track">
-            <div
-              className="phase-progress-fill"
-              style={{
-                width: `${((PHASES.findIndex(p => p.id === activePhase) + 1) / PHASES.length) * 100}%`,
-                backgroundColor: PHASES.find(p => p.id === activePhase)?.color
-              }}
-            />
-          </div>
-
-          <div className="studio-workspace">
-            <PhaseWorkspace phase={activePhase} project={activeProject} />
-          </div>
-        </main>
-
-      </div>
-
-      {/* Floating AI Mentor Widget */}
-      {aiPanelOpen ? (
-        <div className="ai-widget open">
-          <div className="ai-panel-header">
-            <SparklesIcon size={20} />
-            <h3>{AI_MENTOR_NAME}</h3>
-            <span className="ai-status-badge">Available</span>
-            <button
-              className="ai-panel-btn"
-              onClick={() => setAiPanelOpen(false)}
-              aria-label="Minimize AI Mentor"
-            >
-              <XIcon size={16} />
-            </button>
-          </div>
-
-          <div className="ai-chat-messages">
-            {aiChat.map((msg, i) => (
-              <div key={i} className={`ai-message ${msg.role}`}>
-                {msg.role === 'assistant' && (
-                  <div className="ai-avatar">
-                    <SparklesIcon size={14} />
-                  </div>
-                )}
-                <div className="ai-message-bubble">
-                  <p>{msg.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="ai-suggestions">
-            {(AI_SUGGESTIONS[activePhase] || []).map((suggestion, i) => (
-              <button
-                key={i}
-                className="ai-suggestion-chip"
-                onClick={() => setAiMessage(suggestion)}
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-
-          <form className="ai-input-form" onSubmit={handleSendMessage}>
-            <input
-              type="text"
-              className="ai-input"
-              placeholder="Ask me anything..."
-              value={aiMessage}
-              onChange={(e) => setAiMessage(e.target.value)}
-            />
-            <button type="submit" className="ai-send-btn" disabled={!aiMessage.trim()}>
-              <SendIcon size={16} />
-            </button>
-          </form>
-
-          <div className="ai-credits">
-            <span className="credits-label">Tokens</span>
-            <div className="credits-bar">
-              <div className="credits-bar-fill" style={{ width: `${getTokenUsagePercent()}%` }} />
-            </div>
-            <span className="credits-count">{tokens.current} / {tokens.total}</span>
+          <div className="studio-builder-meta">
+            <span className="builder-rank-badge">{rankName} &middot; Lv. {level}</span>
+            <span className="builder-tokens">
+              <SparklesIcon size={14} />
+              <span>{tokens.current} tokens</span>
+            </span>
           </div>
         </div>
-      ) : (
-        <button
-          className="ai-fab"
-          onClick={() => setAiPanelOpen(true)}
-          aria-label="Open AI Mentor"
-        >
-          <SparklesIcon size={24} />
-        </button>
-      )}
+
+        {/* Main content area */}
+        <div className="studio-builder-main">
+
+          {view === 'welcome' ? (
+            /* ---- WELCOME STATE ---- */
+            <div className="builder-welcome">
+              <div className="builder-welcome-icon">
+                <SparklesIcon size={32} />
+              </div>
+              <h2>What do you want to build?</h2>
+              <p className="builder-welcome-subtitle">
+                Describe your idea and {AI_MENTOR_NAME} will help you plan, design, and build it step by step. You direct — AI executes.
+              </p>
+
+              <div className="builder-chips">
+                {SUGGESTION_CHIPS.map((chip, i) => (
+                  <button
+                    key={i}
+                    className="builder-chip"
+                    onClick={() => handleChipClick(chip)}
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </div>
+
+              <form className="builder-welcome-input" onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  placeholder="Describe what you want to build..."
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                />
+                <button type="submit" className="builder-send-btn" disabled={!inputValue.trim()}>
+                  <SendIcon size={18} />
+                </button>
+              </form>
+            </div>
+          ) : (
+            /* ---- WORKSPACE STATE ---- */
+            <div className="builder-workspace">
+              {/* Workspace header */}
+              <div className="builder-workspace-header">
+                <div className="builder-workspace-nav">
+                  <button className="builder-back-btn" onClick={resetToWelcome}>
+                    <ArrowLeftIcon size={16} />
+                    <span>New chat</span>
+                  </button>
+                  <span className="builder-nav-divider">|</span>
+                  <span className="builder-project-name">{projectName}</span>
+                </div>
+                <div className="builder-tab-group">
+                  <button
+                    className={`builder-tab ${activeTab === 'build' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('build')}
+                  >
+                    Build
+                  </button>
+                  <button
+                    className={`builder-tab ${activeTab === 'learn' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('learn')}
+                  >
+                    Learn
+                  </button>
+                </div>
+              </div>
+
+              {/* Workspace body */}
+              <div className="builder-workspace-body">
+                {activeTab === 'build' ? (
+                  <div className="builder-split">
+                    {/* Chat panel */}
+                    <div className="builder-chat-panel">
+                      <div className="builder-chat-messages">
+                        {chatMessages.map((msg, i) => (
+                          <div key={i} className={`builder-message ${msg.role}`}>
+                            {msg.role === 'assistant' && (
+                              <div className="builder-ai-avatar">
+                                <SparklesIcon size={12} />
+                              </div>
+                            )}
+                            <div className="builder-message-bubble">
+                              <p>{msg.text}</p>
+                            </div>
+                          </div>
+                        ))}
+                        <div ref={chatEndRef} />
+                      </div>
+
+                      <form className="builder-chat-input" onSubmit={handleSubmit}>
+                        <input
+                          type="text"
+                          placeholder="Describe changes..."
+                          value={inputValue}
+                          onChange={(e) => setInputValue(e.target.value)}
+                        />
+                        <button type="submit" className="builder-send-btn small" disabled={!inputValue.trim()}>
+                          <SendIcon size={14} />
+                        </button>
+                      </form>
+                    </div>
+
+                    {/* Preview panel */}
+                    <div className="builder-preview-panel">
+                      <div className="builder-preview-toolbar">
+                        <span className="builder-preview-label">
+                          <EyeIcon size={14} />
+                          {showCode ? 'Code' : 'Live preview'}
+                        </span>
+                        <button
+                          className="builder-toggle-code"
+                          onClick={() => setShowCode(!showCode)}
+                        >
+                          {showCode ? 'Preview' : 'View code'}
+                        </button>
+                      </div>
+
+                      <div className="builder-preview-content">
+                        {showCode ? (
+                          <div className="builder-code-view">
+                            <pre>
+                              <code>{`// ${projectName}\n// Generated by ${AI_MENTOR_NAME}\n\nimport React from 'react';\n\nfunction App() {\n  return (\n    <div className="app">\n      <h1>${projectName}</h1>\n      <p>Your app is ready!</p>\n    </div>\n  );\n}\n\nexport default App;`}</code>
+                            </pre>
+                          </div>
+                        ) : (
+                          <div className="builder-preview-mock">
+                            <div className="mock-header" />
+                            <div className="mock-search" />
+                            <div className="mock-grid">
+                              <div className="mock-card mock-card-1" />
+                              <div className="mock-card mock-card-2" />
+                              <div className="mock-card mock-card-3" />
+                              <div className="mock-card mock-card-4" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Learn tab */
+                  <div className="builder-learn-panel">
+                    <div className="builder-learn-content">
+                      <div className="learn-milestone">
+                        <div className="learn-milestone-header">
+                          <span className="learn-milestone-number">1</span>
+                          <div>
+                            <h4>Project Setup & Structure</h4>
+                            <p>Understand how your app is organized and why</p>
+                          </div>
+                        </div>
+                        <div className="learn-tasks">
+                          <div className="learn-task active">
+                            <span className="learn-task-dot" />
+                            <span>What is a React component?</span>
+                          </div>
+                          <div className="learn-task">
+                            <span className="learn-task-dot" />
+                            <span>How does your file structure work?</span>
+                          </div>
+                          <div className="learn-task">
+                            <span className="learn-task-dot" />
+                            <span>What are imports and exports?</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="learn-milestone">
+                        <div className="learn-milestone-header">
+                          <span className="learn-milestone-number">2</span>
+                          <div>
+                            <h4>Building the UI</h4>
+                            <p>Learn how the visual elements are created</p>
+                          </div>
+                        </div>
+                        <div className="learn-tasks">
+                          <div className="learn-task">
+                            <span className="learn-task-dot" />
+                            <span>What is JSX?</span>
+                          </div>
+                          <div className="learn-task">
+                            <span className="learn-task-dot" />
+                            <span>How does CSS styling work here?</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="learn-milestone">
+                        <div className="learn-milestone-header">
+                          <span className="learn-milestone-number">3</span>
+                          <div>
+                            <h4>Adding Interactivity</h4>
+                            <p>Make your app respond to user actions</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="learn-milestone">
+                        <div className="learn-milestone-header">
+                          <span className="learn-milestone-number">4</span>
+                          <div>
+                            <h4>Data & State</h4>
+                            <p>How your app remembers and updates information</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Phase indicator */}
+              <div className="builder-phase-indicator">
+                <span className="builder-phase-label">Phase:</span>
+                {PHASES.map(phase => (
+                  <button
+                    key={phase.id}
+                    className={`builder-phase-pill ${activePhase === phase.id ? 'active' : ''}`}
+                    onClick={() => setActivePhase(phase.id)}
+                    style={{ '--pill-color': phase.color }}
+                  >
+                    <phase.Icon size={12} />
+                    <span>{phase.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }
